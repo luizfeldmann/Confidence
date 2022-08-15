@@ -1,0 +1,3 @@
+[submodule "dependencies/JInterface"]
+	path = dependencies/JInterface
+	url = https://github.com/luizfeldmann/JInterface
