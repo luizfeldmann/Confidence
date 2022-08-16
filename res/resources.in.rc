@@ -1,0 +1,26 @@
+#include <Windows.h>
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION    ${PROJECT_VERSION_MAJOR}, ${PROJECT_VERSION_MINOR}, ${PROJECT_VERSION_PATCH}, ${PROJECT_VERSION_TWEAK}
+PRODUCTVERSION ${PROJECT_VERSION_MAJOR}, ${PROJECT_VERSION_MINOR}, ${PROJECT_VERSION_PATCH}, ${PROJECT_VERSION_TWEAK}
+{
+    BLOCK "StringFileInfo"
+    {
+        BLOCK "040904b0"
+        {
+            VALUE "CompanyName", "${COMPANY_NAME}\0"
+            VALUE "FileDescription", "${PROJ_DESCRIPTION}\0"
+            VALUE "FileVersion", "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}.${PROJECT_VERSION_TWEAK}\0"
+            VALUE "LegalCopyright", "Copyright ${COPYRIGHT_OWNER} - All Rights Reserved\0"
+            VALUE "OriginalFilename", "${CMAKE_PROJECT_NAME}.exe\0"
+            VALUE "ProductName", "${CMAKE_PROJECT_NAME}\0"
+            VALUE "ProductVersion", "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}.${PROJECT_VERSION_TWEAK}\0"
+        }
+    }
+    BLOCK "VarFileInfo"
+    {
+        VALUE "Translation", 0x409, 1200
+    }
+}
+
+1 ICON "${AppIcon_DST}"
