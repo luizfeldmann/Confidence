@@ -1,5 +1,6 @@
 #include "util/Log.h"
 #include "CLI/CLI.hpp"
+#include "ui/CMainApp.h"
 
 //! @brief Represents the set of options passed to the application when launched
 class CCommandLineArguments
@@ -85,14 +86,14 @@ static int RunProj(const std::string& rFileName, const std::string& rConfigName)
     return 0;
 }
 
-static int EditProj(const std::string& rFileName)
+static int EditProj(const std::string& rFileName, int argc, char** argv)
 {
     CINFO("Launching editor for project '%s' ...", rFileName.empty() ? "<new project>" : rFileName.c_str());
 
-    return 0;
+    return wxEntry(argc, argv);
 }
 
-int main(int argc, const char** argv)
+int main(int argc, char** argv)
 {
     CCommandLineArguments cArgs(argc, argv);
     int Status = cArgs.m_iExitCode;
@@ -112,7 +113,7 @@ int main(int argc, const char** argv)
         break;
 
     case CCommandLineArguments::EMode::Edit:
-        Status = EditProj(cArgs.m_strOpenFileName);
+        Status = EditProj(cArgs.m_strOpenFileName, argc, argv);
         break;
     }
 
