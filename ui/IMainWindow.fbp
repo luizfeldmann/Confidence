@@ -123,7 +123,7 @@
                         <property name="window_name"></property>
                         <property name="window_style"></property>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">Load From Art Provider; wxART_NEW; wxART_TOOLBAR</property>
+                            <property name="bitmap">Load From Icon Resource; RES_ID_ICON_NEW; [-1; -1]</property>
                             <property name="context_menu">0</property>
                             <property name="id">wxID_ANY</property>
                             <property name="kind">wxITEM_NORMAL</property>
@@ -137,7 +137,7 @@
                             <property name="permission">protected</property>
                         </object>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">Load From Art Provider; wxART_FILE_OPEN; wxART_TOOLBAR</property>
+                            <property name="bitmap">Load From Icon Resource; RES_ID_ICON_OPEN; [-1; -1]</property>
                             <property name="context_menu">0</property>
                             <property name="id">wxID_ANY</property>
                             <property name="kind">wxITEM_NORMAL</property>
@@ -151,7 +151,7 @@
                             <property name="permission">protected</property>
                         </object>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">Load From Art Provider; wxART_FILE_SAVE; wxART_TOOLBAR</property>
+                            <property name="bitmap">Load From Icon Resource; RES_ID_ICON_SAVE1; [-1; -1]</property>
                             <property name="context_menu">0</property>
                             <property name="id">wxID_ANY</property>
                             <property name="kind">wxITEM_NORMAL</property>
@@ -162,7 +162,7 @@
                             <property name="tooltip"></property>
                         </object>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">Load From Art Provider; wxART_FILE_SAVE_AS; wxART_TOOLBAR</property>
+                            <property name="bitmap">Load From Icon Resource; RES_ID_ICON_SAVE2; [-1; -1]</property>
                             <property name="context_menu">0</property>
                             <property name="id">wxID_ANY</property>
                             <property name="kind">wxITEM_NORMAL</property>
@@ -176,7 +176,7 @@
                             <property name="permission">protected</property>
                         </object>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">Load From Art Provider; wxART_EXECUTABLE_FILE; wxART_TOOLBAR</property>
+                            <property name="bitmap">Load From Icon Resource; RES_ID_ICON_RUN; [-1; -1]</property>
                             <property name="context_menu">0</property>
                             <property name="id">wxID_ANY</property>
                             <property name="kind">wxITEM_NORMAL</property>
@@ -187,7 +187,7 @@
                             <property name="tooltip"></property>
                         </object>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">Load From Art Provider; wxART_CLOSE; wxART_TOOLBAR</property>
+                            <property name="bitmap">Load From Icon Resource; RES_ID_ICON_STOP; [-1; -1]</property>
                             <property name="context_menu">0</property>
                             <property name="id">wxID_ANY</property>
                             <property name="kind">wxITEM_NORMAL</property>
@@ -525,7 +525,7 @@
                                             <property name="window_style"></property>
                                             <object class="notebookpage" expanded="1">
                                                 <property name="bitmap">Load From Art Provider; wxART_GO_HOME; wxART_TOOLBAR</property>
-                                                <property name="label">Group editor</property>
+                                                <property name="label">Welcome</property>
                                                 <property name="select">1</property>
                                                 <object class="wxPanel" expanded="1">
                                                     <property name="BottomDockable">1</property>

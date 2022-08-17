@@ -1,10 +1,9 @@
 #include "ui/CMainWindow.h"
-#include "ui/resources.h"
 
 CMainWindow::CMainWindow() :
     IMainWindow(nullptr)
 {
-    SetIcon(wxIcon(xstr(IDF_MAINICON)));
+    SetIcon(wxIcon("RES_ID_ICON_APPLICATION"));
 }
 
 CMainWindow::~CMainWindow()

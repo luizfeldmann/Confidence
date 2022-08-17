@@ -6,7 +6,8 @@ SET(PROJ_DESCRIPTION "Confidence is a tool to centralize and manage configuratio
 SET(COMPANY_NAME "Luiz Feldmann")
 SET(COPYRIGHT_OWNER ${COMPANY_NAME})
 
-include(res/mainIcon/exportIcon.cmake)
+# Prebuild resources
+include(res/icons/exportIcons.cmake)
 SET(RESOURCESFILE "resources.rc")
 configure_file(res/resources.in.rc ${RESOURCESFILE})
 
@@ -26,7 +27,7 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "ui/wxExport/IMainWindow.h"
     "ui/wxExport/IMainWindow.cpp"
     # GUI
-    "include/ui/resources.h"
+    
     "include/ui/CMainApp.h"
     "src/ui/CMainApp.cpp"
     "include/ui/CMainWindow.h"
@@ -40,7 +41,7 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/util/CGuid.cpp"
     # Resources
     ${RESOURCESFILE}
-    ${AppIcon_DST}
+    ${ICONS_LIST_EXPORTED}
     # Virtual file system
     "include/vfs/IProjectedFileSystemProvider.h"
     "src/vfs/IProjectedFileSystemProvider.cpp"  )
