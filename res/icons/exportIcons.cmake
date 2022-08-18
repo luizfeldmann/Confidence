@@ -8,6 +8,7 @@ endif()
 # List of icons to convert
 SET(ICONS_SOURCE
     "APPLICATION"
+    "SETUP"
     "NEW"
     "OPEN"
     "SAVE1"
