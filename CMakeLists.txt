@@ -83,6 +83,7 @@ set_target_properties(${CMAKE_PROJECT_NAME}
 
 # Create installer
 install(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION "bin")
+x_vcpkg_install_local_dependencies(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION "bin")
 
 SET(CPACK_GENERATOR "NSIS")
 SET(CPACK_PACKAGE_NAME "${CMAKE_PROJECT_NAME}")
