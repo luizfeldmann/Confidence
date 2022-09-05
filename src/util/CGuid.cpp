@@ -20,8 +20,14 @@ CGuid::CGuid(const std::string& rStr) :
 
 CGuid::CGuid(const std::wstring& rStr)
 {
+    bool Status = FromWString(rStr);
+    assert(Status && "Failed to parse GUID");
+}
+
+bool CGuid::FromWString(const std::wstring& rStr)
+{
     HRESULT Status = CLSIDFromString(rStr.c_str(), this);
-    assert((NOERROR == Status) && "Failed to parse GUID");
+    return (NOERROR == Status);
 }
 
 CGuid::operator std::wstring() const
@@ -87,4 +93,14 @@ bool CGuid::operator<(const CGuid& rOther) const
 bool CGuid::operator<=(const CGuid& rOther) const
 {
     return Compare(rOther) <= 0;
+}
+
+std::string CGuid::Serialize() const
+{
+    return CGuid::operator std::string();
+}
+
+bool CGuid::Deserialize(const std::string& rStr)
+{
+    return FromWString(std::wstring(rStr.cbegin(), rStr.cend()));
 }

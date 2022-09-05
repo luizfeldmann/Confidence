@@ -3,9 +3,14 @@
 
 #include <guiddef.h>
 #include <string>
+#include <JInterface/ICustomSerializable.h>
 
 //! @brief Distributed computing environment universally unique identifier
-class CGuid : public GUID {
+class CGuid : public GUID, public ICustomSerializable
+{
+protected:
+    bool FromWString(const std::wstring& rStr);
+
 public:
     //! @brief Creates a new random GUID
     CGuid();
@@ -57,6 +62,9 @@ public:
     //! @param rOther Other instance to compare to this
     //! @return True if this is smaller than or equal to \p rOther
     bool operator<=(const CGuid& rOther) const;
+
+    std::string Serialize() const override;
+    bool Deserialize(const std::string&) override;
 };
 
 #endif
