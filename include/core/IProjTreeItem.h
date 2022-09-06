@@ -1,0 +1,30 @@
+#ifndef _IPROJTREEITEM_H_
+#define _IPROJTREEITEM_H_
+
+#include "INamedItem.h"
+#include "IDescribedItem.h"
+#include "ITreeItemCollection.h"
+
+#pragma warning(disable: 4250)
+
+//! @brief Common base for all items placed on the project tree structure
+class IProjTreeItem : public virtual INamedItem
+                    , public virtual IDescribedItem
+                    , public virtual ITreeItemCollection
+{
+public:
+    //! @brief Constructs an empty item
+    IProjTreeItem() = default;
+    virtual ~IProjTreeItem() = default;
+
+    //! @brief Reflects the type of this item
+    virtual ETreeItemType GetType() const = 0;
+
+    //! @brief Post processing and validation of read data after de-serialization from a project file
+    virtual bool PostDeserialize();
+
+    //! @brief Pre processing and validation of any data required before serializing to a project file
+    virtual bool PreSerialize();
+};
+
+#endif
