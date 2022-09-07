@@ -1,4 +1,5 @@
 #include "ui/CMainApp.h"
+#include "ui/CMainWindow.h"
 
 wxIMPLEMENT_APP_NO_MAIN(CMainApp);
 

@@ -1,6 +1,7 @@
 #include "util/Log.h"
 #include "CLI/CLI.hpp"
 #include "ui/CMainApp.h"
+#include "core/CProject.h"
 
 //! @brief Represents the set of options passed to the application when launched
 class CCommandLineArguments
@@ -76,21 +77,45 @@ static int ExportDocs(const std::string& rFileName)
 {
     CINFO("Exporting documentation for project '%s' ...", rFileName.c_str());
 
-    return 0;
+    bool bSuccess = false;
+    CProject& theProject = CProject::TheProject();
+    if (theProject.OpenFile(rFileName))
+    {
+        bSuccess = theProject.ExportDocumentation();
+    }
+
+    return bSuccess ? 0 : -1;
 }
 
 static int RunProj(const std::string& rFileName, const std::string& rConfigName)
 {
     CINFO("Running configuration '%s' of project '%s' ...", rConfigName.c_str(), rFileName.c_str());
 
-    return 0;
+    bool bSuccess = false;
+    CProject& theProject = CProject::TheProject();
+    if (theProject.OpenFile(rFileName))
+    {
+        bSuccess = theProject.Run();
+        if (bSuccess)
+        {
+            system("PAUSE");
+            theProject.Stop();
+        }
+    }
+
+    return bSuccess ? 0 : -1;
 }
 
 static int EditProj(const std::string& rFileName, int argc, char** argv)
 {
     CINFO("Launching editor for project '%s' ...", rFileName.empty() ? "<new project>" : rFileName.c_str());
+    
+    if (rFileName.empty() || CProject::TheProject().OpenFile(rFileName))
+    {
+        return wxEntry(argc, argv);
+    }
 
-    return wxEntry(argc, argv);
+    return -1;
 }
 
 int main(int argc, char** argv)

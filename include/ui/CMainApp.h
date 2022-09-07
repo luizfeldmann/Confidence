@@ -7,7 +7,7 @@
     #include <wx/wx.h>
 #endif
 
-#include "CMainWindow.h"
+class CMainWindow;
 
 class CMainApp : public wxApp
 {

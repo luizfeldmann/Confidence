@@ -15,6 +15,16 @@ SET(ICONS_SOURCE
     "SAVE2"
     "RUN"
     "STOP"
+    "ARROWUP"
+    "ARROWDOWN"
+    "ADD"
+    "TRASH"
+    "TREEITEM_ERROR"
+    "TREEITEM_PROJECT"
+    "TREEITEM_GROUP"
+    "TREEITEM_CODE"
+    "TREEITEM_CODEFILE"
+    "TREEITEM_EXEC"
 )
 
 # Add build rule for each icon
