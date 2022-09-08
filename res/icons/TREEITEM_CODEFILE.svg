@@ -1,6 +1,61 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    <g>
-        <path fill="none" d="M0 0h24v24H0z"/>
-        <path d="M15 4H5v16h14V8h-4V4zM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992zM17.657 12l-3.536 3.536-1.414-1.415L14.828 12l-2.12-2.121 1.413-1.415L17.657 12zM6.343 12L9.88 8.464l1.414 1.415L9.172 12l2.12 2.121-1.413 1.415L6.343 12z"/>
-    </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="TREEITEM_CODEFILE.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs12" />
+  <sodipodi:namedview
+     id="namedview10"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="true"
+     inkscape:zoom="33.833333"
+     inkscape:cx="11.985222"
+     inkscape:cy="12.014778"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg8">
+    <sodipodi:guide
+       position="12,12"
+       orientation="-1,0"
+       id="guide829"
+       inkscape:label=""
+       inkscape:locked="false"
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="12,12"
+       orientation="0,-1"
+       id="guide831" />
+  </sodipodi:namedview>
+  <path
+     fill="none"
+     d="M 0,0 H 24 V 24 H 0 Z"
+     id="path2" />
+  <path
+     d="M 15,4 H 5 V 20 H 19 V 8 H 15 Z M 3,2.992 C 3,2.444 3.447,2 3.999,2 H 16 l 5,5 v 13.993 c 0.0039,0.55229 -0.44071,1.003147 -0.993,1.007 H 3.993 C 3.4465555,21.996192 3.0043584,21.55444 3,21.008 Z"
+     id="path4"
+     sodipodi:nodetypes="cccccccssccccccs"
+     style="fill:#5f8dd3;fill-opacity:1" />
+  <path
+     d="m 17.657013,12 -3.536,3.536 -1.414,-1.415 2.121,-2.121 -2.12,-2.1209999 1.413,-1.415 z m -11.3140003,0 3.537,-3.5359999 1.4140003,1.415 L 9.1720127,12 11.292013,14.121 9.8790127,15.536 Z"
+     id="path860"
+     style="fill:#b380ff;fill-opacity:1" />
 </svg>
