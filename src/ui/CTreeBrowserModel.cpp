@@ -1,4 +1,5 @@
 #include "ui/CTreeBrowserModel.h"
+#include "ui/STreeItemTypeInfo.h"
 #include "core/CProject.h"
 
 /// =======================================================
@@ -68,15 +69,10 @@ void CTreeBrowserModel::GetNameAndIcon(wxVariant& value, const IProjTreeItem* pI
 {
     #define REGICON(RESNAME) wxIcon(RESNAME, wxBITMAP_TYPE_ICO_RESOURCE, 24, 24)
 
-    static const std::map<ETreeItemType, wxIcon> mapIcons {
-        { EInvalid,     REGICON(L"RES_ID_ICON_TREEITEM_ERROR")},
-        { EProject,     REGICON(L"RES_ID_ICON_TREEITEM_PROJECT")},
-        { EGroup,       REGICON(L"RES_ID_ICON_TREEITEM_GROUP")},
-        { EVariable,    REGICON(L"RES_ID_ICON_TREEITEM_CODE")},
-        { ETextFile,    REGICON(L"RES_ID_ICON_TREEITEM_CODEFILE")},
-    };
+    const STreeItemTypeInfo* pInfo = STreeItemTypeInfo::GetInfo(pItem->GetType());
+    assert(nullptr != pInfo);
 
-    wxDataViewIconText iconAndText(pItem->GetName(), mapIcons.at(pItem->GetType()) );
+    wxDataViewIconText iconAndText(pItem->GetName(), pInfo->m_icon );
     value = wxVariant(iconAndText);
 }
 

@@ -57,6 +57,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/CMainWindow.cpp"
     "include/ui/CTreeBrowserModel.h"
     "src/ui/CTreeBrowserModel.cpp"
+    "include/ui/STreeItemTypeInfo.h"
+    "src/ui/STreeItemTypeInfo.cpp"
 
     # Utility
     "include/util/CScopedConsoleStyle.h"

@@ -17,6 +17,8 @@ SET(ICONS_SOURCE
     "STOP"
     "ARROWUP"
     "ARROWDOWN"
+    "SCISSORS"
+    "CLIPBOARD"
     "ADD"
     "TRASH"
     "TREEITEM_ERROR"
