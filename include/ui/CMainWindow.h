@@ -2,7 +2,8 @@
 #define _CMAINWINDOW_H_
 
 #include "wxExport/IMainWindow.h"
-#include "core/IProjTreeItem.h"
+#include "ui/CTreeItemEditorManager.h"
+#include "ui/CNameDescEditor.h"
 
 class CMainWindow : public IMainWindow
 {
@@ -11,6 +12,9 @@ public:
     ~CMainWindow();
 
 protected:
+	//! Manages the tabs on the editor tab view
+	CTreeItemEditorManager m_editorManager;
+	friend class ITreeItemEditor;
 
 	//! Stores the item in clipboard, which was "cut" and is waiting to be "pasted"
 	ITreeItemCollection::PtrItem m_pCutClipboard;
@@ -38,6 +42,12 @@ protected:
 	//! @brief When the user clicked the popup menu of new item creation
 	void onBtnNewItemMenu(wxCommandEvent& evt);
 
+	//! @brief When the tree item has been renamed on the tree itself
+	void onTreeItemRenamed(wxCommandEvent& evt);
+
+	//! @brief When an item's name or description was changed on the editor
+	void onEditorItemNameDescChanged(wxCommandEvent& evt);
+
 	/* Auto generated GUI event handlers */
 	void onBtnNewProject(wxCommandEvent& event) override;
 	void onBtnOpenProject(wxCommandEvent& event) override;
@@ -51,6 +61,8 @@ protected:
 	void onBtnItemDown(wxCommandEvent& event) override;
 	void onBtnItemCut(wxCommandEvent& event) override;
 	void onBtnItemPaste(wxCommandEvent& event) override;
+	void onToolViewDesc(wxCommandEvent& event) override;
+	void onTreeItemActivate(wxDataViewEvent& event) override;
 };
 
 #endif

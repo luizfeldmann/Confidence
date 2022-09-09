@@ -1,6 +1,8 @@
 #include "ui/STreeItemTypeInfo.h"
-#include "core/CGroup.h"
-#include "core/CVariable.h"
+#include "ui/CProjectEditor.h"
+#include "ui/CGroupEditor.h"
+#include "ui/CVariableEditor.h"
+#include "ui/CGeneratedTextFileEditor.h"
 #include <map>
 
 const std::vector<ETreeItemType>& STreeItemTypeInfo::GetTypesList()
@@ -17,12 +19,17 @@ const std::vector<ETreeItemType>& STreeItemTypeInfo::GetTypesList()
 
 const wxString& STreeItemTypeInfo::STreeItemTypeInfo::GetName(ETreeItemType eType)
 {
-    const STreeItemTypeInfo* pInfo = GetInfo(eType);
-    
-    return (nullptr != pInfo) ? pInfo->m_strTypeName : GetName(EInvalid);
+    const STreeItemTypeInfo& rInfo = GetInfo(eType);
+    return rInfo.m_strTypeName;
 }
 
-const STreeItemTypeInfo* STreeItemTypeInfo::GetInfo(ETreeItemType eType)
+const wxIcon& STreeItemTypeInfo::GetIcon(ETreeItemType eType)
+{
+    const STreeItemTypeInfo& rInfo = GetInfo(eType);
+    return rInfo.m_icon;
+}
+
+const STreeItemTypeInfo& STreeItemTypeInfo::GetInfo(ETreeItemType eType)
 {
     #define REGICON(RESNAME) wxIcon(RESNAME, wxBITMAP_TYPE_ICO_RESOURCE, 24, 24)
 
@@ -32,44 +39,44 @@ const STreeItemTypeInfo* STreeItemTypeInfo::GetInfo(ETreeItemType eType)
             STreeItemTypeInfo {
                 "Invalid item",
                 REGICON(L"RES_ID_ICON_TREEITEM_ERROR"),
-                nullptr,
+                nullptr,    // Cannot instantiate a new "invalid" item
+                nullptr,    // Invalid items do not have editors
             }
         },
         { EProject,
             STreeItemTypeInfo {
                 "Project", 
                 REGICON(L"RES_ID_ICON_TREEITEM_PROJECT"),
-                nullptr,
+                nullptr,    // Cannot instantiate a new project inside the existing project
+                &CProjectEditor::Create
             }
         },
         { EGroup, 
             STreeItemTypeInfo {
                 "Group", 
                 REGICON(L"RES_ID_ICON_TREEITEM_GROUP"),
-                []() { return new CGroup(); }
+                &CGroup::Create,
+                &CGroupEditor::Create
             }
         },
         { EVariable, 
             STreeItemTypeInfo {
                 "Variable",
                 REGICON(L"RES_ID_ICON_TREEITEM_CODE"),
-                []() { return new CVariable(); }
+                &CVariable::Create,
+                &CVariableEditor::Create
             }
         },
         { ETextFile, 
             STreeItemTypeInfo {
                 "Output text file", 
                 REGICON(L"RES_ID_ICON_TREEITEM_CODEFILE"),
-                nullptr
+                &CGeneratedTextFile::Create,
+                & CGeneratedTextFileEditor::Create
             }
         },
     };
 
-    const STreeItemTypeInfo* pInfo = nullptr;
-
     const auto it = mapIcons.find(eType);
-    if (mapIcons.cend() != it)
-        pInfo = &(it->second);
-
-    return pInfo;
+    return (mapIcons.cend() != it) ? it->second : mapIcons.at(EInvalid);
 }

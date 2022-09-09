@@ -16,6 +16,11 @@ CGroup::CGroup()
 
 }
 
+IProjTreeItem* CGroup::Create()
+{
+    return new CGroup();
+}
+
 CGroup::~CGroup()
 {
 

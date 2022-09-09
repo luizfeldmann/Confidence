@@ -17,6 +17,9 @@ public:
     CGroup();
     ~CGroup();
 
+    //! @brief Returns a new instance of this class
+    static IProjTreeItem* Create();
+
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;
 };

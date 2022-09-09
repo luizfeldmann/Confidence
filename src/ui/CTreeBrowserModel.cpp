@@ -6,10 +6,13 @@
 /// Global definitions
 /// =======================================================
 
+wxDEFINE_EVENT(EVT_TREE_ITEM_RENAME, wxCommandEvent);
+
 //! @brief Defines the columns shown in the tree browser
 enum class ETreeBrowserColumn
 {
     IconAndName = 0,
+    Description,
 
     /* MUST BE LAST */
     Count
@@ -31,6 +34,7 @@ static const STreeBrowserColumnInfo* GetColumnInfo(ETreeBrowserColumn eColumn)
 {
     static const std::unordered_map<ETreeBrowserColumn, STreeBrowserColumnInfo> mapInfo {
         {ETreeBrowserColumn::IconAndName,  STreeBrowserColumnInfo{"wxDataViewIconText", &CTreeBrowserModel::GetNameAndIcon, &CTreeBrowserModel::SetName} },
+        {ETreeBrowserColumn::Description,  STreeBrowserColumnInfo{"string",             &CTreeBrowserModel::GetDescription, nullptr} },
     };
 
     const STreeBrowserColumnInfo* pInfo = nullptr;
@@ -69,11 +73,16 @@ void CTreeBrowserModel::GetNameAndIcon(wxVariant& value, const IProjTreeItem* pI
 {
     #define REGICON(RESNAME) wxIcon(RESNAME, wxBITMAP_TYPE_ICO_RESOURCE, 24, 24)
 
-    const STreeItemTypeInfo* pInfo = STreeItemTypeInfo::GetInfo(pItem->GetType());
-    assert(nullptr != pInfo);
-
-    wxDataViewIconText iconAndText(pItem->GetName(), pInfo->m_icon );
+    const wxString strName = pItem->GetName();
+    const wxIcon& rIcon = STreeItemTypeInfo::GetIcon(pItem->GetType());
+    wxDataViewIconText iconAndText(strName, rIcon);
     value = wxVariant(iconAndText);
+}
+
+void CTreeBrowserModel::GetDescription(wxVariant& value, const IProjTreeItem* pItem) const
+{
+    const wxString strDesc = pItem->GetDescription();
+    value = strDesc;
 }
 
 bool CTreeBrowserModel::SetName(const wxVariant& value, IProjTreeItem* pItem)
@@ -82,6 +91,10 @@ bool CTreeBrowserModel::SetName(const wxVariant& value, IProjTreeItem* pItem)
     iconAndText << value;
 
     pItem->SetName( iconAndText.GetText().ToStdString() );
+
+    wxCommandEvent evtNotifyRename(EVT_TREE_ITEM_RENAME);
+    evtNotifyRename.SetClientData(pItem);
+    ProcessEvent(evtNotifyRename);
 
     return true;
 }
@@ -93,6 +106,11 @@ bool CTreeBrowserModel::SetName(const wxVariant& value, IProjTreeItem* pItem)
 unsigned int CTreeBrowserModel::GetColumnCount() const
 {
     return (unsigned int)ETreeBrowserColumn::Count;
+}
+
+bool CTreeBrowserModel::HasValue(const wxDataViewItem& item, unsigned col) const
+{
+    return col < GetColumnCount();
 }
 
 wxString CTreeBrowserModel::GetColumnType(unsigned int col) const

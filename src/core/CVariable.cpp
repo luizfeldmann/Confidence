@@ -14,6 +14,11 @@ CVariable::CVariable()
 
 }
 
+IProjTreeItem* CVariable::Create()
+{
+    return new CVariable();
+}
+
 CVariable::~CVariable()
 {
 

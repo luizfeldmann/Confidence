@@ -8,8 +8,9 @@
 
 const static wxString g_szProjectFileFilter = "Confidence projects (*.cfx)|*.cfx";
 
-CMainWindow::CMainWindow() :
-    IMainWindow(nullptr)
+CMainWindow::CMainWindow()
+    : IMainWindow(nullptr)
+    , m_editorManager(*m_notebookEditor)
 {
     // Let the logger know we are using GUI
     CLog::m_bShowMessageBox = true;
@@ -19,9 +20,14 @@ CMainWindow::CMainWindow() :
 
     // Configure the project tree view
     CTreeBrowserModel* pTreeModel = new CTreeBrowserModel;
+    pTreeModel->Bind(EVT_TREE_ITEM_RENAME, &CMainWindow::onTreeItemRenamed, this);
     m_dataViewCtrlBrowser->AssociateModel(pTreeModel);
     pTreeModel->DecRef();
     m_dataViewCtrlBrowser->ExpandChildren(m_dataViewCtrlBrowser->GetTopItem());
+
+    // Configure the editor tabs
+    m_notebookEditor->Bind(EVT_EDITOR_ITEM_CHANGED_NAME, &CMainWindow::onEditorItemNameDescChanged, this);
+    m_notebookEditor->Bind(EVT_EDITOR_ITEM_CHANGED_DESC, &CMainWindow::onEditorItemNameDescChanged, this);
 
     // Load the current project
     ReloadProject();
@@ -96,6 +102,31 @@ void CMainWindow::onBtnStopProject(wxCommandEvent& event)
 /// Tree browser
 /// =======================================================
 
+void CMainWindow::onTreeItemRenamed(wxCommandEvent& evt)
+{
+    IProjTreeItem* pItem = static_cast<IProjTreeItem*>( evt.GetClientData() );
+    assert(nullptr != pItem);
+
+    m_editorManager.ItemRenamed(*pItem);
+}
+
+void CMainWindow::onEditorItemNameDescChanged(wxCommandEvent& evt)
+{
+    IProjTreeItem* pItem = static_cast<IProjTreeItem*>(evt.GetClientData());
+    assert(nullptr != pItem);
+
+    wxDataViewModel* pModel = m_dataViewCtrlBrowser->GetModel();
+    pModel->ItemChanged(wxDataViewItem(pItem));
+}
+
+void CMainWindow::onTreeItemActivate(wxDataViewEvent& event)
+{
+    IProjTreeItem* pSelected = GetSelectedTreeItem();
+
+    if (nullptr != pSelected)
+        m_editorManager.ActivateItem(*pSelected);
+}
+
 void CMainWindow::onBtnNewItemMenu(wxCommandEvent& evt)
 {
     // Get parent collection of subitems
@@ -109,13 +140,12 @@ void CMainWindow::onBtnNewItemMenu(wxCommandEvent& evt)
 
     // Get information about the class of subitem we wish to append
     const ETreeItemType eType = (ETreeItemType)evt.GetId();
-    const STreeItemTypeInfo* pInfo = STreeItemTypeInfo::GetInfo(eType);
+    const STreeItemTypeInfo& rInfo = STreeItemTypeInfo::GetInfo(eType);
 
-    assert(nullptr != pInfo);
-    assert(nullptr != pInfo->m_fnFactory);
+    assert(nullptr != rInfo.m_fnFactory);
 
     // Create new child and add to collection
-    IProjTreeItem* pNewChild = pInfo->m_fnFactory();
+    IProjTreeItem* pNewChild = rInfo.m_fnFactory();
     assert(nullptr != pNewChild);
 
     rvSubitems.emplace_back(pNewChild);
@@ -149,11 +179,10 @@ void CMainWindow::onBtnNewItem(wxCommandEvent& event)
         if (0 == (eType & eSupported))
             continue;
 
-        const STreeItemTypeInfo* pInfo = STreeItemTypeInfo::GetInfo(eType);
-        assert(nullptr != pInfo);
+        const STreeItemTypeInfo& rInfo = STreeItemTypeInfo::GetInfo(eType);
 
-        wxMenuItem* pMenuItem = menu.Append(eType, pInfo->m_strTypeName);
-        pMenuItem->SetBitmap(pInfo->m_icon);
+        wxMenuItem* pMenuItem = menu.Append(eType, rInfo.m_strTypeName);
+        pMenuItem->SetBitmap(rInfo.m_icon);
     }
 
     // Display the menu only if there are relevant options
@@ -189,11 +218,13 @@ void CMainWindow::OnItemOperation(EItemOperation eOper)
     {
         default:
         case EItemOperation::Delete:
+            m_editorManager.ItemDeleted(*pChild);
             vParentSubitems.erase(iterChild);
             bItemDelete = true;
         break;
 
         case EItemOperation::Cut:
+            m_editorManager.ItemDeleted(*pChild);
             m_pCutClipboard.reset( iterChild->release() );
             vParentSubitems.erase(iterChild);
             bItemDelete = true;
@@ -291,6 +322,12 @@ void CMainWindow::onBtnItemPaste(wxCommandEvent& event)
     }
 }
 
+void CMainWindow::onToolViewDesc(wxCommandEvent& event)
+{
+    const bool bShowDesc = m_toolViewDesc->IsToggled();
+    m_dataViewColumnDescription->SetHidden(!bShowDesc);
+}
+
 /// =======================================================
 /// General
 /// =======================================================
@@ -315,6 +352,9 @@ IProjTreeItem* CMainWindow::GetTreeItemParent(IProjTreeItem* pChild) const
 
 void CMainWindow::ReloadProject()
 {
+    // Close all tabs on the editor notebook
+    m_editorManager.Clear();
+
     // Update tree: delete and re-add the project
     wxDataViewItem root(0);
     wxDataViewItem project(&CProject::TheProject());
