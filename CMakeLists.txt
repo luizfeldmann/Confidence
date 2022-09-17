@@ -18,7 +18,7 @@ include(dependencies/JInterface/ConsumeMe.txt)
 include_directories(dependencies/CLI11/include)
 
 # Dependency: wxWidgets
-find_package(wxWidgets COMPONENTS core base aui)
+find_package(wxWidgets COMPONENTS core base aui stc)
 
 # Project sources
 SET(${CMAKE_PROJECT_NAME}_SOURCES
@@ -91,6 +91,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/CGroupEditor.cpp"
     "include/ui/CVariableEditor.h"
     "src/ui/CVariableEditor.cpp"
+    "include/ui/CTextStyler.h" 
+    "src/ui/CTextStyler.cpp"
     "include/ui/CGeneratedTextFileEditor.h"
     "src/ui/CGeneratedTextFileEditor.cpp"
 

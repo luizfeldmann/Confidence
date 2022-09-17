@@ -2,6 +2,12 @@
 
 CGeneratedTextFileEditorUI::CGeneratedTextFileEditorUI(wxWindow* pParent)
     : ITextFileEditor(pParent)
+    , m_cStyler(*m_textEditor)
+{
+    m_cStyler.SetLexer(wxSTC_LEX_CONTAINER);
+}
+
+void CGeneratedTextFileEditorUI::onOpenEditor(wxCommandEvent& event)
 {
 
 }
@@ -10,7 +16,7 @@ CGeneratedTextFileEditor::CGeneratedTextFileEditor(wxAuiNotebook& rNotebook, IPr
     : CNameDescEditor(rNotebook, rItem)
     , m_pUiTextFile(new CGeneratedTextFileEditorUI(m_pPanel))
 {
-    m_pSizer->Add(m_pUiTextFile, 0, wxEXPAND, 5);
+    m_pSizer->Add(m_pUiTextFile, 1, wxEXPAND, 5);
     m_pPanel->Layout();
 }
 
