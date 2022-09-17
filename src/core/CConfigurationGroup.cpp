@@ -7,7 +7,7 @@ DEFINE_SERIALIZATION_SCHEME(CConfigurationGroup,
 REGISTER_POLYMORPHIC_CLASS(CConfigurationGroup);
 
 CConfigurationGroup::CConfigurationGroup()
-    : CConfiguration()
+    : CConfiguration("Default", "Default configuration")
 {
 
 }

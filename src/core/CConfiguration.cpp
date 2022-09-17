@@ -16,6 +16,14 @@ CConfiguration::CConfiguration()
 
 }
 
+CConfiguration::CConfiguration(const std::string& strName, const std::string& strDesc)
+    : CStoredNameItem(strName)
+    , CStoredDescriptionItem(strDesc)
+    , CStoredItemCollection(EConfig)
+{
+
+}
+
 IProjTreeItem* CConfiguration::Create()
 {
     return new CConfiguration();

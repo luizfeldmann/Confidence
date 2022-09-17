@@ -17,7 +17,7 @@ protected:
 	friend class ITreeItemEditor;
 
 	//! Stores the item in clipboard, which was "cut" and is waiting to be "pasted"
-	ITreeItemCollection::PtrItem m_pCutClipboard;
+	ITreeItemCollection::ptr_t m_pCutClipboard;
 
 	//! @brief Updates all the interface whenever a new project is loaded
 	void ReloadProject();
@@ -28,16 +28,11 @@ protected:
 	//! @brief Get parent of the provided item from the project tree
 	IProjTreeItem* GetTreeItemParent(IProjTreeItem*) const;
 
-	//! @brief Possible edit operations on project tree items
-	enum class EItemOperation {
-		MoveUp,
-		MoveDown,
-		Delete,
-		Cut
-	};
+	//! @brief Removes the currently selected item from the tree and takes it's ownership
+	ITreeItemCollection::ptr_t TreeTakeSelectedItem();
 
-	//! @brief Performs the requested operation on the currently selected project tree item
-	void OnItemOperation(EItemOperation eOper);
+	//! @brief Performs the requested move operation on the currently selected project tree item
+	bool OnItemMove(bool bUp);
 
 	//! @brief When the user clicked the popup menu of new item creation
 	void onBtnNewItemMenu(wxCommandEvent& evt);

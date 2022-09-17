@@ -12,10 +12,23 @@ class IProjTreeItem : public virtual INamedItem
                     , public virtual IDescribedItem
                     , public virtual ITreeItemCollection
 {
+private:
+    //! @brief Deleted copy-constructor; class is non-copyable
+    IProjTreeItem(const IProjTreeItem&) = delete;
+
+    //! @brief Deleted copy-assignment operator; class is non-copyable
+    IProjTreeItem& operator=(const IProjTreeItem&) = delete;
+
 public:
     //! @brief Constructs an empty item
     IProjTreeItem() = default;
     virtual ~IProjTreeItem() = default;
+
+    //! @brief Default move-constructor
+    IProjTreeItem(IProjTreeItem&&) = default;
+
+    //! @brief Default move-assignment operator
+    IProjTreeItem& operator=(IProjTreeItem&&) = default;
 
     //! @brief Reflects the type of this item
     virtual ETreeItemType GetType() const = 0;

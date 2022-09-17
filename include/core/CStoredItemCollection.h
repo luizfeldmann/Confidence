@@ -12,13 +12,17 @@ private:
     CStoredItemCollection& operator=(const CStoredItemCollection&) = delete;
 
 protected:
+    using vstore_t = std::vector<ptr_t>;
+
     //! Stores the subitems of this tree item
-    VecPtrItem m_vItems;
+    vstore_t m_vItems;
 
     //! The types of children that may be added to this object
     ETreeItemType m_eSupportedItemTypes;
 
     SERIALIZATION_FRIEND(CStoredItemCollection);
+
+    vstore_t::iterator find(const IProjTreeItem&);
 
 public:
     //! @brief Initializes a new instance with support for the given types of subitems
@@ -27,11 +31,20 @@ public:
     CStoredItemCollection(CStoredItemCollection&&) = default;
     CStoredItemCollection& operator=(CStoredItemCollection&&) = default;
 
-    //! @copydoc ITreeItemCollection::GetItems
-    OptVecPtrItem GetItems() override;
+    //! @copydoc ITreeItemCollection::SubItems
+    vec_ref_t SubItems() override;
 
-    //! @copydoc ITreeItemCollection::GetItems
-    OptCVecPtrItem GetItems() const override;
+    //! @copydoc ITreeItemCollection::SubItems
+    vec_cref_t SubItems() const override;
+
+    //! @copydoc ITreeItemCollection::TakeItem
+    ptr_t TakeItem(const IProjTreeItem& rItem) override;
+
+    //! @copydoc ITreeItemCollection::AddItem
+    bool AddItem(IProjTreeItem* pNewItem) override;
+
+    //! @copydoc ITreeItemCollection::SwapItems
+    bool SwapItems(const IProjTreeItem& rA, const IProjTreeItem& rB) override;
 
     //! @copydoc ITreeItemCollection::GetSupportedChildTypes
     ETreeItemType GetSupportedChildTypes() const override;

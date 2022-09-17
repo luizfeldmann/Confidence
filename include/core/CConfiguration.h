@@ -17,6 +17,17 @@ public:
     CConfiguration();
     ~CConfiguration();
 
+    //! @brief Creates a new configuration with the provided name and description
+    //! @param[in] strName Name of new configuration
+    //! @param[in] strDesc Description of new configuration
+    CConfiguration(const std::string& strName, const std::string& strDesc);
+
+    //! @brief Default move-constructor
+    CConfiguration(CConfiguration&&) = default;
+
+	//! @brief Default move-assignment operator
+    CConfiguration& operator=(CConfiguration&&) = default;
+
     //! @brief Returns a new instance of this class
     static IProjTreeItem* Create();
 

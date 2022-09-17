@@ -131,33 +131,36 @@ void CMainWindow::onBtnNewItemMenu(wxCommandEvent& evt)
 {
     // Get parent collection of subitems
     IProjTreeItem* pSelected = GetSelectedTreeItem();
-    assert(nullptr != pSelected);
-
-    IProjTreeItem::OptVecPtrItem optSubitems = pSelected->GetItems();
-    assert(optSubitems.has_value());
-
-    IProjTreeItem::VecPtrItem& rvSubitems = optSubitems.value().get();
+    assert((nullptr != pSelected) && "Parent item must be selected before creating it's child");
 
     // Get information about the class of subitem we wish to append
     const ETreeItemType eType = (ETreeItemType)evt.GetId();
     const STreeItemTypeInfo& rInfo = STreeItemTypeInfo::GetInfo(eType);
 
-    assert(nullptr != rInfo.m_fnFactory);
+    assert((nullptr != rInfo.m_fnFactory) && "New item type does not have a factory function");
 
     // Create new child and add to collection
     IProjTreeItem* pNewChild = rInfo.m_fnFactory();
-    assert(nullptr != pNewChild);
+    assert((nullptr != pNewChild) && "Factory failed to create instance of new item");
 
-    rvSubitems.emplace_back(pNewChild);
+    if (pSelected->AddItem(pNewChild))
+    {
+        wxDataViewItem parentItem(pSelected);
+        wxDataViewItem newItem(pNewChild);
 
-    // Notify the view about a new item was created
-    wxDataViewItem parentItem(pSelected);
-    wxDataViewItem newItem(pNewChild);
+        m_dataViewCtrlBrowser->GetModel()->ItemAdded(parentItem, newItem);
 
-    m_dataViewCtrlBrowser->GetModel()->ItemAdded(parentItem, newItem);
+        m_dataViewCtrlBrowser->Expand(parentItem);
+        m_dataViewCtrlBrowser->SetSelections(wxDataViewItemArray(1, newItem));
+    }
+    else
+    {
+        delete pNewChild;
+        pNewChild = nullptr;
 
-    m_dataViewCtrlBrowser->Expand(parentItem);
-    m_dataViewCtrlBrowser->SetSelections(wxDataViewItemArray(1, newItem));
+        wxScopedCharBuffer wxTypeName = rInfo.m_strTypeName.utf8_str();
+        CERROR("Failed adding item '%s' to collection", wxTypeName.data());
+    }
 }
 
 void CMainWindow::onBtnNewItem(wxCommandEvent& event)
@@ -190,92 +193,107 @@ void CMainWindow::onBtnNewItem(wxCommandEvent& event)
         PopupMenu(&menu);
 }
 
-void CMainWindow::OnItemOperation(EItemOperation eOper)
+bool CMainWindow::OnItemMove(bool bUp)
 {
+    bool bSuccess = false;
+
     // Ensure there is a selected item for us to operate
     // If the parent is root, then the project itself is selected
     // We cannot move/cut/delete the project itself
+    IProjTreeItem* const pChild = GetSelectedTreeItem();
+    IProjTreeItem* const pParent = GetTreeItemParent(pChild);
+
+    if (!pChild || !pParent)
+        CWARNING("Cannot move the root item");
+    else
+    {
+        // Find the iterator to this item inside it's parent vector
+        IProjTreeItem::vec_ref_t& vSubitems = pParent->SubItems();
+
+        IProjTreeItem::vec_ref_t::iterator iterChild = std::find_if(vSubitems.begin(), vSubitems.end(),
+            [pChild](const IProjTreeItem::ref_t pSearch)->bool {
+                return (&pSearch.get() == pChild);
+            });
+
+        assert(vSubitems.cend() != iterChild);
+
+        IProjTreeItem::vec_ref_t::iterator iterSwap;
+        if (bUp)
+        {
+            iterSwap = (vSubitems.begin() == iterChild)
+                ? std::prev(vSubitems.end()) // Move up 1st item = wrap around to the end
+                : std::prev(iterChild);
+        }
+        else
+        {
+            iterSwap = std::next(iterChild);
+
+            // If move down last item - wrap around to the front
+            if (vSubitems.cend() == iterSwap)
+                iterSwap = vSubitems.begin();
+        }
+
+        if (pParent->SwapItems(*iterSwap, *iterChild))
+        {
+            wxDataViewModel* pModel = m_dataViewCtrlBrowser->GetModel();
+            wxDataViewItem wxParent(pParent), wxChild(pChild);
+
+            pModel->ItemDeleted(wxParent, wxChild);
+            pModel->ItemAdded(wxParent, wxChild);
+
+            bSuccess = true;
+        }
+    }
+
+    return bSuccess;
+}
+
+ITreeItemCollection::ptr_t CMainWindow::TreeTakeSelectedItem()
+{
+    ITreeItemCollection::ptr_t pTakeItem;
+
     IProjTreeItem* pChild = GetSelectedTreeItem();
     IProjTreeItem* pParent = GetTreeItemParent(pChild);
 
     if (!pChild || !pParent)
-        return;
-
-    // Find the iterator to this item inside it's parent vector
-    IProjTreeItem::OptVecPtrItem optParentSubitems = pParent->GetItems();
-    IProjTreeItem::VecPtrItem& vParentSubitems = optParentSubitems.value().get();
-
-    IProjTreeItem::VecPtrItem::iterator iterChild = std::find_if(vParentSubitems.begin(), vParentSubitems.end(),
-        [pChild](const IProjTreeItem::PtrItem& pSearch)->bool {
-            return (pSearch.get() == pChild);
-        });
-    assert(vParentSubitems.cend() != iterChild);
-
-    bool bItemDelete = false;
-    bool bItemCreate = false;
-
-    switch (eOper)
+        CWARNING("You must select a child item for this operation");
+    else
     {
-        default:
-        case EItemOperation::Delete:
-            m_editorManager.ItemDeleted(*pChild);
-            vParentSubitems.erase(iterChild);
-            bItemDelete = true;
-        break;
+        pTakeItem = pParent->TakeItem(*pChild);
 
-        case EItemOperation::Cut:
-            m_editorManager.ItemDeleted(*pChild);
-            m_pCutClipboard.reset( iterChild->release() );
-            vParentSubitems.erase(iterChild);
-            bItemDelete = true;
-        break;
-
-        case EItemOperation::MoveUp:
-            if (vParentSubitems.cbegin() != iterChild) // Can only move up if it's not the first
-            {
-                IProjTreeItem::VecPtrItem::iterator iterPrev = std::prev(iterChild);
-                std::iter_swap(iterChild, iterPrev);
-                bItemDelete = true;
-                bItemCreate = true;
-            }
-            break;
-
-        case EItemOperation::MoveDown:
-            IProjTreeItem::VecPtrItem::iterator iterNext = std::next(iterChild);
-            if (vParentSubitems.cend() != iterNext) // Can only move up if it's not the first
-            {
-                std::iter_swap(iterChild, iterNext);
-                bItemDelete = true;
-                bItemCreate = true;
-            }
-            break;
+        if (pTakeItem)
+            m_dataViewCtrlBrowser->GetModel()->ItemDeleted(wxDataViewItem(pParent), wxDataViewItem(pChild));
+        else
+        {
+            const std::string strName = pChild->GetName();
+            CWARNING("Item '%s' cannot be removed from the collection", strName.c_str());
+        }
     }
 
-    if (bItemDelete)
-        m_dataViewCtrlBrowser->GetModel()->ItemDeleted(wxDataViewItem(pParent), wxDataViewItem(pChild));
-
-    if (bItemCreate)
-        m_dataViewCtrlBrowser->GetModel()->ItemAdded(wxDataViewItem(pParent), wxDataViewItem(pChild));
+    return pTakeItem;
 }
 
 void CMainWindow::onBtnDeleteItem(wxCommandEvent& event)
 {
-    OnItemOperation(EItemOperation::Delete);
+    TreeTakeSelectedItem();
 }
 
 void CMainWindow::onBtnItemUp(wxCommandEvent& event)
 {
-    OnItemOperation(EItemOperation::MoveUp);
+    OnItemMove(true);
 }
 
 void CMainWindow::onBtnItemDown(wxCommandEvent& event)
 {
-    OnItemOperation(EItemOperation::MoveDown);
+    OnItemMove(false);
 }
 
 void CMainWindow::onBtnItemCut(wxCommandEvent& event)
 {
-    OnItemOperation(EItemOperation::Cut);
+    ITreeItemCollection::ptr_t pTakeItem = TreeTakeSelectedItem();
+
+    if (pTakeItem)
+        m_pCutClipboard = std::move(pTakeItem);
 }
 
 void CMainWindow::onBtnItemPaste(wxCommandEvent& event)
@@ -305,20 +323,23 @@ void CMainWindow::onBtnItemPaste(wxCommandEvent& event)
     }
     else
     {
-        ITreeItemCollection::OptVecPtrItem optSubitems = pSelected->GetItems();
-        assert(optSubitems.has_value());
-        ITreeItemCollection::VecPtrItem& rVecSubitems = optSubitems.value().get();
-
         wxDataViewItem pasteItem(m_pCutClipboard.get()); // We must get this reference before std::move destroys the m_pCutClipboard
         wxDataViewItem parentItem(pSelected);
 
         // Move the clipboard item into the new parent's vector
-        rVecSubitems.emplace_back( std::move(m_pCutClipboard) );
+        if (pSelected->AddItem(m_pCutClipboard.get()))
+        {
+            m_pCutClipboard.release(); // the ownership was transfered to the parent tree item
 
-        // Update the GUI
-        m_dataViewCtrlBrowser->GetModel()->ItemAdded(parentItem, pasteItem);
-        m_dataViewCtrlBrowser->Expand(parentItem);
-        m_dataViewCtrlBrowser->SetSelections(wxDataViewItemArray(1, pasteItem));
+            // Update the GUI
+            m_dataViewCtrlBrowser->GetModel()->ItemAdded(parentItem, pasteItem);
+            m_dataViewCtrlBrowser->Expand(parentItem);
+            m_dataViewCtrlBrowser->SetSelections(wxDataViewItemArray(1, pasteItem));
+        }
+        else
+        {
+            CERROR("Parent item refused to accept new child");
+        }
     }
 }
 

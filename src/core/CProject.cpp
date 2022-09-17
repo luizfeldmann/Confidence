@@ -9,10 +9,14 @@ DEFINE_SERIALIZATION_SCHEME(CProject,
     SERIALIZATION_INHERIT(CStoredNameItem)
     SERIALIZATION_INHERIT(CStoredDescriptionItem)
     SERIALIZATION_MEMBER(m_id)
+    SERIALIZATION_MEMBER(m_cConfigurations)
+    SERIALIZATION_MEMBER(m_cInstances)
     SERIALIZATION_INHERIT(CStoredItemCollection)
 )
 
 REGISTER_POLYMORPHIC_CLASS(CProject);
+
+/* CProject */
 
 CProject::CProject()
     : CStoredNameItem("<new project>")
@@ -30,11 +34,6 @@ CProject& CProject::TheProject()
 {
     static CProject theProject;
     return theProject;
-}
-
-ETreeItemType CProject::GetType() const
-{
-    return EProject;
 }
 
 bool CProject::OpenFile(const std::string& szOpenFileName)
@@ -61,11 +60,6 @@ bool CProject::OpenFile(const std::string& szOpenFileName)
     return bSuccess;
 }
 
-bool CProject::PostDeserialize()
-{
-    return IProjTreeItem::PostDeserialize();
-}
-
 bool CProject::SaveToFile(const std::string& szSaveFileName)
 {
     bool bSuccess = false;
@@ -85,11 +79,6 @@ bool CProject::SaveToFile(const std::string& szSaveFileName)
 
     m_currentPath = szSaveFileName;
     return true;
-}
-
-bool CProject::PreSerialize()
-{
-    return IProjTreeItem::PreSerialize();
 }
 
 const std::string& CProject::GetCurrentPath() const
@@ -112,4 +101,43 @@ bool CProject::ExportDocumentation()
 {
     CERROR("FEATURE NOT YET IMPLEMENTED");
     return false;
+}
+
+/* OVERRIDES FROM ITreeItemCollection */
+
+CProject::vec_ref_t CProject::SubItems()
+{
+    CProject::vec_ref_t vSubItems = CStoredItemCollection::SubItems();
+
+    vSubItems.emplace(vSubItems.begin(), std::ref(m_cInstances));
+    vSubItems.emplace(vSubItems.begin(), std::ref(m_cConfigurations));
+
+    return vSubItems;
+}
+
+CProject::vec_cref_t CProject::SubItems() const
+{
+    CProject::vec_cref_t vSubItems = CStoredItemCollection::SubItems();
+
+    vSubItems.emplace(vSubItems.begin(), std::cref(m_cInstances));
+    vSubItems.emplace(vSubItems.begin(), std::cref(m_cConfigurations));
+
+    return vSubItems;
+}
+
+/* OVERRIDES FROM IProjTreeItem */
+
+ETreeItemType CProject::GetType() const
+{
+    return EProject;
+}
+
+bool CProject::PostDeserialize()
+{
+    return IProjTreeItem::PostDeserialize();
+}
+
+bool CProject::PreSerialize()
+{
+    return IProjTreeItem::PreSerialize();
 }

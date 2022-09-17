@@ -1,13 +1,32 @@
 #include "core/CNoChildren.h"
+#include "core/IProjTreeItem.h"
 
-ITreeItemCollection::OptVecPtrItem CNoChildren::GetItems()
+CNoChildren::vec_ref_t CNoChildren::SubItems()
 {
-    return OptVecPtrItem();
+    vec_ref_t vEmpty;
+    return vEmpty;
 }
 
-ITreeItemCollection::OptCVecPtrItem CNoChildren::GetItems() const
+CNoChildren::vec_cref_t CNoChildren::SubItems() const
 {
-    return OptCVecPtrItem();
+    vec_cref_t vEmpty;
+    return vEmpty;
+}
+
+CNoChildren::ptr_t CNoChildren::TakeItem(const IProjTreeItem& rItem)
+{
+    ptr_t pEmpty;
+    return pEmpty;
+}
+
+bool CNoChildren::AddItem(IProjTreeItem* pNewItem)
+{
+    return false;
+}
+
+bool CNoChildren::SwapItems(const IProjTreeItem& rA, const IProjTreeItem& rB)
+{
+    return false;
 }
 
 ETreeItemType CNoChildren::GetSupportedChildTypes() const

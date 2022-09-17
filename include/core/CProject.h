@@ -2,10 +2,8 @@
 #define _CPROJECT_H_
 
 #include "util/CGuid.h"
-#include "IProjTreeItem.h"
-#include "CStoredNameItem.h"
-#include "CStoredDescriptionItem.h"
-#include "CStoredItemCollection.h"
+#include "core/CInstanceGroup.h"
+#include "core/CConfigurationGroup.h"
 
 //! @brief Top level item in the project tree / the main project document
 class CProject : public IProjTreeItem
@@ -18,10 +16,32 @@ public:
     CProject();
     ~CProject();
 
+    //! @brief Default move-constructor
+    CProject(CProject&&) = default;
+
+    //! @brief Default move-assignment operator
     CProject& operator=(CProject&&) = default;
+
+    /********************************/
+    /* OVERRIDES FROM IProjTreeItem */
+    /********************************/
 
     // @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;
+
+    /**************************************/
+    /* OVERRIDES FROM ITreeItemCollection */
+    /**************************************/
+
+    //! @copydoc ITreeItemCollection::SubItems
+    vec_ref_t SubItems() override;
+
+    //! @copydoc ITreeItemCollection::SubItems
+    vec_cref_t SubItems() const override;
+
+    /************/
+    /* CProject */
+    /************/
 
     //! @brief Opens a project from a file
     //! @param[in] szOpenFileName Path to the file to be opened
@@ -51,17 +71,32 @@ public:
     static CProject& TheProject();
 
 protected:
+    /********************************/
+    /* OVERRIDES FROM IProjTreeItem */
+    /********************************/
+
     // @copydoc IProjTreeItem::PostDeserialize
     bool PostDeserialize() override;
 
     // @copydoc IProjTreeItem::PreSerialize
     bool PreSerialize() override;
 
+    /************/
+    /* CProject */
+    /************/
+
     //! Stores most recent open/save path to the project file, if any
     std::string m_currentPath;
 
     //! Unique ID of the project - for traceability
     CGuid m_id;
+
+    //! Group of all configurations supported by the project
+    CConfigurationGroup m_cConfigurations;
+
+    //! Group of all instances on this project
+    CInstanceGroup m_cInstances;
+
     SERIALIZATION_FRIEND(CProject);
 };
 

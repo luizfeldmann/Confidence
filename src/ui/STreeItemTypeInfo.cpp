@@ -108,7 +108,7 @@ const STreeItemTypeInfo& STreeItemTypeInfo::GetInfo(ETreeItemType eType)
         { EConfGroup,
             STreeItemTypeInfo {
                 "Root configuration",
-                REGICON(L"RES_ID_ICON_TREEITEM_CONFIG"),
+                REGICON(L"RES_ID_ICON_TREEITEM_CONFIGS"),
                 nullptr,    // Special item type, cannot be created
                 &CNameDescEditor::Create // TODO: implement dedicated editor for configurations
             }

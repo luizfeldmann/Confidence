@@ -13,9 +13,15 @@ class CInstanceGroup : public IProjTreeItem
     , public CStoredItemCollection
 {
 public:
-    //! @brief Creates a new, empty group
+    //! @brief Creates a new, empty instances-group
     CInstanceGroup();
     ~CInstanceGroup();
+
+    //! @brief Default move-constructor
+    CInstanceGroup(CInstanceGroup&&) = default;
+
+    //! @brief Default move-assignment operator
+    CInstanceGroup& operator=(CInstanceGroup&&) = default;
 
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;

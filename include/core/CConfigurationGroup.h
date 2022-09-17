@@ -11,6 +11,12 @@ public:
     CConfigurationGroup();
     ~CConfigurationGroup();
 
+    //! @brief Default move-constructor
+    CConfigurationGroup(CConfigurationGroup&&) = default;
+
+    //! @brief Default move-assignment operator
+    CConfigurationGroup& operator=(CConfigurationGroup&&) = default;
+
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;
 };

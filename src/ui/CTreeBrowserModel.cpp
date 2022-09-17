@@ -1,6 +1,7 @@
 #include "ui/CTreeBrowserModel.h"
 #include "ui/STreeItemTypeInfo.h"
 #include "core/CProject.h"
+#include <unordered_map>
 
 /// =======================================================
 /// Global definitions
@@ -175,8 +176,7 @@ bool CTreeBrowserModel::IsContainer(const wxDataViewItem& item) const
         const IProjTreeItem* pItem = GetItem(item);
         assert(nullptr != pItem);
 
-        // Regular items may or not have a vector of subitems
-        bIsContainer = pItem->GetItems().has_value();
+        bIsContainer = (EInvalid != pItem->GetSupportedChildTypes());
     }
 
     return bIsContainer;
@@ -200,19 +200,15 @@ unsigned int CTreeBrowserModel::GetChildren(const wxDataViewItem& parent, wxData
         const IProjTreeItem* pParent = GetItem(parent);
         assert(nullptr != pParent);
 
-        ITreeItemCollection::OptCVecPtrItem optSubitems = pParent->GetItems();
-        if (optSubitems.has_value())
+        ITreeItemCollection::vec_cref_t vSubitems = pParent->SubItems();
+        for (const ITreeItemCollection::cref_t& rChild : vSubitems)
         {
-            const ITreeItemCollection::VecPtrItem& vecSubitems = optSubitems.value();
+            const IProjTreeItem* pChild = &rChild.get();
+            wxDataViewItem child((void*)pChild);
+            array.push_back(child);
+            uiCount++;
 
-            for (const ITreeItemCollection::PtrItem& pChild : vecSubitems)
-            {
-                wxDataViewItem child(pChild.get());
-                array.push_back(child);
-                uiCount++;
-
-                g_mapParents[child] = parent;
-            }
+            g_mapParents[child] = parent;
         }
     }
 
