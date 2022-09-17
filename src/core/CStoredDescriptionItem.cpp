@@ -10,12 +10,13 @@ CStoredDescriptionItem::CStoredDescriptionItem(const std::string& strDesc)
 
 }
 
-const std::string& CStoredDescriptionItem::GetDescription() const
+std::string CStoredDescriptionItem::GetDescription() const
 {
     return m_strDescription;
 }
 
-void CStoredDescriptionItem::SetDescription(const std::string& strNewDesc)
+bool CStoredDescriptionItem::SetDescription(const std::string& strNewDesc)
 {
     m_strDescription = strNewDesc;
+    return true;
 }

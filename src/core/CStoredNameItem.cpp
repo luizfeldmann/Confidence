@@ -10,12 +10,13 @@ CStoredNameItem::CStoredNameItem(const std::string& strName)
 
 }
 
-const std::string& CStoredNameItem::GetName() const
+std::string CStoredNameItem::GetName() const
 {
     return m_strName;
 }
 
-void CStoredNameItem::SetName(const std::string& strNewName)
+bool CStoredNameItem::SetName(const std::string& strNewName)
 {
     m_strName = strNewName;
+    return true;
 }

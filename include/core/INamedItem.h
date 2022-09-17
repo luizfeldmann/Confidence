@@ -11,11 +11,12 @@ public:
     virtual ~INamedItem() = default;
 
     //! @brief Reads the name of this item
-    virtual const std::string& GetName() const = 0;
+    virtual std::string GetName() const = 0;
 
     //! @brief Sets the name of this item
     //! @param[in] strNewName Assigned name
-    virtual void SetName(const std::string& strNewName) = 0;
+    //! @return True if new name was accepted
+    virtual bool SetName(const std::string& strNewName) = 0;
 };
 
 #endif

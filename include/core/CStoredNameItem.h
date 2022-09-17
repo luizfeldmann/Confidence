@@ -22,10 +22,10 @@ public:
     virtual ~CStoredNameItem() = default;
 
     //! @copydoc INamedItem::GetName
-    virtual const std::string& GetName() const override;
+    virtual std::string GetName() const override;
 
     //! @copydoc INamedItem::SetName
-    virtual void SetName(const std::string& strNewName) override;
+    virtual bool SetName(const std::string& strNewName) override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CStoredNameItem);

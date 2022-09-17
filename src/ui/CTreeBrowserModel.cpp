@@ -90,13 +90,16 @@ bool CTreeBrowserModel::SetName(const wxVariant& value, IProjTreeItem* pItem)
     wxDataViewIconText iconAndText;
     iconAndText << value;
 
-    pItem->SetName( iconAndText.GetText().ToStdString() );
+    bool bSuccess = pItem->SetName( iconAndText.GetText().ToStdString() );
 
-    wxCommandEvent evtNotifyRename(EVT_TREE_ITEM_RENAME);
-    evtNotifyRename.SetClientData(pItem);
-    ProcessEvent(evtNotifyRename);
+    if (bSuccess)
+    {
+        wxCommandEvent evtNotifyRename(EVT_TREE_ITEM_RENAME);
+        evtNotifyRename.SetClientData(pItem);
+        ProcessEvent(evtNotifyRename);
+    }
 
-    return true;
+    return bSuccess;
 }
 
 /// =======================================================

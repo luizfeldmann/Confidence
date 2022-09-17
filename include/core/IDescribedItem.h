@@ -11,11 +11,12 @@ public:
     virtual ~IDescribedItem() = default;
 
     //! @brief Reads the description of this item
-    virtual const std::string& GetDescription() const = 0;
+    virtual std::string GetDescription() const = 0;
 
     //! @brief Sets the description of this item
     //! @param[in] strNewDesc Assigned description
-    virtual void SetDescription(const std::string& strNewDesc) = 0;
+    //! @return True if new description was accepted
+    virtual bool SetDescription(const std::string& strNewDesc) = 0;
 };
 
 #endif

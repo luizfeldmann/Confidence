@@ -18,10 +18,10 @@ public:
     virtual ~CStoredDescriptionItem() = default;
 
     //! @copydoc IDescribedItem::GetDescription
-    virtual const std::string& GetDescription() const override;
+    virtual std::string GetDescription() const override;
 
     //! @copydoc IDescribedItem::SetDescription
-    virtual void SetDescription(const std::string& strNewDesc) override;
+    virtual bool SetDescription(const std::string& strNewDesc) override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CStoredDescriptionItem);
