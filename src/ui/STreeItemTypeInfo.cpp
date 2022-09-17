@@ -3,6 +3,8 @@
 #include "ui/CGroupEditor.h"
 #include "ui/CVariableEditor.h"
 #include "ui/CGeneratedTextFileEditor.h"
+#include "core/CInstance.h"
+#include "core/CConfiguration.h"
 #include <map>
 
 const std::vector<ETreeItemType>& STreeItemTypeInfo::GetTypesList()
@@ -11,7 +13,11 @@ const std::vector<ETreeItemType>& STreeItemTypeInfo::GetTypesList()
         EProject,
         EGroup,
         EVariable,
-        ETextFile
+        ETextFile,
+        EInstance,
+        EInstGroup,
+        EConfig,
+        EConfGroup,
     };
 
     return theList;
@@ -73,6 +79,38 @@ const STreeItemTypeInfo& STreeItemTypeInfo::GetInfo(ETreeItemType eType)
                 REGICON(L"RES_ID_ICON_TREEITEM_CODEFILE"),
                 &CGeneratedTextFile::Create,
                 & CGeneratedTextFileEditor::Create
+            }
+        },
+        { EInstance,
+            STreeItemTypeInfo {
+                "Instance",
+                REGICON(L"RES_ID_ICON_TREEITEM_INSTANCE"),
+                &CInstance::Create,
+                &CNameDescEditor::Create // TODO: implement dedicated editor for instances
+            }
+        },
+        { EInstGroup,
+            STreeItemTypeInfo {
+                "Instances collection",
+                REGICON(L"RES_ID_ICON_TREEITEM_INSTANCES"),
+                nullptr,    // Special item type, cannot be created 
+                nullptr     // Cannot be edited
+            }
+        },
+        { EConfig,
+            STreeItemTypeInfo {
+                "Configuration",
+                REGICON(L"RES_ID_ICON_TREEITEM_CONFIG"),
+                &CConfiguration::Create,
+                &CNameDescEditor::Create // TODO: implement dedicated editor for configurations
+            }
+        },
+        { EConfGroup,
+            STreeItemTypeInfo {
+                "Root configuration",
+                REGICON(L"RES_ID_ICON_TREEITEM_CONFIG"),
+                nullptr,    // Special item type, cannot be created
+                &CNameDescEditor::Create // TODO: implement dedicated editor for configurations
             }
         },
     };
