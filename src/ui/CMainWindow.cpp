@@ -262,7 +262,10 @@ ITreeItemCollection::ptr_t CMainWindow::TreeTakeSelectedItem()
         pTakeItem = pParent->TakeItem(*pChild);
 
         if (pTakeItem)
+        {
             m_dataViewCtrlBrowser->GetModel()->ItemDeleted(wxDataViewItem(pParent), wxDataViewItem(pChild));
+            m_editorManager.ItemDeleted(*pTakeItem);
+        }
         else
         {
             const std::string strName = pChild->GetName();
