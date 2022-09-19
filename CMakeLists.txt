@@ -12,7 +12,7 @@ SET(RESOURCESFILE "resources.rc")
 configure_file(res/resources.in.rc ${RESOURCESFILE})
 
 # Dependency: JInterface
-include(dependencies/JInterface/ConsumeMe.txt)
+include(dependencies/JInterface/ConsumeMe.cmake)
 
 # Dependency: CLI11
 include_directories(dependencies/CLI11/include)
@@ -93,6 +93,11 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/CVariableEditor.cpp"
     "include/ui/CTextStyler.h" 
     "src/ui/CTextStyler.cpp"
+    "include/core/ITextProvider.h"
+    "include/core/CStoredTextProvider.h"
+    "src/core/CStoredTextProvider.cpp"
+    "include/core/CFileTextProvider.h"
+    "src/core/CFileTextProvider.cpp"
     "include/ui/CGeneratedTextFileEditor.h"
     "src/ui/CGeneratedTextFileEditor.cpp"
 
@@ -103,6 +108,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/util/Log.cpp"
     "include/util/CGuid.h"
     "src/util/CGuid.cpp"
+    "include/util/CTempFile.h"
+    "src/util/CTempFile.cpp"
 
     # Resources
     ${RESOURCESFILE}
@@ -141,7 +148,7 @@ endif()
 
 set_target_properties(${CMAKE_PROJECT_NAME}
     PROPERTIES
-    CXX_STANDARD 11
+    CXX_STANDARD 17
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib
