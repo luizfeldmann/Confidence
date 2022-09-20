@@ -1,6 +1,7 @@
 #ifndef _CMAINWINDOW_H_
 #define _CMAINWINDOW_H_
 
+#include <wx/accel.h>
 #include "wxExport/IMainWindow.h"
 #include "ui/CTreeItemEditorManager.h"
 #include "ui/CNameDescEditor.h"
@@ -12,6 +13,9 @@ public:
     ~CMainWindow();
 
 protected:
+	//! Manages shortcuts
+	wxAcceleratorTable m_cAccTbl;
+
 	//! Manages the tabs on the editor tab view
 	CTreeItemEditorManager m_editorManager;
 	friend class ITreeItemEditor;

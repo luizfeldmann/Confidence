@@ -5,6 +5,7 @@
 #include <wx/filedlg.h>
 #include <wx/menu.h>
 #include "core/CProject.h"
+#include <array>
 
 const static wxString g_szProjectFileFilter = "Confidence projects (*.cfx)|*.cfx";
 
@@ -28,6 +29,27 @@ CMainWindow::CMainWindow()
     // Configure the editor tabs
     m_notebookEditor->Bind(EVT_EDITOR_ITEM_CHANGED_NAME, &CMainWindow::onEditorItemNameDescChanged, this);
     m_notebookEditor->Bind(EVT_EDITOR_ITEM_CHANGED_DESC, &CMainWindow::onEditorItemNameDescChanged, this);
+
+    // Build accelerator table
+    const std::array<wxAcceleratorEntry, 11> arrAccEntry {
+        // Main menu
+        wxAcceleratorEntry(wxACCEL_CTRL,    (int)'O',   m_toolOpenProject->GetId()),
+        wxAcceleratorEntry(wxACCEL_CTRL,    (int)'S',   m_toolSaveProject->GetId()),
+        wxAcceleratorEntry(wxACCEL_CTRL | 
+                           wxACCEL_SHIFT,   (int)'S',   m_toolSaveAsProject->GetId()),
+        wxAcceleratorEntry(wxACCEL_NORMAL,  WXK_F5,     m_toolRunProject->GetId()),
+        wxAcceleratorEntry(wxACCEL_NORMAL,  WXK_ESCAPE, m_toolStopProject->GetId()),
+        // Tree browser
+        wxAcceleratorEntry(wxACCEL_CTRL,    (int)'N',   m_toolNewItem->GetId()),
+        wxAcceleratorEntry(wxACCEL_NORMAL,  WXK_DELETE, m_toolDeleteItem->GetId()),
+        wxAcceleratorEntry(wxACCEL_CTRL,    WXK_UP,     m_toolMoveUpItem->GetId()),
+        wxAcceleratorEntry(wxACCEL_CTRL,    WXK_DOWN,   m_toolMoveDownItem->GetId()),
+        wxAcceleratorEntry(wxACCEL_CTRL,    (int)'X',   m_toolCutItem->GetId()),
+        wxAcceleratorEntry(wxACCEL_CTRL,    (int)'V',   m_toolPasteItem->GetId()),
+    };
+
+    m_cAccTbl = wxAcceleratorTable(arrAccEntry.size(), arrAccEntry.data());
+    SetAcceleratorTable(m_cAccTbl);
 
     // Load the current project
     ReloadProject();
@@ -240,6 +262,7 @@ bool CMainWindow::OnItemMove(bool bUp)
 
             pModel->ItemDeleted(wxParent, wxChild);
             pModel->ItemAdded(wxParent, wxChild);
+            m_dataViewCtrlBrowser->Select(wxChild);
 
             bSuccess = true;
         }
