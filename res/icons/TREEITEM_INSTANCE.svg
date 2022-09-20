@@ -7,7 +7,7 @@
    viewBox="0 0 16 16"
    version="1.1"
    id="svg4"
-   sodipodi:docname="BOX.svg"
+   sodipodi:docname="TREEITEM_INSTANCE.svg"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -32,9 +32,24 @@
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg4" />
+     inkscape:current-layer="svg4"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-object-midpoints="true">
+    <sodipodi:guide
+       position="8,8"
+       orientation="0.70710678,-0.70710678"
+       id="guide821"
+       inkscape:label=""
+       inkscape:locked="false"
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="8,8"
+       orientation="-0.70710678,-0.70710678"
+       id="guide823" />
+  </sodipodi:namedview>
   <path
-     d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5 8.186 1.113zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"
+     d="m 8.1255925,3.32382 a 0.33761489,0.33761489 0 0 0 -0.251185,0 L 3.844636,4.9355934 8,6.5973339 12.155364,4.9355934 Z M 12.726608,5.4345882 8.3376152,7.1901856 V 12.539356 L 12.726608,10.78376 V 5.4352634 Z M 7.6623847,12.540032 V 7.1895104 L 3.2733916,5.4345882 V 10.784434 Z M 7.623897,2.6965315 a 1.0128447,1.0128447 0 0 1 0.752206,0 l 4.813713,1.9257553 a 0.33761489,0.33761489 0 0 1 0.212022,0.3133066 v 5.8488406 a 0.67522976,0.67522976 0 0 1 -0.42472,0.626613 l -4.8515255,1.940611 a 0.33761489,0.33761489 0 0 1 -0.251185,0 L 3.0235566,11.411047 A 0.67522976,0.67522976 0 0 1 2.5981619,10.784434 V 4.9355934 A 0.33761489,0.33761489 0 0 1 2.810184,4.6222868 Z"
      id="path2"
-     style="fill:#b380ff;fill-opacity:1" />
+     style="fill:#b380ff;fill-opacity:1;stroke-width:0.67523" />
 </svg>

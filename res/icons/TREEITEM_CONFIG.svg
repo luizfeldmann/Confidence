@@ -7,7 +7,7 @@
    viewBox="0 0 16 16"
    version="1.1"
    id="svg4"
-   sodipodi:docname="WRENCH.svg"
+   sodipodi:docname="TREEITEM_CONFIG.svg"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -24,17 +24,32 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      showgrid="false"
-     inkscape:zoom="50.75"
-     inkscape:cx="7.9901478"
-     inkscape:cy="8.0098522"
+     inkscape:zoom="35.885669"
+     inkscape:cx="9.9064615"
+     inkscape:cy="9.154072"
      inkscape:window-width="1920"
      inkscape:window-height="1001"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg4" />
+     inkscape:current-layer="svg4"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-object-midpoints="true">
+    <sodipodi:guide
+       position="8,8"
+       orientation="-1,0"
+       id="guide855"
+       inkscape:label=""
+       inkscape:locked="false"
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="8,8"
+       orientation="0,-1"
+       id="guide937" />
+  </sodipodi:namedview>
   <path
-     d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11l.471.242z"
+     d="m 3.4156755,4.6464571 a 1.743974,1.743974 0 0 0 2.1352651,2.1329425 l 3.6812717,3.6296034 a 1.7433934,1.7433934 0 0 0 1.6714047,2.2357 1.7416518,1.7416518 0 1 0 -0.494049,-3.4124764 L 6.7799663,5.5509549 A 1.743974,1.743974 0 0 0 4.6470233,3.4139482 L 5.8899821,4.6574876 5.6786617,5.6780955 4.6586343,5.8894159 Z m 7.7619615,5.2359855 0.30653,0.01509 0.166618,0.2583454 0.258345,0.166618 0.0151,0.307111 0.140493,0.273439 -0.140493,0.27344 -0.0151,0.307111 -0.258345,0.166618 -0.166618,0.258345 -0.307111,0.01509 -0.273439,0.140493 -0.27344,-0.140493 -0.307111,-0.01509 -0.166618,-0.258345 -0.2583447,-0.166618 -0.01509,-0.307111 -0.140493,-0.27344 0.140493,-0.273439 0.01509,-0.307111 0.2583447,-0.166618 0.166618,-0.2583454 0.307111,-0.01509 0.27344,-0.140493 0.273439,0.140493 z"
      id="path2"
-     style="fill:#5f8dd3;fill-opacity:1" />
+     style="fill:#5f8dd3;fill-opacity:1;stroke-width:0.580551" />
 </svg>
