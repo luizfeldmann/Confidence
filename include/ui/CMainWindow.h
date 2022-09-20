@@ -1,7 +1,7 @@
 #ifndef _CMAINWINDOW_H_
 #define _CMAINWINDOW_H_
 
-#include <wx/accel.h>
+#include "ui/CAcceleratorEntry.h"
 #include "wxExport/IMainWindow.h"
 #include "ui/CTreeItemEditorManager.h"
 #include "ui/CNameDescEditor.h"

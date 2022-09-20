@@ -75,6 +75,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/CMainApp.cpp"
     "include/ui/CMainWindow.h"
     "src/ui/CMainWindow.cpp"
+    "include/ui/CAcceleratorEntry.h"
+    "src/ui/CAcceleratorEntry.cpp"
     "include/ui/CTreeBrowserModel.h"
     "src/ui/CTreeBrowserModel.cpp"
     "include/ui/STreeItemTypeInfo.h"

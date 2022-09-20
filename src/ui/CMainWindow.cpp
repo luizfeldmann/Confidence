@@ -31,21 +31,22 @@ CMainWindow::CMainWindow()
     m_notebookEditor->Bind(EVT_EDITOR_ITEM_CHANGED_DESC, &CMainWindow::onEditorItemNameDescChanged, this);
 
     // Build accelerator table
-    const std::array<wxAcceleratorEntry, 11> arrAccEntry {
+    using acc_entry_t = CAcceleratorEntry;
+    const std::array<acc_entry_t, 11> arrAccEntry {
         // Main menu
-        wxAcceleratorEntry(wxACCEL_CTRL,    (int)'O',   m_toolOpenProject->GetId()),
-        wxAcceleratorEntry(wxACCEL_CTRL,    (int)'S',   m_toolSaveProject->GetId()),
-        wxAcceleratorEntry(wxACCEL_CTRL | 
-                           wxACCEL_SHIFT,   (int)'S',   m_toolSaveAsProject->GetId()),
-        wxAcceleratorEntry(wxACCEL_NORMAL,  WXK_F5,     m_toolRunProject->GetId()),
-        wxAcceleratorEntry(wxACCEL_NORMAL,  WXK_ESCAPE, m_toolStopProject->GetId()),
+        acc_entry_t(wxACCEL_CTRL,    (int)'O',   m_toolOpenProject),
+        acc_entry_t(wxACCEL_CTRL,    (int)'S',   m_toolSaveProject),
+        acc_entry_t(wxACCEL_CTRL |
+                     wxACCEL_SHIFT,  (int)'S',   m_toolSaveAsProject),
+        acc_entry_t(wxACCEL_NORMAL,  WXK_F5,     m_toolRunProject),
+        acc_entry_t(wxACCEL_NORMAL,  WXK_ESCAPE, m_toolStopProject),
         // Tree browser
-        wxAcceleratorEntry(wxACCEL_CTRL,    (int)'N',   m_toolNewItem->GetId()),
-        wxAcceleratorEntry(wxACCEL_NORMAL,  WXK_DELETE, m_toolDeleteItem->GetId()),
-        wxAcceleratorEntry(wxACCEL_CTRL,    WXK_UP,     m_toolMoveUpItem->GetId()),
-        wxAcceleratorEntry(wxACCEL_CTRL,    WXK_DOWN,   m_toolMoveDownItem->GetId()),
-        wxAcceleratorEntry(wxACCEL_CTRL,    (int)'X',   m_toolCutItem->GetId()),
-        wxAcceleratorEntry(wxACCEL_CTRL,    (int)'V',   m_toolPasteItem->GetId()),
+        acc_entry_t(wxACCEL_CTRL,    (int)'N',   m_toolNewItem),
+        acc_entry_t(wxACCEL_NORMAL,  WXK_DELETE, m_toolDeleteItem),
+        acc_entry_t(wxACCEL_CTRL,    WXK_UP,     m_toolMoveUpItem),
+        acc_entry_t(wxACCEL_CTRL,    WXK_DOWN,   m_toolMoveDownItem),
+        acc_entry_t(wxACCEL_CTRL,    (int)'X',   m_toolCutItem),
+        acc_entry_t(wxACCEL_CTRL,    (int)'V',   m_toolPasteItem),
     };
 
     m_cAccTbl = wxAcceleratorTable(arrAccEntry.size(), arrAccEntry.data());
