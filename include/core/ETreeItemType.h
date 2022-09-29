@@ -17,6 +17,7 @@ enum ETreeItemType
     EInstGroup  = 0x20, //! Special group containing only instances
     EConfig     = 0x40, //! Complete collection of configurations
     EConfGroup  = 0x80, //! Special group containing only configurations
+    ERunProcess = 0x100,//! Creates a new process and (optionally) waits for return code and output
 };
 
 #endif

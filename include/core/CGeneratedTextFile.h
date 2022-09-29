@@ -36,6 +36,7 @@ public:
     ITextProvider* GetProvider() const;
 
     //! @brief Sets the underlying text provider
+    //! @details The old provider is destroyed; assumes exclusive ownership of the new pointer
     void SetProvider(ITextProvider* pNewProvider);
 
     //! @brief Reads the path where this file is generated

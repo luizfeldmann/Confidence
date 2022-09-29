@@ -3,6 +3,7 @@
 #include "ui/CGroupEditor.h"
 #include "ui/CVariableEditor.h"
 #include "ui/CGeneratedTextFileEditor.h"
+#include "ui/CProcessEditor.h"
 #include "core/CInstance.h"
 #include "core/CConfiguration.h"
 #include <map>
@@ -18,6 +19,7 @@ const std::vector<ETreeItemType>& STreeItemTypeInfo::GetTypesList()
         EInstGroup,
         EConfig,
         EConfGroup,
+        ERunProcess,
     };
 
     return theList;
@@ -111,6 +113,14 @@ const STreeItemTypeInfo& STreeItemTypeInfo::GetInfo(ETreeItemType eType)
                 REGICON(L"RES_ID_ICON_TREEITEM_CONFIGS"),
                 nullptr,    // Special item type, cannot be created
                 &CNameDescEditor::Create // TODO: implement dedicated editor for configurations
+            }
+        },
+        { ERunProcess,
+            STreeItemTypeInfo {
+                "Run Process",
+                REGICON(L"RES_ID_ICON_TREEITEM_EXEC"),
+                &CRunProcess::Create,
+                &CRunProcessEditor::Create
             }
         },
     };

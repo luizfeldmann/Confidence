@@ -1,5 +1,5 @@
 #include "ui/CMainWindow.h"
-#include "ui/CTreeBrowserModel.h"
+#include "ui/Models/CTreeBrowserModel.h"
 #include "ui/STreeItemTypeInfo.h"
 #include "util/Log.h"
 #include <wx/filedlg.h>
