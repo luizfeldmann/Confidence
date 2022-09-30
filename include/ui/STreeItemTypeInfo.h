@@ -2,7 +2,7 @@
 #define _STREEITEMTYPEINFO_H_
 
 #include <core/IProjTreeItem.h>
-#include <ui/ITreeItemEditor.h>
+#include <ui/Editors/ITreeItemEditor.h>
 #include <wx/string.h>
 #include <wx/icon.h>
 

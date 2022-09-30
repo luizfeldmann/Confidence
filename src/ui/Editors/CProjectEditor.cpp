@@ -1,4 +1,4 @@
-#include "ui/CProjectEditor.h"
+#include "ui/Editors/CProjectEditor.h"
 
 CProjectEditorUI::CProjectEditorUI(wxWindow* pParent)
     : IProjectEditor(pParent)

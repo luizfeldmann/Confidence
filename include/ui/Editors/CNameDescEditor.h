@@ -1,7 +1,7 @@
 #ifndef _CNAMEDESCEDITOR_
 #define _CNAMEDESCEDITOR_
 
-#include "ui/ITreeItemEditor.h"
+#include "ui/Editors/ITreeItemEditor.h"
 #include "wxExport/INameDescEditor.h"
 
 //! Fired by the editor when the owned item name has changed

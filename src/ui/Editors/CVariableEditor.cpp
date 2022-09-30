@@ -1,4 +1,4 @@
-#include "ui/CVariableEditor.h"
+#include "ui/Editors/CVariableEditor.h"
 
 CVariableEditorUI::CVariableEditorUI(wxWindow* pParent)
     : IVariableEditor(pParent)

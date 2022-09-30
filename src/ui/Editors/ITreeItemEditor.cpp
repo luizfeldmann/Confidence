@@ -1,4 +1,4 @@
-#include "ui/ITreeItemEditor.h"
+#include "ui/Editors/ITreeItemEditor.h"
 #include "ui/STreeItemTypeInfo.h"
 
 ITreeItemEditor::ITreeItemEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)

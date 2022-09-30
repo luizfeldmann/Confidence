@@ -1,7 +1,7 @@
 #ifndef _CGENERATEDTEXTFILEEDITOR_
 #define _CGENERATEDTEXTFILEEDITOR_
 
-#include "ui/CNameDescEditor.h"
+#include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/ITextFileEditor.h"
 #include "core/CGeneratedTextFile.h"
 #include "ui/CTextStyler.h"

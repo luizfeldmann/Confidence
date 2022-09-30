@@ -1,4 +1,4 @@
-#include "ui/CGeneratedTextFileEditor.h"
+#include "ui/Editors/CGeneratedTextFileEditor.h"
 #include "core/CFileTextProvider.h"
 #include "core/CStoredTextProvider.h"
 #include "util/Log.h"

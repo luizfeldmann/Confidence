@@ -1,4 +1,4 @@
-#include "ui/CNameDescEditor.h"
+#include "ui/Editors/CNameDescEditor.h"
 
 wxDEFINE_EVENT(EVT_EDITOR_ITEM_CHANGED_NAME, wxCommandEvent);
 wxDEFINE_EVENT(EVT_EDITOR_ITEM_CHANGED_DESC, wxCommandEvent);

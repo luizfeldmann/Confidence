@@ -1,4 +1,4 @@
-#include "ui/CGroupEditor.h"
+#include "ui/Editors/CGroupEditor.h"
 
 CGroupEditorUI::CGroupEditorUI(wxWindow* pParent)
     : IGroupEditor(pParent)

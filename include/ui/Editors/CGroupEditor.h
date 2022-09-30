@@ -1,7 +1,7 @@
 #ifndef _CGROUPEDITOR_
 #define _CGROUPEDITOR_
 
-#include "ui/CNameDescEditor.h"
+#include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/IGroupEditor.h"
 #include "core/CGroup.h"
 

@@ -1,4 +1,4 @@
-#include "ui/CProcessEditor.h"
+#include "ui/Editors/CProcessEditor.h"
 #include "ui/Models/CProcessArgsModel.h"
 #include "core/CProcessFireForget.h"
 #include "core/CProcessWaitCompletion.h"

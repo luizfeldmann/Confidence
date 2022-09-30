@@ -1,7 +1,7 @@
 #ifndef _CPROJECTEDITOR_
 #define _CPROJECTEDITOR_
 
-#include "ui/CNameDescEditor.h"
+#include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/IProjectEditor.h"
 
 //! @brief Item editor for the project

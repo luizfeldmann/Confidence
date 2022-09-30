@@ -1,7 +1,7 @@
 #ifndef _CTREEITEMEDITORMANAGER_H_
 #define _CTREEITEMEDITORMANAGER_H_
 
-#include "ui/ITreeItemEditor.h"
+#include "ui/Editors/ITreeItemEditor.h"
 
 //! @brief Manages a collection of "editors" / a tab corresponding to the tree item
 class CTreeItemEditorManager : public wxEvtHandler

@@ -4,7 +4,7 @@
 #include "ui/CAcceleratorEntry.h"
 #include "wxExport/IMainWindow.h"
 #include "ui/CTreeItemEditorManager.h"
-#include "ui/CNameDescEditor.h"
+#include "ui/Editors/CNameDescEditor.h"
 
 class CMainWindow : public IMainWindow
 {

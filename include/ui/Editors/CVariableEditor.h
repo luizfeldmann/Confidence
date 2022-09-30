@@ -1,7 +1,7 @@
 #ifndef _CVARIABLEEDITOR_
 #define _CVARIABLEEDITOR_
 
-#include "ui/CNameDescEditor.h"
+#include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/IVariableEditor.h"
 #include "core/CVariable.h"
 

@@ -1,7 +1,7 @@
 #ifndef _CPROCESSEDITOR_
 #define _CPROCESSEDITOR_
 
-#include "ui/CNameDescEditor.h"
+#include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/IRunProcessEditor.h"
 #include "core/CRunProcess.h"
 
