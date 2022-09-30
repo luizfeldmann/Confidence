@@ -20,6 +20,12 @@ protected:
     //! Gets the pointer to the currently selected argument
     CProcessArgument* GetSelectedArgument() const;
 
+    //! Loads the combo box of "policy" type
+    EProcessPolicy GetCurrentPolicy() const;
+
+    //! Loads the "wait completion" exclusive UI elements
+    void LoadWaitCompletion();
+
     /* OVERRIDES FROM IRunProcessEditor */
     void onToolNewArg(wxCommandEvent& event) override;
     void onToolDelArg(wxCommandEvent& event) override;

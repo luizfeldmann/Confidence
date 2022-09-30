@@ -2,6 +2,7 @@
 
 DEFINE_SERIALIZATION_SCHEME(CProcessArgument,
     SERIALIZATION_INHERIT(CStoredDescriptionItem)
+    SERIALIZATION_INHERIT(CStoredExpression)
 )
 
 CProcessArgument::CProcessArgument()

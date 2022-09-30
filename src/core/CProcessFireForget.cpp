@@ -13,5 +13,5 @@ CProcessFireAndForget::CProcessFireAndForget()
 
 EProcessPolicy CProcessFireAndForget::GetType() const
 {
-    return EProcessPolicy::EProcessFireForget;
+    return EProcessPolicy::FireForget;
 }

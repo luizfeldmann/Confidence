@@ -2,6 +2,7 @@
 #define _CPROCESSWAITCOMPLETION_H_
 
 #include "IProcessPolicy.h"
+#include <optional>
 
 //! @copydoc EProcessPolicy::EProcessWaitCompletion
 class CProcessWaitCompletion : public IProcessPolicy
@@ -11,6 +12,23 @@ public:
 
     //! @copydoc IProcessPolicy::GetType
     EProcessPolicy GetType() const override;
+
+    using opt_returncode_t = std::optional<int>;
+
+    //! @brief Sets the (optional) checked return code
+    void SetExpectedReturnCode(opt_returncode_t);
+
+    //! @brief Reads the (optional) checked return code
+    const opt_returncode_t GetExpectedReturnCode() const;
+
+protected:
+    //! @brief If true, the return code must be compared to m_nExpectedReturnCode when the process returns
+    bool m_bCheckReturnCode;
+
+    //! @brief Stores the expected return code for process validation (if set)
+    int m_nExpectedReturnCode;
+
+    SERIALIZATION_FRIEND(CProcessWaitCompletion);
 };
 
 DECLARE_SERIALIZATION_SCHEME(CProcessWaitCompletion);

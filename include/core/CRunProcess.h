@@ -9,6 +9,13 @@
 #include "CProcessArgument.h"
 #include "IProcessPolicy.h"
 
+//! @brief How the process window is supposed to start
+enum class EProcessStartWindowMode : int {
+    Minimized = -1,   //!< Starts the process with a minimized window
+    Normal    = 0,    //!< Starts the process with a normal window
+    Maximized = 1,    //!< Starts the process with a maximized window
+};
+
 //! @brief Stores a constant or an expression
 class CRunProcess   : public IProjTreeItem
                     , public CStoredNameItem
@@ -20,6 +27,12 @@ public:
     CRunProcess();
 
     ~CRunProcess();
+
+    //! @brief If the process should start as admin
+    bool m_bRunAsAdmin;
+
+    //! @brief The window mode to start the process
+    EProcessStartWindowMode m_eStartMode;
 
     //! @brief Returns a new instance of this class
     static IProjTreeItem* Create();

@@ -54,7 +54,11 @@ public:
 
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
-        value = "no expression";
+        CProcessArgument* pItem = GetItem(rItem);
+        assert(pItem);
+
+        const wxString strExpr = pItem->GetExpression();
+        value = strExpr;
     }
 
     bool IsEnabled(const wxDataViewItem&) const
@@ -64,7 +68,12 @@ public:
 
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
-        return false;
+        CProcessArgument* pItem = GetItem(rItem);
+        assert(pItem);
+
+        wxString strExpr = value.GetString();
+
+        return pItem->SetExpression(strExpr.ToStdString());
     }
 };
 
@@ -74,7 +83,7 @@ CProcessArgsModel::CProcessArgsModel(CRunProcess& rEdit)
 {
     // Create columns
     m_mapColumns[EProcessArgsColumn::Description] = std::make_unique<CArgumentDescriptionModelColumnHandler>();
-    m_mapColumns[EProcessArgsColumn::Value]       = std::make_unique<CArgumentExpressionModelColumnHandler>();
+    m_mapColumns[EProcessArgsColumn::Expression]  = std::make_unique<CArgumentExpressionModelColumnHandler>();
 }
 
 CProcessArgsModel::~CProcessArgsModel()
@@ -82,7 +91,7 @@ CProcessArgsModel::~CProcessArgsModel()
 
 }
 
-static CRunProcess::vec_args_t::iterator FindArg(CRunProcess::vec_args_t& rvArgs, CProcessArgument* pFind)
+static CRunProcess::vec_args_t::iterator FindArg(CRunProcess::vec_args_t& rvArgs, const CProcessArgument* pFind)
 {
     return std::find_if(rvArgs.begin(), rvArgs.end(), [pFind](const CProcessArgument& rTest)->bool
         {
@@ -117,6 +126,45 @@ bool CProcessArgsModel::DeleteItem(CProcessArgument* pDeleteItem)
     }
 
     return bSuccess;
+}
+
+CProcessArgument* CProcessArgsModel::MoveItem(CProcessArgument* pMoveItem, bool bUp)
+{
+    // Find the item on the collection
+    CRunProcess::vec_args_t& rvArgs = m_rEdit.GetArguments();
+    CRunProcess::vec_args_t::iterator itMove = FindArg(rvArgs, pMoveItem);
+
+    if (rvArgs.end() == itMove)
+        return nullptr; // cannot move item - it's not on the collection
+
+    // Get iterator to the swap item
+    CRunProcess::vec_args_t::iterator itSwap;
+
+    if (bUp)
+    {
+        itSwap = (rvArgs.begin() == itMove)
+            ? std::prev(rvArgs.end())
+            : std::prev(itMove);
+    }
+    else
+    {
+        itSwap = std::next(itMove);
+
+        if (rvArgs.end() == itSwap)
+            itSwap = rvArgs.begin();
+    }
+
+    // Swap in the collection
+    std::iter_swap(itMove, itSwap);
+
+    // Update the data list view
+    wxDataViewItem cItem(pMoveItem);
+    wxDataViewItem cParent = GetParent(cItem);
+
+    ItemDeleted(cParent, cItem);
+    ItemAdded(cParent, cItem);
+
+    return &(*itSwap);
 }
 
 IModelColumnHandler* CProcessArgsModel::GetColumnInfo(unsigned int nModelColumn)

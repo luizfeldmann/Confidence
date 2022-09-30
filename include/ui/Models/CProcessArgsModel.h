@@ -18,7 +18,7 @@ protected:
     enum class EProcessArgsColumn
     {
         Description = 0,
-        Value,
+        Expression,
 
         /* MUST BE LAST */
         Count
@@ -38,8 +38,18 @@ public:
     ~CProcessArgsModel();
 
     /* Public interface */
+
+    //! @brief Creates a new argument item
+    //! @returns Pointer to the new item
     CProcessArgument* NewItem();
-    bool DeleteItem(CProcessArgument*);
+
+    //! @brief Deletes the argument item from the list
+    //! @returns True if success
+    bool DeleteItem(CProcessArgument* pDeleteItem);
+
+    //! @brief Moves the given item up or down in the list
+    //! @returns Pointer to the swapped item
+    CProcessArgument* MoveItem(CProcessArgument* pMoveItem, bool bUp);
 
     /* wxDataViewModel overrides */
     unsigned int GetColumnCount() const wxOVERRIDE;

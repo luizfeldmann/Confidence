@@ -3,6 +3,8 @@
 DEFINE_SERIALIZATION_SCHEME(CRunProcess,
     SERIALIZATION_INHERIT(CStoredNameItem)
     SERIALIZATION_INHERIT(CStoredDescriptionItem)
+    SERIALIZATION_MEMBER(m_bRunAsAdmin)
+    SERIALIZATION_MEMBER_AS(m_eStartMode, int)
     SERIALIZATION_MEMBER(m_pPolicy)
     SERIALIZATION_MEMBER(m_vArgs)
 )
@@ -12,6 +14,8 @@ REGISTER_POLYMORPHIC_CLASS(CRunProcess);
 CRunProcess::CRunProcess()
     : CStoredNameItem("<new process>")
     , CStoredDescriptionItem("<no process description>")
+    , m_bRunAsAdmin(false)
+    , m_eStartMode(EProcessStartWindowMode::Normal)
 {
 
 }
