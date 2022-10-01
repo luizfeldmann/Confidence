@@ -24,7 +24,7 @@ public:
 };
 
 //! @brief Basic implementation of wxDataViewModel that delegates column access to callbacks
-class CBaseModel : public wxDataViewModel
+class CBaseModel : public virtual wxDataViewModel
 {
 protected:
     // @brief Reads the callbacks for a requested column
@@ -34,15 +34,12 @@ protected:
     virtual const IModelColumnHandler* GetColumnInfo(unsigned int nModelColumn) const = 0;
 
 public:
-    CBaseModel();
-    virtual ~CBaseModel();
-
     /* wxDataViewModel overrides */
-    virtual bool HasValue(const wxDataViewItem& item, unsigned col) const wxOVERRIDE;
-    virtual wxString GetColumnType(unsigned int col) const wxOVERRIDE;
-    virtual void GetValue(wxVariant& variant, const wxDataViewItem& item, unsigned int col) const wxOVERRIDE;
-    virtual bool SetValue(const wxVariant& variant, const wxDataViewItem& item, unsigned int col) wxOVERRIDE;
-    virtual bool IsEnabled(const wxDataViewItem& item, unsigned int col) const wxOVERRIDE;
+    bool HasValue(const wxDataViewItem& item, unsigned col) const wxOVERRIDE;
+    wxString GetColumnType(unsigned int col) const wxOVERRIDE;
+    void GetValue(wxVariant& variant, const wxDataViewItem& item, unsigned int col) const wxOVERRIDE;
+    bool SetValue(const wxVariant& variant, const wxDataViewItem& item, unsigned int col) wxOVERRIDE;
+    bool IsEnabled(const wxDataViewItem& item, unsigned int col) const wxOVERRIDE;
 };
 
 #endif

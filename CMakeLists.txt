@@ -37,6 +37,7 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "include/core/CNoChildren.h"
     "src/core/CNoChildren.cpp"
     "include/core/ETreeItemType.h"
+    "include/core/ISerializationNotify.h"
     "include/core/IProjTreeItem.h"
     "src/core/IProjTreeItem.cpp"
     "include/core/CProject.h"
@@ -119,6 +120,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/Editors/CProcessEditor.cpp"
     "include/ui/Models/CBaseModel.h"
     "src/ui/Models/CBaseModel.cpp"
+    "include/ui/Models/CBaseTreeItemModel.h"
+    "src/ui/Models/CBaseTreeItemModel.cpp"
     "include/ui/Models/CTreeBrowserModel.h"
     "src/ui/Models/CTreeBrowserModel.cpp"
     "include/ui/Models/CProcessArgsModel.h"
@@ -167,6 +170,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} ${wxWidgets_LIBRARIES})
 
 if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-D_CRTDBG_MAP_ALLOC)
 endif()
 
 set_target_properties(${CMAKE_PROJECT_NAME}

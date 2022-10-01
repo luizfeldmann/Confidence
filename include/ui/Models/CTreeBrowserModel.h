@@ -2,9 +2,10 @@
 #define _CTREEBROWSERMODEL_H_
 
 #include "ui/Models/CBaseModel.h"
+#include "ui/Models/CBaseTreeItemModel.h"
 #include <wx/event.h>
-#include <map>
-#include <unordered_map>
+
+#pragma warning(disable: 4250)
 
 class IProjTreeItem;
 
@@ -12,7 +13,7 @@ class IProjTreeItem;
 wxDECLARE_EVENT(EVT_TREE_ITEM_RENAME, wxCommandEvent);
 
 //! @brief Model to connect the GUI to the backend project structure
-class CTreeBrowserModel : public wxEvtHandler, public CBaseModel
+class CTreeBrowserModel : public wxEvtHandler, public CBaseModel, public CBaseTreeItemModel
 {
 protected:
     //! Reference to the project whose tree is shown/edited
@@ -37,6 +38,9 @@ protected:
     //! @copydoc CBaseModel::GetColumnInfo
     const IModelColumnHandler* GetColumnInfo(unsigned int nModelColumn) const override;
 
+    //! @copydoc CBaseTreeItemModel::GetRootItem
+    const IProjTreeItem& GetRootItem() const override;
+
 public:
     //! @brief Creates a model reflecting the tree structure of a project item
     //! @param[in] rRootItem The root item of the tree view
@@ -46,9 +50,7 @@ public:
 
     /* wxDataViewModel overrides */
     unsigned int GetColumnCount() const wxOVERRIDE;
-    wxDataViewItem GetParent(const wxDataViewItem& item) const wxOVERRIDE;
     bool IsContainer(const wxDataViewItem& item) const wxOVERRIDE;
-    unsigned int GetChildren(const wxDataViewItem& parent, wxDataViewItemArray& array) const wxOVERRIDE;
 };
 
 #endif

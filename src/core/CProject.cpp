@@ -30,6 +30,16 @@ CProject::~CProject()
 
 }
 
+const CConfigurationGroup& CProject::GetConfigurations() const
+{
+    return m_cConfigurations;
+}
+
+const CInstanceGroup& CProject::GetInstances() const
+{
+    return m_cInstances;
+}
+
 bool CProject::OpenFile(const std::string& szOpenFileName)
 {
     bool bSuccess = false;
@@ -124,14 +134,4 @@ CProject::vec_cref_t CProject::SubItems() const
 ETreeItemType CProject::GetType() const
 {
     return EProject;
-}
-
-bool CProject::PostDeserialize()
-{
-    return IProjTreeItem::PostDeserialize();
-}
-
-bool CProject::PreSerialize()
-{
-    return IProjTreeItem::PreSerialize();
 }

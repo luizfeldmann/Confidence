@@ -56,6 +56,12 @@ public:
     //! @brief Gets the most recent path where this project was opened/saved
     const std::string& GetCurrentPath() const;
 
+    //! @brief Gets a reference to the project's configurations
+    const CConfigurationGroup& GetConfigurations() const;
+
+    //! @brief Gets a reference to the project's instances
+    const CInstanceGroup& GetInstances() const;
+
     //! @brief Executes the project
     //! @return True if success
     bool Run();
@@ -68,16 +74,6 @@ public:
     bool ExportDocumentation();
 
 protected:
-    /********************************/
-    /* OVERRIDES FROM IProjTreeItem */
-    /********************************/
-
-    // @copydoc IProjTreeItem::PostDeserialize
-    bool PostDeserialize() override;
-
-    // @copydoc IProjTreeItem::PreSerialize
-    bool PreSerialize() override;
-
     /************/
     /* CProject */
     /************/

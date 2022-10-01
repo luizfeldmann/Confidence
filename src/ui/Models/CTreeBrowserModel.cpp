@@ -13,15 +13,6 @@ bool IsEnabled(const wxDataViewItem&)
     return true;
 }
 
-//! @brief Casts the DataViewItem into a ProjectItem
-static inline IProjTreeItem* GetItem(const wxDataViewItem& item)
-{
-    return static_cast<IProjTreeItem*>(item.GetID());
-}
-
-//! Maps child (key) to parent (value) - this two-way relation does not exist in the project structure
-static std::map<wxDataViewItem, wxDataViewItem> g_mapParents;
-
 /// =======================================================
 /// Handlers
 /// =======================================================
@@ -45,7 +36,7 @@ public:
 
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
-        IProjTreeItem* pItem = GetItem(rItem);
+        IProjTreeItem* pItem = CBaseTreeItemModel::GetItem(rItem);
         assert(pItem);
 
         #define REGICON(RESNAME) wxIcon(RESNAME, wxBITMAP_TYPE_ICO_RESOURCE, 24, 24)
@@ -63,7 +54,7 @@ public:
 
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
-        IProjTreeItem* pItem = GetItem(rItem);
+        IProjTreeItem* pItem = CBaseTreeItemModel::GetItem(rItem);
         assert(pItem);
 
         wxDataViewIconText iconAndText;
@@ -101,7 +92,7 @@ public:
 
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
-        IProjTreeItem* pItem = GetItem(rItem);
+        IProjTreeItem* pItem = CBaseTreeItemModel::GetItem(rItem);
         assert(pItem);
 
         const wxString strDesc = pItem->GetDescription();
@@ -157,6 +148,11 @@ const IModelColumnHandler* CTreeBrowserModel::GetColumnInfo(unsigned int nModelC
     return pInfo;
 }
 
+const IProjTreeItem& CTreeBrowserModel::GetRootItem() const
+{
+    return m_rRootItem;
+}
+
 /// =======================================================
 /// Model interface overrides
 /// =======================================================
@@ -164,11 +160,6 @@ const IModelColumnHandler* CTreeBrowserModel::GetColumnInfo(unsigned int nModelC
 unsigned int CTreeBrowserModel::GetColumnCount() const
 {
     return (unsigned int)ETreeBrowserColumn::Count;
-}
-
-wxDataViewItem CTreeBrowserModel::GetParent(const wxDataViewItem& item) const
-{
-    return g_mapParents[item];
 }
 
 bool CTreeBrowserModel::IsContainer(const wxDataViewItem& item) const
@@ -186,37 +177,4 @@ bool CTreeBrowserModel::IsContainer(const wxDataViewItem& item) const
     }
 
     return bIsContainer;
-}
-
-unsigned int CTreeBrowserModel::GetChildren(const wxDataViewItem& parent, wxDataViewItemArray& array) const
-{
-    unsigned int uiCount = 0;
-    array.clear();
-
-    if (NULL == parent.GetID())
-    {
-        wxDataViewItem item(&m_rRootItem);
-        array.push_back(item);
-        uiCount = 1;
-
-        g_mapParents[item] = parent;
-    }
-    else
-    {
-        const IProjTreeItem* pParent = GetItem(parent);
-        assert(nullptr != pParent);
-
-        ITreeItemCollection::vec_cref_t vSubitems = pParent->SubItems();
-        for (const ITreeItemCollection::cref_t& rChild : vSubitems)
-        {
-            const IProjTreeItem* pChild = &rChild.get();
-            wxDataViewItem child((void*)pChild);
-            array.push_back(child);
-            uiCount++;
-
-            g_mapParents[child] = parent;
-        }
-    }
-
-    return uiCount;
 }

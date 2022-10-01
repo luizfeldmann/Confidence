@@ -2,12 +2,22 @@
 
 bool IProjTreeItem::PostDeserialize()
 {
-    // TODO: invoke on all children
-    return true;
+    bool bStatus = true;
+
+    const vec_ref_t& vSubItems = SubItems();
+    for (const ref_t& rItem : vSubItems)
+        bStatus = bStatus && rItem.get().PostDeserialize();
+
+    return bStatus;
 }
 
 bool IProjTreeItem::PreSerialize()
 {
-    // TODO: invoke in all children
-    return true;
+    bool bStatus = true;
+
+    const vec_ref_t& vSubItems = SubItems();
+    for (const ref_t& rItem : vSubItems)
+        bStatus = bStatus && rItem.get().PreSerialize();
+
+    return bStatus;
 }

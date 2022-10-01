@@ -1,15 +1,5 @@
 #include "ui/Models/CBaseModel.h"
 
-CBaseModel::CBaseModel()
-{
-
-}
-
-CBaseModel::~CBaseModel()
-{
-
-}
-
 /* wxDataViewModel overrides */
 bool CBaseModel::HasValue(const wxDataViewItem& item, unsigned col) const
 {

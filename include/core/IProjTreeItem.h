@@ -4,6 +4,7 @@
 #include "INamedItem.h"
 #include "IDescribedItem.h"
 #include "ITreeItemCollection.h"
+#include "ISerializationNotify.h"
 
 #pragma warning(disable: 4250)
 
@@ -11,6 +12,7 @@
 class IProjTreeItem : public virtual INamedItem
                     , public virtual IDescribedItem
                     , public virtual ITreeItemCollection
+                    , public ISerializationNotify
 {
 private:
     //! @brief Deleted copy-constructor; class is non-copyable
@@ -33,11 +35,11 @@ public:
     //! @brief Reflects the type of this item
     virtual ETreeItemType GetType() const = 0;
 
-    //! @brief Post processing and validation of read data after de-serialization from a project file
-    virtual bool PostDeserialize();
+    //! @copydoc ISerializationNotify::PostDeserialize
+    bool PostDeserialize() override;
 
-    //! @brief Pre processing and validation of any data required before serializing to a project file
-    virtual bool PreSerialize();
+    //! @copydoc ISerializationNotify::PreSerialize
+    bool PreSerialize() override;
 };
 
 #endif
