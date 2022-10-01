@@ -67,9 +67,6 @@ public:
     //! @return True if success
     bool ExportDocumentation();
 
-    //! @brief Gets reference to the "global/current project"
-    static CProject& TheProject();
-
 protected:
     /********************************/
     /* OVERRIDES FROM IProjTreeItem */

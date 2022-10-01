@@ -6,13 +6,21 @@
 #include "ui/CTreeItemEditorManager.h"
 #include "ui/Editors/CNameDescEditor.h"
 
+class CProject;
+
 class CMainWindow : public IMainWindow
 {
 public:
-    CMainWindow();
+	//! @brief Creates an application window editing the provided project
+	//! @param[in] rProject Reference to the working project
+    CMainWindow(CProject& rProject);
+
     ~CMainWindow();
 
 protected:
+	//! Reference to the project being edited
+	CProject& m_rProject;
+
 	//! Manages shortcuts
 	wxAcceleratorTable m_cAccTbl;
 

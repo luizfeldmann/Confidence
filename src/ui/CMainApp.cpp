@@ -3,6 +3,8 @@
 
 wxIMPLEMENT_APP_NO_MAIN(CMainApp);
 
+/*static*/ CProject CMainApp::m_cWorkingProject;
+
 CMainApp::CMainApp()
     : m_pMainWindow(nullptr)
 {
@@ -11,7 +13,7 @@ CMainApp::CMainApp()
 
 bool CMainApp::OnInit()
 {
-    m_pMainWindow = new CMainWindow();
+    m_pMainWindow = new CMainWindow(m_cWorkingProject);
     m_pMainWindow->Show();
     return true;
 }

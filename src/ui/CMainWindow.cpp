@@ -9,8 +9,9 @@
 
 const static wxString g_szProjectFileFilter = "Confidence projects (*.cfx)|*.cfx";
 
-CMainWindow::CMainWindow()
+CMainWindow::CMainWindow(CProject& rProject)
     : IMainWindow(nullptr)
+    , m_rProject(rProject)
     , m_editorManager(*m_notebookEditor)
 {
     // Let the logger know we are using GUI
@@ -20,7 +21,7 @@ CMainWindow::CMainWindow()
     SetIcon(wxIcon("RES_ID_ICON_APPLICATION"));
 
     // Configure the project tree view
-    CTreeBrowserModel* pTreeModel = new CTreeBrowserModel;
+    CTreeBrowserModel* pTreeModel = new CTreeBrowserModel(m_rProject);
     pTreeModel->Bind(EVT_TREE_ITEM_RENAME, &CMainWindow::onTreeItemRenamed, this);
     m_dataViewCtrlBrowser->AssociateModel(pTreeModel);
     pTreeModel->DecRef();
@@ -67,7 +68,7 @@ CMainWindow::~CMainWindow()
 
 void CMainWindow::onBtnNewProject(wxCommandEvent& event)
 {
-    CProject::TheProject() = std::move( CProject() );
+    m_rProject = std::move( CProject() );
     ReloadProject();
 }
 
@@ -82,21 +83,21 @@ void CMainWindow::onBtnOpenProject(wxCommandEvent& event)
     CProject openProj;
     if (openProj.OpenFile(openFileDialog.GetPath().ToStdString()))
     {
-        CProject::TheProject() = std::move( openProj );
+        m_rProject = std::move( openProj );
         ReloadProject();
     }
 }
 
 void CMainWindow::onBtnSaveProject(wxCommandEvent& event)
 {
-    const std::string& szCurrentPath = CProject::TheProject().GetCurrentPath();
+    const std::string& szCurrentPath = m_rProject.GetCurrentPath();
     if (szCurrentPath.empty())
     {
         onBtnSaveAsProject(event);
     }
     else
     {
-        CProject::TheProject().SaveToFile(szCurrentPath);
+        m_rProject.SaveToFile(szCurrentPath);
     }
 }
 
@@ -108,7 +109,7 @@ void CMainWindow::onBtnSaveAsProject(wxCommandEvent& event)
     if (wxID_CANCEL == saveFileDialog.ShowModal())
         return;
 
-    CProject::TheProject().SaveToFile(saveFileDialog.GetPath().ToStdString());
+    m_rProject.SaveToFile(saveFileDialog.GetPath().ToStdString());
 }
 
 void CMainWindow::onBtnRunProject(wxCommandEvent& event)
@@ -405,7 +406,7 @@ void CMainWindow::ReloadProject()
 
     // Update tree: delete and re-add the project
     wxDataViewItem root(0);
-    wxDataViewItem project(&CProject::TheProject());
+    wxDataViewItem project(&m_rProject);
     m_dataViewCtrlBrowser->GetModel()->ItemDeleted(root, project);
     m_dataViewCtrlBrowser->GetModel()->ItemAdded(root, project);
 }

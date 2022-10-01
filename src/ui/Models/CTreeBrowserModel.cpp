@@ -1,6 +1,5 @@
 #include "ui/Models/CTreeBrowserModel.h"
 #include "ui/STreeItemTypeInfo.h"
-#include "core/CProject.h"
 
 /// =======================================================
 /// Global definitions
@@ -124,7 +123,8 @@ public:
 /// Model logic
 /// =======================================================
 
-CTreeBrowserModel::CTreeBrowserModel()
+CTreeBrowserModel::CTreeBrowserModel(IProjTreeItem& rRootItem)
+    : m_rRootItem(rRootItem)
 {
     m_mapColumns[ETreeBrowserColumn::IconAndName] = std::make_unique<CNameModelColumnHandler>(*this);
     m_mapColumns[ETreeBrowserColumn::Description] = std::make_unique<CDescriptionModelColumnHandler>(*this);
@@ -195,7 +195,7 @@ unsigned int CTreeBrowserModel::GetChildren(const wxDataViewItem& parent, wxData
 
     if (NULL == parent.GetID())
     {
-        wxDataViewItem item(&CProject::TheProject());
+        wxDataViewItem item(&m_rRootItem);
         array.push_back(item);
         uiCount = 1;
 

@@ -15,6 +15,9 @@ wxDECLARE_EVENT(EVT_TREE_ITEM_RENAME, wxCommandEvent);
 class CTreeBrowserModel : public wxEvtHandler, public CBaseModel
 {
 protected:
+    //! Reference to the project whose tree is shown/edited
+    IProjTreeItem& m_rRootItem;
+
     //! @brief Defines the columns shown in the tree browser
     enum class ETreeBrowserColumn
     {
@@ -35,7 +38,10 @@ protected:
     const IModelColumnHandler* GetColumnInfo(unsigned int nModelColumn) const override;
 
 public:
-    CTreeBrowserModel();
+    //! @brief Creates a model reflecting the tree structure of a project item
+    //! @param[in] rRootItem The root item of the tree view
+    CTreeBrowserModel(IProjTreeItem& rRootItem);
+
     ~CTreeBrowserModel();
 
     /* wxDataViewModel overrides */

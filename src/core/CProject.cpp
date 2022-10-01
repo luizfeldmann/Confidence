@@ -30,12 +30,6 @@ CProject::~CProject()
 
 }
 
-CProject& CProject::TheProject()
-{
-    static CProject theProject;
-    return theProject;
-}
-
 bool CProject::OpenFile(const std::string& szOpenFileName)
 {
     bool bSuccess = false;
