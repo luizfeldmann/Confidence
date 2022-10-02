@@ -3,6 +3,7 @@
 
 #include <guiddef.h>
 #include <string>
+#include <JInterface/JsonSerialization.h>
 #include <JInterface/ICustomSerializable.h>
 
 //! @brief Distributed computing environment universally unique identifier
@@ -63,8 +64,14 @@ public:
     //! @return True if this is smaller than or equal to \p rOther
     bool operator<=(const CGuid& rOther) const;
 
+    //! @copydoc ICustomSerializable::Serialize
     std::string Serialize() const override;
+
+    //! @copydoc ICustomSerializable::Deserialize
     bool Deserialize(const std::string&) override;
+
+    //! @brief Gets the "NULL" GUID (all zeroes) 
+    static const CGuid& Null();
 };
 
 #endif

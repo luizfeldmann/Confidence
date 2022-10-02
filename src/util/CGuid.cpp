@@ -18,6 +18,12 @@ CGuid::CGuid(const std::string& rStr) :
 
 }
 
+/* static */ const CGuid& CGuid::Null()
+{
+    const static CGuid c_nullGuid("{00000000-0000-0000-0000-000000000000}");
+    return c_nullGuid;
+}
+
 CGuid::CGuid(const std::wstring& rStr)
 {
     bool Status = FromWString(rStr);
