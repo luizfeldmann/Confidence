@@ -5,14 +5,19 @@
 #include "IDescribedItem.h"
 #include "ITreeItemCollection.h"
 #include "ISerializationNotify.h"
+#include "util/ITracked.h"
 
 #pragma warning(disable: 4250)
+
+class IProjTreeItem;
+using IProjTreeItem_Tracker_t = ITracked<IProjTreeItem>;
 
 //! @brief Common base for all items placed on the project tree structure
 class IProjTreeItem : public virtual INamedItem
                     , public virtual IDescribedItem
                     , public virtual ITreeItemCollection
                     , public ISerializationNotify
+                    , public IProjTreeItem_Tracker_t
 {
 private:
     //! @brief Deleted copy-constructor; class is non-copyable
@@ -41,5 +46,7 @@ public:
     //! @copydoc ISerializationNotify::PreSerialize
     bool PreSerialize() override;
 };
+
+DECLARE_SERIALIZATION_SCHEME(IProjTreeItem_Tracker_t);
 
 #endif

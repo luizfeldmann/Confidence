@@ -81,9 +81,6 @@ protected:
     //! Stores most recent open/save path to the project file, if any
     std::string m_currentPath;
 
-    //! Unique ID of the project - for traceability
-    CGuid m_id;
-
     //! Group of all configurations supported by the project
     CConfigurationGroup m_cConfigurations;
 
