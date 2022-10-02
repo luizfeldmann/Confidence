@@ -1,6 +1,7 @@
 #include "core/CStoredExpression.h"
 
 DEFINE_SERIALIZATION_SCHEME(CStoredExpression,
+    SERIALIZATION_INHERIT(CVariableExpressionKey)
     SERIALIZATION_MEMBER(m_strExpression)
 )
 

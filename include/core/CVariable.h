@@ -5,6 +5,7 @@
 #include "CStoredNameItem.h"
 #include "CStoredDescriptionItem.h"
 #include "CNoChildren.h"
+#include "CStoredExpression.h"
 
 //! @brief Stores a constant or an expression
 class CVariable : public IProjTreeItem
@@ -12,17 +13,40 @@ class CVariable : public IProjTreeItem
                 , public CStoredDescriptionItem
                 , public CNoChildren
 {
+protected:
+    using vec_rules_t = std::vector<CStoredExpression>;
+
+    //! @brief Collection of expressions keyed by configurations and instances
+    vec_rules_t m_vRules;
+
+    SERIALIZATION_FRIEND(CVariable);
+
 public:
     //! @brief Creates a new, empty variable
     CVariable();
 
     ~CVariable();
 
+    //! @brief Creates a new rule associated to a provided configuration and instance, and returns a reference to it
+    IExpression& AddRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance);
+
+    //! @brief Erases the specified rule from the collection
+    void EraseRule(IExpression& rExpr);
+
+    //! @brief Returns an expression associated to a provided configuration and instance, if such exists
+    IExpression* GetRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance);
+
     //! @brief Returns a new instance of this class
     static IProjTreeItem* Create();
 
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;
+
+    //! @copydoc ISerializationNotify::PostDeserialize
+    bool PostDeserialize() override;
+
+    //! @copydoc ISerializationNotify::PreSerialize
+    bool PreSerialize() override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CVariable)

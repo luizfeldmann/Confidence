@@ -44,6 +44,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/core/CProject.cpp"
     "include/core/CGroup.h"
     "src/core/CGroup.cpp"
+    "include/core/CVariableExpressionKey.h"
+    "src/core/CVariableExpressionKey.cpp"
     "include/core/CVariable.h"
     "src/core/CVariable.cpp"
     "include/core/CGeneratedTextFile.h"
@@ -126,6 +128,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/Models/CTreeBrowserModel.cpp"
     "include/ui/Models/CProcessArgsModel.h"
     "src/ui/Models/CProcessArgsModel.cpp"
+    "include/ui/Models/CVariableTableModel.h"
+    "src/ui/Models/CVariableTableModel.cpp"
 
     # Utility
     "include/util/CScopedConsoleStyle.h"
@@ -134,6 +138,7 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/util/Log.cpp"
     "include/util/CGuid.h"
     "src/util/CGuid.cpp"
+    "include/util/ITracked.h"
     "include/util/CTempFile.h"
     "src/util/CTempFile.cpp"
 
