@@ -1,5 +1,4 @@
 #include "ui/Models/CBaseTreeItemModel.h"
-#include "core/IProjTreeItem.h"
 
 /* static */ IProjTreeItem* CBaseTreeItemModel::GetItem(const wxDataViewItem& item)
 {

@@ -7,6 +7,7 @@
 #include "ui/Editors/CNameDescEditor.h"
 
 class CProject;
+class CTreeBrowserModel;
 
 class CMainWindow : public IMainWindow
 {
@@ -21,6 +22,9 @@ protected:
 	//! Reference to the project being edited
 	CProject& m_rProject;
 
+	//! Model managing the project editor tree
+	CTreeBrowserModel* const m_pTreeModel;
+
 	//! Manages shortcuts
 	wxAcceleratorTable m_cAccTbl;
 
@@ -33,15 +37,6 @@ protected:
 
 	//! @brief Updates all the interface whenever a new project is loaded
 	void ReloadProject();
-
-	//! @brief Get pointer to the selected item in project tree
-	IProjTreeItem* GetSelectedTreeItem() const;
-
-	//! @brief Get parent of the provided item from the project tree
-	IProjTreeItem* GetTreeItemParent(IProjTreeItem*) const;
-
-	//! @brief Removes the currently selected item from the tree and takes it's ownership
-	ITreeItemCollection::ptr_t TreeTakeSelectedItem();
 
 	//! @brief Performs the requested move operation on the currently selected project tree item
 	bool OnItemMove(bool bUp);

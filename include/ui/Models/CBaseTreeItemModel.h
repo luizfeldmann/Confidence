@@ -3,8 +3,7 @@
 
 #include <wx/dataview.h>
 #include <map>
-
-class IProjTreeItem;
+#include "core/IProjTreeItem.h"
 
 //! @brief Base implementation of a model having IProjTreeItems as items
 class CBaseTreeItemModel : virtual public wxDataViewModel

@@ -48,6 +48,20 @@ public:
 
     ~CTreeBrowserModel();
 
+    //! @brief Removes the currently selected item from the tree and takes it's ownership
+    //! @param[in] rItem The item to remove from the collection
+    ITreeItemCollection::ptr_t TakeItem(const wxDataViewItem& rItem);
+
+    //! @brief Moves the specified item up or down in the tree
+    //! @param[in] rItem The item to move
+    //! @param[in] bUp The direction to move
+    //! @return True if success
+    bool MoveItem(const wxDataViewItem& rItem, bool bUp);
+
+    //! @brief Inserts a new item into the parent node
+    //! @return True if success - the parent object takes ownership of the pointer \p pInsertItem
+    bool InsertItem(const wxDataViewItem& rParent, IProjTreeItem* pInsertItem);
+
     /* wxDataViewModel overrides */
     unsigned int GetColumnCount() const wxOVERRIDE;
     bool IsContainer(const wxDataViewItem& item) const wxOVERRIDE;

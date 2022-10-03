@@ -1,5 +1,6 @@
 #include "ui/Models/CTreeBrowserModel.h"
 #include "ui/STreeItemTypeInfo.h"
+#include "util/Log.h"
 
 /// =======================================================
 /// Global definitions
@@ -177,4 +178,129 @@ bool CTreeBrowserModel::IsContainer(const wxDataViewItem& item) const
     }
 
     return bIsContainer;
+}
+
+/// =======================================================
+/// Operations
+/// =======================================================
+
+
+ITreeItemCollection::ptr_t CTreeBrowserModel::TakeItem(const wxDataViewItem& rItem)
+{
+    ITreeItemCollection::ptr_t pTakeItem;
+
+    IProjTreeItem* pChild = GetItem(rItem);
+    IProjTreeItem* pParent = GetItem(GetParent(rItem));
+
+    if (!pChild || !pParent)
+        CWARNING("You must select a child item for this operation");
+    else
+    {
+        pTakeItem = pParent->TakeItem(*pChild);
+
+        if (pTakeItem)
+        {
+            ItemDeleted(wxDataViewItem(pParent), rItem);
+        }
+        else
+        {
+            const std::string strName = pChild->GetName();
+            CWARNING("Item '%s' cannot be removed from the collection", strName.c_str());
+        }
+    }
+
+    return pTakeItem;
+}
+
+bool CTreeBrowserModel::MoveItem(const wxDataViewItem& rItem, bool bUp)
+{
+    bool bSuccess = false;
+
+    // Ensure there is a selected item for us to operate
+    // If the parent is root, then the project itself is selected
+    // We cannot move/cut/delete the project itself
+    IProjTreeItem* const pChild = GetItem(rItem);
+    IProjTreeItem* const pParent = GetItem(GetParent(rItem));
+
+    if (!pChild || !pParent)
+        CWARNING("Cannot move the root item");
+    else
+    {
+        // Find the iterator to this item inside it's parent vector
+        IProjTreeItem::vec_ref_t& vSubitems = pParent->SubItems();
+
+        IProjTreeItem::vec_ref_t::iterator iterChild = std::find_if(vSubitems.begin(), vSubitems.end(),
+            [pChild](const IProjTreeItem::ref_t pSearch)->bool {
+                return (&pSearch.get() == pChild);
+            });
+
+        assert(vSubitems.cend() != iterChild);
+
+        IProjTreeItem::vec_ref_t::iterator iterSwap;
+        if (bUp)
+        {
+            iterSwap = (vSubitems.begin() == iterChild)
+                ? std::prev(vSubitems.end()) // Move up 1st item = wrap around to the end
+                : std::prev(iterChild);
+        }
+        else
+        {
+            iterSwap = std::next(iterChild);
+
+            // If move down last item - wrap around to the front
+            if (vSubitems.cend() == iterSwap)
+                iterSwap = vSubitems.begin();
+        }
+
+        if (pParent->SwapItems(*iterSwap, *iterChild))
+        {
+            wxDataViewItem wxParent(pParent);
+
+            ItemDeleted(wxParent, rItem);
+            ItemAdded(wxParent, rItem);
+
+            bSuccess = true;
+        }
+    }
+
+    return bSuccess;
+}
+
+bool CTreeBrowserModel::InsertItem(const wxDataViewItem& rParent, IProjTreeItem* pInsertItem)
+{
+    bool bSuccess = false;
+
+    IProjTreeItem* const pParent = GetItem(rParent);
+
+    if (!pParent || !pInsertItem)
+        CERROR("Item is NULL");
+    else
+    {
+        // Make sure the parent can accept the child
+        const ETreeItemType eSupportedTypes = pParent->GetSupportedChildTypes();
+        const ETreeItemType eInsertItemType = pInsertItem->GetType();
+
+        if (0 == (eSupportedTypes & eInsertItemType))
+        {
+            const ETreeItemType eParentItemType = pParent->GetType();
+
+            const wxScopedCharBuffer childTypeName = STreeItemTypeInfo::GetName(eInsertItemType).ToUTF8();
+            const wxScopedCharBuffer parentTypeName = STreeItemTypeInfo::GetName(eParentItemType).ToUTF8();
+
+            CWARNING("Cannot paste an item of type '%s' inside a parent of type '%s'",
+                childTypeName.data(),
+                parentTypeName.data());
+        }
+        else if (pParent->AddItem(pInsertItem))
+        {
+            ItemAdded(rParent, wxDataViewItem(pInsertItem));
+            bSuccess = true;
+        }
+        else
+        {
+            CERROR("Parent item refused to accept new child");
+        }
+    }
+
+    return bSuccess;
 }
