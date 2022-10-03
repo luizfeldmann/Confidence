@@ -24,12 +24,12 @@ CVariableExpressionKey::CVariableExpressionKey(const CConfiguration& rConfig, co
 
 CConfiguration* CVariableExpressionKey::GetConfiguration() const
 {
-    return dynamic_cast<CConfiguration*>(IProjTreeItem::FindByID(m_gIdConfiguration));
+    return CConfiguration::FindByID(m_gIdConfiguration);
 }
 
 CInstance* CVariableExpressionKey::GetInstance() const
 {
-    return dynamic_cast<CInstance*>(IProjTreeItem::FindByID(m_gIdInstance));
+    return CInstance::FindByID(m_gIdInstance);
 }
 
 bool CVariableExpressionKey::PreSerialize()
@@ -53,51 +53,25 @@ bool CVariableExpressionKey::PreSerialize()
 
 bool CVariableExpressionKey::PostDeserialize()
 {
-    bool bFoundConfig = false;
-    bool bFoundInstance = false;
+    bool bResult = false;
 
-    for (IProjTreeItem::const_iterator it = IProjTreeItem::TrackedBegin(); 
-        (it != IProjTreeItem::TrackedEnd()) && (!bFoundConfig || !bFoundInstance); 
-        ++it)
+    const CConfiguration* const pConfig = CConfiguration::FindByName(m_strConfiguration);
+
+    if (!pConfig)
+        CERROR("Cannot find configuration named '%s'", m_strConfiguration.c_str());
+    else
     {
-        // Search the ID of the configuration
-        if (!bFoundConfig)
+        m_gIdConfiguration = pConfig->GetID();
+
+        const CInstance* const pInst = CInstance::FindByName(m_strInstance);
+        if (!pInst)
+            CERROR("Cannot find instance named '%s'", m_strInstance.c_str());
+        else
         {
-            const CConfiguration* const pConfig = dynamic_cast<const CConfiguration*>(*it);
-            if (pConfig)
-            {
-                const std::string strName = pConfig->GetName();
-
-                if (strName == m_strConfiguration)
-                {
-                    m_gIdConfiguration = pConfig->GetID();
-                    bFoundConfig = true;
-                }
-            }
-        }
-
-        // Search the ID of the instance
-        if (!bFoundInstance)
-        {
-            const CInstance* const pInst = dynamic_cast<const CInstance*>(*it);
-            if (pInst)
-            {
-                const std::string strName = pInst->GetName();
-
-                if (strName == m_strInstance)
-                {
-                    m_gIdInstance = pInst->GetID();
-                    bFoundInstance = true;
-                }
-            }
+            m_gIdInstance = pInst->GetID();
+            bResult = true;
         }
     }
 
-    if (!bFoundConfig)
-        CERROR("Cannot find configuration named '%s'", m_strConfiguration.c_str());
-
-    if (!bFoundInstance)
-        CERROR("Cannot find instance named '%s'", m_strInstance.c_str());
-
-    return (bFoundConfig && bFoundInstance);
+    return bResult;
 }

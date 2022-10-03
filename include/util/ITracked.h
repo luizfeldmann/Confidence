@@ -2,10 +2,10 @@
 #define _ITRACKED_H_
 
 #include <unordered_set>
-#include "CGuid.h"
+#include "util/IIdentifiable.h"
 
 // @brief Interface for objects with a tracking ID and a registry used to find them
-template<typename T> class ITracked
+template<typename T> class ITracked : public IIdentifiable
 {
 private:
     //! @brief The copy-constructor is deleted because this class cannot be copied
@@ -19,15 +19,11 @@ public:
     using const_iterator = typename set_type::const_iterator;
 
 protected:
-    //! The unique ID associated with this instance
-    CGuid m_ID;
-    SERIALIZATION_FRIEND(ITracked<T>);
-
     //! A set of all valid instances
     static set_type m_trackSet;
 
     //! Casts an ITracked to the specialized type
-    inline T* Cast(ITracked<T>* p)
+    inline T* Cast(ITracked* p)
     {
         return static_cast<T*>(p);
     }
@@ -39,7 +35,7 @@ protected:
     }
 
 public:
-    //! @brief Creates an instance with a new GUID, and registers it
+    //! @brief Creates an instance and registers it
     ITracked()
     {
         m_trackSet.insert(This());
@@ -47,19 +43,13 @@ public:
 
     //! @brief Registers the new location and unregisters the old one
     ITracked(ITracked&& rOther)
-        : m_ID(rOther.m_ID)
     {
-        rOther.m_ID = CGuid::Null();
-
         m_trackSet.erase(Cast(&rOther));
         m_trackSet.insert(This());
     }
 
     ITracked& operator=(ITracked&& rOther)
     {
-        m_ID = rOther.m_ID;
-        rOther.m_ID = CGuid::Null();
-
         m_trackSet.erase(Cast(&rOther));
         m_trackSet.insert(This());
         
@@ -70,12 +60,6 @@ public:
     ~ITracked()
     {
         m_trackSet.erase(This());
-    }
-
-    //! @brief Returns the unique ID associated with this object
-    inline CGuid GetID() const
-    {
-        return m_ID;
     }
 
     //! @brief Returns the first iterator to the set of all instances of this type
@@ -91,13 +75,13 @@ public:
     }
 
     //! @brief Finds an instance by the provided ID
-    static T* FindByID(const CGuid& rID)
+    static T* FindByID(const id_type& rID)
     {
         T* pFound = nullptr;
 
         const_iterator itFound = std::find_if(TrackedBegin(), TrackedEnd(), 
-            [rID](const T* const pSearch) -> bool {
-                return (pSearch->m_ID == rID);
+            [&rID](const T* const pSearch) -> bool {
+                return (pSearch->GetID() == rID);
             }
         );
 

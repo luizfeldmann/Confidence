@@ -34,7 +34,7 @@ public:
     //! @brief Gets a pointer to the associated instance, if any
     CInstance* GetInstance() const
     {
-        return dynamic_cast<CInstance*>(IProjTreeItem::FindByID(m_gInstance));
+        return CInstance::FindByID(m_gInstance);
     }
 
     //! @brief Searches the wxDataViewCtrl for the column with the given model index

@@ -7,6 +7,8 @@ DEFINE_SERIALIZATION_SCHEME(CInstance,
 
 REGISTER_POLYMORPHIC_CLASS(CInstance);
 
+CInstance::ITracked::set_type CInstance::ITracked::m_trackSet;
+
 CInstance::CInstance()
     : CStoredNameItem("<new instance>")
     , CStoredDescriptionItem("<no instance description>")

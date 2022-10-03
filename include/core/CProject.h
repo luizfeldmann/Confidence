@@ -10,6 +10,7 @@ class CProject : public IProjTreeItem
                , public CStoredNameItem
                , public CStoredDescriptionItem
                , public CStoredItemCollection
+               , public IIdentifiable
 {
 public:
     //! @brief Creates a new, empty project

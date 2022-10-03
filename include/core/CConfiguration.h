@@ -5,12 +5,14 @@
 #include "CStoredNameItem.h"
 #include "CStoredDescriptionItem.h"
 #include "CStoredItemCollection.h"
+#include "core/IFindByName.h"
 
 //! @brief A named set of settings that are chosen together
 class CConfiguration : public IProjTreeItem
     , public CStoredNameItem
     , public CStoredDescriptionItem
     , public CStoredItemCollection
+    , public IFindByName<CConfiguration>
 {
 public:
     //! @brief Creates a new, empty configuration
