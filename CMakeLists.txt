@@ -11,6 +11,9 @@ include(res/icons/exportIcons.cmake)
 SET(RESOURCESFILE "resources.rc")
 configure_file(res/resources.in.rc ${RESOURCESFILE})
 
+# Configure version file
+configure_file(src/util/version.in.cpp "version.cpp")
+
 # Dependency: JInterface
 include(dependencies/JInterface/ConsumeMe.cmake)
 
@@ -135,6 +138,7 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/Models/CVariableTableModel.cpp"
 
     # Utility
+    "include/util/version.h" "version.cpp"
     "include/util/CScopedConsoleStyle.h"
     "src/util/CScopedConsoleStyle.cpp"
     "include/util/Log.h"

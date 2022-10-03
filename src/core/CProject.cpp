@@ -1,7 +1,7 @@
 #include "core/CProject.h"
 #include "util/Log.h"
 #include <fstream>
-
+#include "util/version.h"
 #include "core/CVariable.h"
 #include "core/CGroup.h"
 
@@ -9,6 +9,7 @@ DEFINE_SERIALIZATION_SCHEME(CProject,
     SERIALIZATION_INHERIT(CStoredNameItem)
     SERIALIZATION_INHERIT(CStoredDescriptionItem)
     SERIALIZATION_INHERIT(IIdentifiable)
+    SERIALIZATION_MEMBER(m_strAppVersion)
     SERIALIZATION_MEMBER(m_cConfigurations)
     SERIALIZATION_MEMBER(m_cInstances)
     SERIALIZATION_INHERIT(CStoredItemCollection)
@@ -22,6 +23,7 @@ CProject::CProject()
     : CStoredNameItem("<new project>")
     , CStoredDescriptionItem("<no project description>")
     , CStoredItemCollection(EGroup)
+    , m_strAppVersion(Version::szVersion)
 {
 }
 
@@ -134,4 +136,11 @@ CProject::vec_cref_t CProject::SubItems() const
 ETreeItemType CProject::GetType() const
 {
     return EProject;
+}
+
+bool CProject::PreSerialize()
+{
+    m_strAppVersion = Version::szVersion;
+
+    return IProjTreeItem::PreSerialize();
 }

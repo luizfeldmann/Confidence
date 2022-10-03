@@ -82,6 +82,9 @@ protected:
     //! Stores most recent open/save path to the project file, if any
     std::string m_currentPath;
 
+    //! Stores the version of the application that created this project file
+    std::string m_strAppVersion;
+
     //! Group of all configurations supported by the project
     CConfigurationGroup m_cConfigurations;
 
@@ -89,6 +92,13 @@ protected:
     CInstanceGroup m_cInstances;
 
     SERIALIZATION_FRIEND(CProject);
+
+    /********************************/
+    /* OVERRIDES FROM IProjTreeItem */
+    /********************************/
+
+    // @copydoc IProjTreeItem::PreSerialize
+    bool PreSerialize() override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CProject)

@@ -1,4 +1,5 @@
 #include "util/Log.h"
+#include "util/version.h"
 #include "CLI/CLI.hpp"
 #include "ui/CMainApp.h"
 #include "core/CProject.h"
@@ -16,6 +17,7 @@ public:
     enum class EMode {
         Invalid,//!< The application was called incorrectly
         Help,   //!< User requested a help message
+        Version,//!< Show application version
         Edit,   //!< Opens the project editor as a GUI
         Run,    //!< Runs the project in a console
         ExpDocs //!< Exports the documentation and then closes
@@ -28,6 +30,9 @@ public:
     {
         CLI::App app{ "Confidence - A configuration management tool you can trust" };
 
+        bool bShowVersion = false;
+        CLI::Option* pOptVersion = app.add_flag("-v,--version", bShowVersion, "Shows the version of this software");
+
         CLI::Option* pOptFileName = app.add_option("-f,--file,filename", m_strOpenFileName, "Path to the project file");
         pOptFileName->check(CLI::ExistingFile);
 
@@ -35,8 +40,15 @@ public:
         CLI::Option* pOptExport = app.add_flag("-d,--docs", bExportDocs, "Export the documentation and exit");
         CLI::Option* pOptRun = app.add_option("-r,--run", m_strRunConfigurationName, "Run the project in a console, using a supplied configuration name");
 
+        pOptVersion->excludes(pOptRun);
+        pOptVersion->excludes(pOptExport);
+        pOptVersion->excludes(pOptFileName);
+
+        pOptRun->excludes(pOptVersion);
         pOptRun->excludes(pOptExport);
         pOptRun->needs(pOptFileName);
+
+        pOptExport->excludes(pOptVersion);
         pOptExport->excludes(pOptRun);
         pOptExport->needs(pOptFileName);
 
@@ -57,9 +69,11 @@ public:
             m_iExitCode = e.get_exit_code();
         }
 
-        if (0 == m_iExitCode)
+        if ((0 == m_iExitCode) && (EMode::Help != m_eMode))
         {
-            if (EMode::Help != m_eMode)
+            if (bShowVersion)
+                m_eMode = EMode::Version;
+            else
                 m_eMode = EMode::Edit;
 
             if (!m_strOpenFileName.empty())
@@ -118,6 +132,12 @@ static int EditProj(const std::string& rFileName, int argc, char** argv)
     return -1;
 }
 
+static int PrintVersion()
+{
+    CLOG("%s (%s)", Version::szVersion, Version::szTimestamp);
+    return 0;
+}
+
 int main(int argc, char** argv)
 {
     CCommandLineArguments cArgs(argc, argv);
@@ -127,6 +147,10 @@ int main(int argc, char** argv)
     default:
     case CCommandLineArguments::EMode::Help:
     case CCommandLineArguments::EMode::Invalid:
+        break;
+
+    case CCommandLineArguments::EMode::Version:
+        Status = PrintVersion();
         break;
 
     case CCommandLineArguments::EMode::ExpDocs:
