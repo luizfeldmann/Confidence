@@ -2,12 +2,13 @@
 #define _CVARIABLETABLEMODEL_H_
 
 #include "CBaseTreeItemModel.h"
+#include "core/INotifyItemOperation.h"
 
 class CVariable;
 class CProject;
 
 //! @brief Table with configurations as rows and instances as columns
-class CVariableTableModel : public CBaseTreeItemModel
+class CVariableTableModel : public CBaseTreeItemModel, public INotifyItemOperation
 {
 protected:
     //! The variable being edited
@@ -33,6 +34,15 @@ public:
     //! @brief Deletes the expression in the provided cell
     //! @return True if success
     bool DeleteCell(const wxDataViewItem& rCellRow, const wxDataViewColumn* pCellColumn);
+
+    //! @copydoc INotifyItemOperation::OnItemCreated
+    void OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent) override;
+
+    //! @copydoc INotifyItemOperation::OnAnyItemErased
+    void OnAnyItemErased(const IProjTreeItem& rItem) override;
+
+    //! @copydoc INotifyItemOperation::OnAnyItemRenamed
+    void OnAnyItemRenamed(const IProjTreeItem& rItem) override;
 
     /* wxDataViewModel overrides */
     unsigned int GetColumnCount() const wxOVERRIDE;

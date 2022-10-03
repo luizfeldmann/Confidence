@@ -34,10 +34,14 @@ wxAuiNotebook& ITreeItemEditor::GetNotebook()
     return m_rNotebook;
 }
 
-void ITreeItemEditor::ItemChanged()
+void ITreeItemEditor::OnAnyItemRenamed(const IProjTreeItem& rChanged)
 {
-    const int iPageIndex = m_rNotebook.FindPage(m_pPanel);
-    m_rNotebook.SetPageText(iPageIndex, m_rItem.GetName());
+    // If the changed item is associated to this tab, then reload the title
+    if (&m_rItem == &rChanged)
+    {
+        const int iPageIndex = m_rNotebook.FindPage(m_pPanel);
+        m_rNotebook.SetPageText(iPageIndex, m_rItem.GetName());
+    }
 }
 
 void ITreeItemEditor::Reactivate()

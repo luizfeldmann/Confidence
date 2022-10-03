@@ -19,6 +19,21 @@ CVariableEditorUI::CVariableEditorUI(wxWindow* pParent, CVariable& rVar)
     SetAcceleratorTable(m_cAccTbl);
 }
 
+void CVariableEditorUI::OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent)
+{
+    m_pModel->OnItemCreated(rItem, rParent);
+}
+
+void CVariableEditorUI::OnAnyItemErased(const IProjTreeItem& rItem)
+{
+    m_pModel->OnAnyItemErased(rItem);
+}
+
+void CVariableEditorUI::OnAnyItemRenamed(const IProjTreeItem& rItem)
+{
+    m_pModel->OnAnyItemRenamed(rItem);
+}
+
 void CVariableEditorUI::onDeleteCell(wxCommandEvent& event)
 {
     wxDataViewItem 	selectRow = m_dataView->GetCurrentItem();
@@ -38,5 +53,23 @@ CVariableEditor::CVariableEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
 ITreeItemEditor* CVariableEditor::Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
 {
     return new CVariableEditor(rNotebook, rItem);
+}
+
+void CVariableEditor::OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent)
+{
+    CNameDescEditor::OnItemCreated(rItem, rParent);
+    m_pUiVar->OnItemCreated(rItem, rParent);
+}
+
+void CVariableEditor::OnAnyItemErased(const IProjTreeItem& rItem)
+{
+    CNameDescEditor::OnAnyItemErased(rItem);
+    m_pUiVar->OnAnyItemErased(rItem);
+}
+
+void CVariableEditor::OnAnyItemRenamed(const IProjTreeItem& rChanged)
+{
+    CNameDescEditor::OnAnyItemRenamed(rChanged);
+    m_pUiVar->OnAnyItemRenamed(rChanged);
 }
 

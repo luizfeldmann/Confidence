@@ -131,7 +131,7 @@ void CMainWindow::onTreeItemRenamed(wxCommandEvent& evt)
     IProjTreeItem* pItem = static_cast<IProjTreeItem*>( evt.GetClientData() );
     assert(nullptr != pItem);
 
-    m_editorManager.ItemRenamed(*pItem);
+    m_editorManager.OnAnyItemRenamed(*pItem);
 }
 
 void CMainWindow::onEditorItemNameDescChanged(wxCommandEvent& evt)
@@ -141,6 +141,8 @@ void CMainWindow::onEditorItemNameDescChanged(wxCommandEvent& evt)
 
     wxDataViewModel* pModel = m_dataViewCtrlBrowser->GetModel();
     pModel->ItemChanged(wxDataViewItem(pItem));
+
+    m_editorManager.OnAnyItemRenamed(*pItem);
 }
 
 void CMainWindow::onTreeItemActivate(wxDataViewEvent& event)
@@ -172,10 +174,12 @@ void CMainWindow::onBtnNewItemMenu(wxCommandEvent& evt)
         wxDataViewItem parentItem(pSelected);
         wxDataViewItem newItem(pNewChild);
 
-        m_dataViewCtrlBrowser->GetModel()->ItemAdded(parentItem, newItem);
+        m_pTreeModel->ItemAdded(parentItem, newItem);
 
         m_dataViewCtrlBrowser->Expand(parentItem);
         m_dataViewCtrlBrowser->SetSelections(wxDataViewItemArray(1, newItem));
+
+        m_editorManager.OnItemCreated(*pNewChild, *pSelected);
     }
     else
     {
@@ -234,7 +238,7 @@ void CMainWindow::onBtnDeleteItem(wxCommandEvent& event)
     ITreeItemCollection::ptr_t pTakeItem = m_pTreeModel->TakeItem(selectedItem);
 
     if (pTakeItem)
-        m_editorManager.ItemDeleted(*pTakeItem);
+        m_editorManager.OnAnyItemErased(*pTakeItem);
 }
 
 void CMainWindow::onBtnItemUp(wxCommandEvent& event)
@@ -254,7 +258,7 @@ void CMainWindow::onBtnItemCut(wxCommandEvent& event)
 
     if (pTakeItem)
     {
-        m_editorManager.ItemDeleted(*pTakeItem);
+        m_editorManager.OnAnyItemErased(*pTakeItem);
         m_pCutClipboard = std::move(pTakeItem);
     }
 }
@@ -271,6 +275,8 @@ void CMainWindow::onBtnItemPaste(wxCommandEvent& event)
 
             m_dataViewCtrlBrowser->Expand(parentItem);
             m_dataViewCtrlBrowser->SetSelections(wxDataViewItemArray(1, pasteItem));
+
+            m_editorManager.OnItemCreated(*m_pCutClipboard, *CTreeBrowserModel::GetItem(parentItem));
 
             m_pCutClipboard.release();
         }

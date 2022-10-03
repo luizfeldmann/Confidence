@@ -7,15 +7,18 @@ CNameDescEditorUI::CNameDescEditorUI(wxWindow* pParent, CNameDescEditor& rEditor
     : INameDescEditor(pParent)
     , m_rEditor(rEditor)
 {
-    ItemChanged();
+    OnAnyItemRenamed(m_rEditor.GetItem());
 }
 
-void CNameDescEditorUI::ItemChanged()
+void CNameDescEditorUI::OnAnyItemRenamed(const IProjTreeItem& rChanged)
 {
     IProjTreeItem& rItem = m_rEditor.GetItem();
 
-    m_textCtrlName->ChangeValue(rItem.GetName());
-    m_textCtrlDesc->ChangeValue(rItem.GetDescription());
+    if (&rChanged == &rItem)
+    {
+        m_textCtrlName->ChangeValue(rItem.GetName());
+        m_textCtrlDesc->ChangeValue(rItem.GetDescription());
+    }
 }
 
 void CNameDescEditorUI::onChangedName(wxCommandEvent& event)
@@ -28,7 +31,7 @@ void CNameDescEditorUI::onChangedName(wxCommandEvent& event)
     if (bSuccess)
     {
         // Make sure the tab name is updated as well
-        m_rEditor.ITreeItemEditor::ItemChanged();
+        m_rEditor.ITreeItemEditor::OnAnyItemRenamed(rItem);
 
         // Notify the main window about the name change
         wxCommandEvent cmdEvent(EVT_EDITOR_ITEM_CHANGED_NAME);
@@ -76,8 +79,8 @@ ITreeItemEditor* CNameDescEditor::Create(wxAuiNotebook& rNotebook, IProjTreeItem
     return new CNameDescEditor(rNotebook, rItem);
 }
 
-void CNameDescEditor::ItemChanged()
+void CNameDescEditor::OnAnyItemRenamed(const IProjTreeItem& rChanged)
 {
-    ITreeItemEditor::ItemChanged();
-    m_pUiNameDesc->ItemChanged();
+    ITreeItemEditor::OnAnyItemRenamed(rChanged);
+    m_pUiNameDesc->OnAnyItemRenamed(rChanged);
 }

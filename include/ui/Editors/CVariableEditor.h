@@ -8,7 +8,7 @@
 #include "core/CVariable.h"
 
 //! @brief Item editor for variable types
-class CVariableEditorUI : public IVariableEditor
+class CVariableEditorUI : public IVariableEditor, public INotifyItemOperation
 {
 protected:
     //! Reference to the variable being edited
@@ -23,6 +23,16 @@ protected:
 public:
     CVariableEditorUI(wxWindow* pParent, CVariable& rVar);
 
+    //! @copydoc INotifyItemOperation::OnItemCreated
+    void OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent) override;
+
+    //! @copydoc INotifyItemOperation::OnAnyItemErased
+    void OnAnyItemErased(const IProjTreeItem& rItem) override;
+
+    //! @copydoc INotifyItemOperation::OnAnyItemChanged
+    void OnAnyItemRenamed(const IProjTreeItem& pItem) override;
+
+    /* OVERRIDES FROM IVariableEditor */
     void onDeleteCell(wxCommandEvent& event) override;
 };
 
@@ -34,6 +44,15 @@ protected:
 
 public:
     CVariableEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+
+    //! @copydoc INotifyItemOperation::OnItemCreated
+    void OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent) override;
+
+    //! @copydoc INotifyItemOperation::OnAnyItemErased
+    void OnAnyItemErased(const IProjTreeItem& rItem) override;
+
+    //! @copydoc INotifyItemOperation::OnAnyItemRenamed
+    void OnAnyItemRenamed(const IProjTreeItem& rChanged) override;
 
     //! @brief Returns a new instance of this class
     static ITreeItemEditor* Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);

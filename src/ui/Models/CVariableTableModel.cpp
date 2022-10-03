@@ -11,7 +11,7 @@ class CInstanceColumn : public wxDataViewColumn
 {
 protected:
     //! @brief ID of the instance associated to this column
-    CGuid m_gInstance;
+    CInstance::id_type m_gInstance;
 
     //! @brief Returns the icon of the column
     inline static const wxIcon& GetIcon()
@@ -35,6 +35,12 @@ public:
     CInstance* GetInstance() const
     {
         return CInstance::FindByID(m_gInstance);
+    }
+
+    //! @brief Gets the ID of the associated instance
+    CInstance::id_type GetID() const
+    {
+        return m_gInstance;
     }
 
     //! @brief Searches the wxDataViewCtrl for the column with the given model index
@@ -118,14 +124,58 @@ const IProjTreeItem& CVariableTableModel::GetRootItem() const
     return m_rProj.GetConfigurations();
 }
 
+void CVariableTableModel::OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent)
+{
+    // If an instance was created, reload the columns
+    // If a configuration was created, append the row
+    const ETreeItemType eType = rItem.GetType();
+    if (EInstance == eType)
+        ReloadColumns();
+    else if (EConfig == eType)
+    {
+        ItemAdded(wxDataViewItem((void*)&rParent), wxDataViewItem((void*)&rItem));
+    }
+}
+
+void CVariableTableModel::OnAnyItemErased(const IProjTreeItem& rItem)
+{
+    if (EConfig == rItem.GetType())
+    {
+        wxDataViewItem deletedItem((void*)&rItem);
+        ItemDeleted(GetParent(deletedItem), deletedItem);
+    }
+}
+
+void CVariableTableModel::OnAnyItemRenamed(const IProjTreeItem& rItem)
+{
+    // Rename the columns if any instance was renamed
+    const CInstance* const pInst = dynamic_cast<const CInstance*>(&rItem);
+    if (pInst)
+    {
+        unsigned int uColCount = m_pCtrl->GetColumnCount();
+        for (unsigned int i = 0; i < uColCount; i++)
+        {
+            CInstanceColumn* const pColumn = dynamic_cast<CInstanceColumn*>(m_pCtrl->GetColumnAt(i));
+
+            if (pColumn && pColumn->GetID() == pInst->GetID())
+                pColumn->SetTitle(pInst->GetName());
+        }
+    }
+
+    // Rename the row if a configuration was renamed
+    const CConfiguration* const pConfig = dynamic_cast<const CConfiguration*>(&rItem);
+    if (pConfig)
+        ItemChanged(wxDataViewItem((void*)pConfig));
+}
+
 void CVariableTableModel::ReloadColumns()
 {
     m_pCtrl->ClearColumns();
 
     // Create first column for configurations
-    const wxIcon& rIconConfig = STreeItemTypeInfo::GetIcon(ETreeItemType::EConfGroup);
-    wxDataViewColumn* pColConfig = m_pCtrl->AppendIconTextColumn(rIconConfig, (unsigned int)EVariableColumns::Configuration);
-    pColConfig->SetTitle("Configuration");
+    const STreeItemTypeInfo& rHeaderInfo = STreeItemTypeInfo::GetInfo(ETreeItemType::EConfGroup);
+    wxDataViewColumn* pColConfig = m_pCtrl->AppendIconTextColumn(rHeaderInfo.m_icon, (unsigned int)EVariableColumns::Configuration);
+    pColConfig->SetTitle(rHeaderInfo.m_strTypeName);
 
     // Create one column for each instance
     const CInstanceGroup& rInstances = m_rProj.GetInstances();

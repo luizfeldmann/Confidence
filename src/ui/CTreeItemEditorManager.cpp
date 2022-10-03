@@ -20,6 +20,14 @@ CTreeItemEditorManager::VecPtrEditor::iterator CTreeItemEditorManager::FindEdito
         });
 }
 
+CTreeItemEditorManager::VecPtrEditor::const_iterator CTreeItemEditorManager::FindEditor(const IProjTreeItem& rItemFind)
+{
+    return std::find_if(m_vEditors.cbegin(), m_vEditors.cend(), [&](const PtrEditor& pSearch)->bool
+        {
+            return (&(pSearch->GetItem()) == &rItemFind);
+        });
+}
+
 CTreeItemEditorManager::VecPtrEditor::iterator CTreeItemEditorManager::FindEditor(wxWindow* pFindWindow)
 {
     return std::find_if(m_vEditors.begin(), m_vEditors.end(), [pFindWindow](const PtrEditor& pSearch)->bool
@@ -45,27 +53,34 @@ void CTreeItemEditorManager::ActivateItem(IProjTreeItem& pEditItem)
     }
 }
 
-void CTreeItemEditorManager::ItemDeleted(IProjTreeItem& pEditItem)
+void CTreeItemEditorManager::OnAnyItemErased(const IProjTreeItem& pEditItem)
 {
     // Close editors of child items
-    for (IProjTreeItem::ref_t& rChild : pEditItem.SubItems())
-        ItemDeleted(rChild.get());
+    for (IProjTreeItem::cref_t& rChild : pEditItem.SubItems())
+        OnAnyItemErased(rChild.get());
+
+    // Notify all editors the item has been erased
+    for (const PtrEditor& pEditor : m_vEditors)
+        pEditor->OnAnyItemErased(pEditItem);
 
     // Close own editor
-    VecPtrEditor::iterator itFoundEditor = FindEditor(pEditItem);
-    if (m_vEditors.end() != itFoundEditor)
+    VecPtrEditor::const_iterator itFoundEditor = FindEditor(pEditItem);
+    if (m_vEditors.cend() != itFoundEditor)
     {
         m_vEditors.erase(itFoundEditor);
     }
 }
 
-void CTreeItemEditorManager::ItemRenamed(IProjTreeItem& pEditItem)
+void CTreeItemEditorManager::OnAnyItemRenamed(const IProjTreeItem& pEditItem)
 {
-    VecPtrEditor::iterator itFoundEditor = FindEditor(pEditItem);
-    if (m_vEditors.end() != itFoundEditor)
-    {
-        itFoundEditor->get()->ItemChanged();
-    }
+    for (const PtrEditor& pEditor : m_vEditors)
+        pEditor->OnAnyItemRenamed(pEditItem);
+}
+
+void CTreeItemEditorManager::OnItemCreated(const IProjTreeItem& pEditItem, const IProjTreeItem& rParent)
+{
+    for (const PtrEditor& pEditor : m_vEditors)
+        pEditor->OnItemCreated(pEditItem, rParent);
 }
 
 void CTreeItemEditorManager::OnPageClose(wxAuiNotebookEvent& event)

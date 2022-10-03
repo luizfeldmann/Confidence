@@ -15,7 +15,7 @@ wxDECLARE_EVENT(EVT_EDITOR_ITEM_CHANGED_DESC, wxCommandEvent);
 class CNameDescEditor;
 
 //! @brief Item editor containing text boxes to edit the name and the description 
-class CNameDescEditorUI : public INameDescEditor
+class CNameDescEditorUI : public INameDescEditor, public INotifyItemOperation
 {
 protected:
     //! Reference to the item being edited
@@ -28,8 +28,8 @@ protected:
 public:
     CNameDescEditorUI(wxWindow* pParent, CNameDescEditor& rEditor);
 
-    //! @copydoc ITreeItemEditor::ItemChanged
-    void ItemChanged();
+    //! @copydoc INotifyItemOperation::OnAnyItemRenamed
+    void OnAnyItemRenamed(const IProjTreeItem& rChanged) override;
 };
 
 //! @copydoc CNameDescEditorUI
@@ -44,8 +44,8 @@ public:
     //! @brief Returns a new instance of this class
     static ITreeItemEditor* Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
 
-    //! @copydoc ITreeItemEditor::ItemChanged
-    virtual void ItemChanged() override;
+    //! @copydoc INotifyItemOperation::ItemChanged
+    void OnAnyItemRenamed(const IProjTreeItem& rChanged) override;
 };
 
 #endif

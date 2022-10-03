@@ -4,9 +4,10 @@
 #include <wx/panel.h>
 #include <wx/aui/auibook.h>
 #include "core/IProjTreeItem.h"
+#include "core/INotifyItemOperation.h"
 
 //! @brief Custom content of the editor tab opened for a specific project tree item
-class ITreeItemEditor
+class ITreeItemEditor : public INotifyItemOperation
 {
 private:
     ITreeItemEditor(const ITreeItemEditor&) = delete;               //! Non copy-constructible
@@ -44,8 +45,8 @@ public:
     //! @brief Gets the tab page used by the editor
     wxPanel* GetPage();
 
-    //! @brief Notifies the editor the item was changed and must be reloaded
-    virtual void ItemChanged();
+    //! @copydoc INotifyItemOperation::OnAnyItemRenamed
+    void OnAnyItemRenamed(const IProjTreeItem& rChanged) override;
 
     //! @brief Sets this editor as the current selection of the tabbed notebook
     virtual void Reactivate();
