@@ -27,6 +27,9 @@ public:
 
     ~CVariable();
 
+    //! If true, the variable is exported to the system environment when evaluated
+    bool m_bExportToEnvironment;
+
     //! @brief Creates a new rule associated to a provided configuration and instance, and returns a reference to it
     IExpression& AddRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance);
 

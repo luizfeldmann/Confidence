@@ -3,6 +3,7 @@
 DEFINE_SERIALIZATION_SCHEME(CVariable,
     SERIALIZATION_INHERIT(CStoredNameItem)
     SERIALIZATION_INHERIT(CStoredDescriptionItem)
+    SERIALIZATION_MEMBER(m_bExportToEnvironment)
     SERIALIZATION_MEMBER(m_vRules)
 )
 
@@ -11,6 +12,7 @@ REGISTER_POLYMORPHIC_CLASS(CVariable);
 CVariable::CVariable()
     : CStoredNameItem("<new variable>")
     , CStoredDescriptionItem("<no variable description>")
+    , m_bExportToEnvironment(false)
 {
 
 }

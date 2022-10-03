@@ -17,6 +17,8 @@ CVariableEditorUI::CVariableEditorUI(wxWindow* pParent, CVariable& rVar)
 
     m_cAccTbl = wxAcceleratorTable(arrAccEntry.size(), arrAccEntry.data());
     SetAcceleratorTable(m_cAccTbl);
+
+    m_toolBar->ToggleTool(m_toolExportEnv->GetId(), m_rVar.m_bExportToEnvironment);
 }
 
 void CVariableEditorUI::OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent)
@@ -40,6 +42,11 @@ void CVariableEditorUI::onDeleteCell(wxCommandEvent& event)
     wxDataViewColumn* selectColumn = m_dataView->GetCurrentColumn();
 
     m_pModel->DeleteCell(selectRow, selectColumn);
+}
+
+void CVariableEditorUI::onToolExportEnv(wxCommandEvent& event)
+{
+    m_rVar.m_bExportToEnvironment = m_toolExportEnv->IsToggled();
 }
 
 CVariableEditor::CVariableEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)

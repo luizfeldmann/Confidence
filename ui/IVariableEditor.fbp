@@ -75,7 +75,7 @@
                         <property name="aui_row"></property>
                         <property name="best_size"></property>
                         <property name="bg"></property>
-                        <property name="bitmapsize"></property>
+                        <property name="bitmapsize">16,16</property>
                         <property name="caption"></property>
                         <property name="caption_visible">1</property>
                         <property name="center_pane">0</property>
@@ -113,19 +113,34 @@
                         <property name="separation">5</property>
                         <property name="show">1</property>
                         <property name="size"></property>
-                        <property name="style">wxTB_HORIZONTAL</property>
+                        <property name="style">wxTB_HORIZONTAL|wxTB_HORZ_LAYOUT|wxTB_TEXT</property>
                         <property name="subclass">; ; forward_declare</property>
                         <property name="toolbar_pane">0</property>
                         <property name="tooltip"></property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
-                        <property name="window_style"></property>
+                        <property name="window_style">wxBORDER_NONE</property>
+                        <object class="tool" expanded="1">
+                            <property name="bitmap">Load From Icon Resource; RES_ID_ICON_EXPORT; [-1; -1]</property>
+                            <property name="context_menu">0</property>
+                            <property name="id">wxID_ANY</property>
+                            <property name="kind">wxITEM_CHECK</property>
+                            <property name="label">Export to Environment</property>
+                            <property name="name">m_toolExportEnv</property>
+                            <property name="permission">protected</property>
+                            <property name="statusbar"></property>
+                            <property name="tooltip"></property>
+                            <event name="OnToolClicked">onToolExportEnv</event>
+                        </object>
+                        <object class="toolSeparator" expanded="1">
+                            <property name="permission">protected</property>
+                        </object>
                         <object class="tool" expanded="1">
                             <property name="bitmap">Load From Icon Resource; RES_ID_ICON_TRASH; [-1; -1]</property>
                             <property name="context_menu">0</property>
                             <property name="id">wxID_ANY</property>
                             <property name="kind">wxITEM_NORMAL</property>
-                            <property name="label">Delete cell</property>
+                            <property name="label">Delete Cell</property>
                             <property name="name">m_toolDeleteCell</property>
                             <property name="permission">protected</property>
                             <property name="statusbar"></property>
