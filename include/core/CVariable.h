@@ -31,7 +31,7 @@ public:
     IExpression& AddRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance);
 
     //! @brief Erases the specified rule from the collection
-    void EraseRule(IExpression& rExpr);
+    bool EraseRule(const IExpression* pExpr);
 
     //! @brief Returns an expression associated to a provided configuration and instance, if such exists
     IExpression* GetRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance);

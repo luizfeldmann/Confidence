@@ -68,6 +68,38 @@ enum class EVariableColumns : int
     InstanceFirst   = 1     //!< The 1-st to last columns are instances 
 };
 
+//! @brief Possible status for the expression cells of the variable
+enum class ECellStatus {
+    Assign,     //!< An expression is set for the cell
+    Inherit,    //!< The cell inherits the expression from the parent configuration
+    Undefined,  //!< The expression is undefined
+    Error,      //!< The expression rule is invalid
+};
+
+//! @brief Updates a table view cell text and icon
+static void SetCellStatus(ECellStatus eStatus, wxDataViewIconText& rCell, const wxString strLabel = wxEmptyString)
+{
+    struct SCellStyle
+    {
+        const wxString strText;
+        const wxIcon cIcon;
+    };
+    
+    #define CELL_ICON(NAME) wxIcon(NAME, wxBITMAP_TYPE_ICO_RESOURCE, 16, 16)
+
+    static const std::map<ECellStatus, SCellStyle> c_mIcons {
+        {ECellStatus::Assign,    SCellStyle{"<set empty>",     CELL_ICON("RES_ID_ICON_EXPR_ASSIGN")} },
+        {ECellStatus::Inherit,   SCellStyle{"<inherit empty>", CELL_ICON("RES_ID_ICON_EXPR_INHERIT")} },
+        {ECellStatus::Undefined, SCellStyle{"<undefined>",     CELL_ICON("RES_ID_ICON_EXPR_UNDEFINED")} },
+        {ECellStatus::Error,     SCellStyle{"<error>",         CELL_ICON("RES_ID_ICON_EXPR_ERROR")} },
+    };
+
+    const SCellStyle& rStyle = c_mIcons.at(eStatus);
+
+    rCell.SetText(strLabel.empty() ? rStyle.strText : strLabel);
+    rCell.SetIcon(rStyle.cIcon);
+}
+
 CVariableTableModel::CVariableTableModel(CVariable& rVar, const CProject& rProj, wxDataViewCtrl* pCtrl)
     : m_rVar(rVar)
     , m_rProj(rProj)
@@ -155,18 +187,38 @@ void CVariableTableModel::GetValue(wxVariant& variant, const wxDataViewItem& ite
     {
         // Other columns - associated to instances
         const CInstanceColumn* const pColumn = CInstanceColumn::GetColumnByModelIndex(col, m_pCtrl);
+        const CInstance* const pInstance = pColumn ? pColumn->GetInstance() : nullptr;
 
-        if (pColumn)
+        if (!pInstance)
         {
-            const CInstance* const pInstance = pColumn->GetInstance();
-            const CConfiguration* const pConfig = dynamic_cast<CConfiguration*>((IProjTreeItem*)item.GetID());
+            // Instance/Column does not exitst
+            SetCellStatus(ECellStatus::Error, value);
+        }
+        else
+        {
+            const IExpression* pExpression = nullptr;
+            wxDataViewItem currentItem = item;
 
-            if (pConfig && pInstance)
+            do
             {
-                const IExpression* const pExpression = m_rVar.GetRule(*pConfig, *pInstance);
-                if (pExpression)
-                    value.SetText( pExpression->GetExpression() );
-            }
+                const CConfiguration* pConfig = dynamic_cast<CConfiguration*>((IProjTreeItem*)currentItem.GetID());
+
+                if (!pConfig)
+                    break; // Reached root item, no more parents
+                else
+                {
+                    pExpression = m_rVar.GetRule(*pConfig, *pInstance);
+
+                    if (!pExpression)
+                        currentItem = GetParent(currentItem);
+                }
+
+            } while (!pExpression);
+
+            if (!pExpression)
+                SetCellStatus(ECellStatus::Undefined, value);
+            else
+                SetCellStatus(currentItem == item ? ECellStatus::Assign : ECellStatus::Inherit, value, pExpression->GetExpression());
         }
     }
 
@@ -199,4 +251,32 @@ bool CVariableTableModel::SetValue(const wxVariant& variant, const wxDataViewIte
     }
 
     return bSuccess;
+}
+
+bool CVariableTableModel::DeleteCell(const wxDataViewItem& rCellRow, const wxDataViewColumn* pCellColumn)
+{
+    bool bResult = false;
+
+    const CInstanceColumn* const pColumn = dynamic_cast<const CInstanceColumn*>(pCellColumn);
+
+    if (pColumn)
+    {
+        const CInstance* const pInstance = pColumn->GetInstance();
+        const CConfiguration* const pConfig = dynamic_cast<CConfiguration*>((IProjTreeItem*)rCellRow.GetID());
+
+        if (pConfig && pInstance)
+        {
+            IExpression* const pExpression = m_rVar.GetRule(*pConfig, *pInstance);
+
+            if (pExpression)
+            {
+                bResult = m_rVar.EraseRule(pExpression);
+                
+                if (bResult)
+                    ItemChanged(rCellRow);
+            }
+        }
+    }
+
+    return bResult;
 }

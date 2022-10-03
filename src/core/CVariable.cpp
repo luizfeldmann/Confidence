@@ -42,12 +42,14 @@ bool CVariable::PostDeserialize()
 
 bool CVariable::PreSerialize()
 {
-    bool bSuccess = true;
+    // Remove invalid expressions before serializing
+    m_vRules.erase(std::remove_if(m_vRules.begin(), m_vRules.end(),
+        [](CVariableExpressionKey& rKey)->bool
+        {
+            return !rKey.PreSerialize();
+        }), m_vRules.end());
 
-    for (CVariableExpressionKey& rKey : m_vRules)
-        bSuccess = bSuccess && rKey.PreSerialize();
-
-    return bSuccess;
+    return true;
 }
 
 IExpression& CVariable::AddRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance)
@@ -56,16 +58,23 @@ IExpression& CVariable::AddRule(const CConfiguration& rKeyConfig, const CInstanc
     return m_vRules.back();
 }
 
-void CVariable::EraseRule(IExpression& rExpr)
+bool CVariable::EraseRule(const IExpression* pExpr)
 {
+    bool bSuccess = false;
+
     vec_rules_t::const_iterator itFind = std::find_if(m_vRules.cbegin(), m_vRules.cend(),
-        [&rExpr](const IExpression& rSearch) -> bool {
-            return (&rSearch == &rExpr);
+        [&pExpr](const IExpression& rSearch) -> bool {
+            return (&rSearch == pExpr);
         }
     );
 
     if (m_vRules.cend() != itFind)
+    {
         m_vRules.erase(itFind);
+        bSuccess = true;
+    }
+
+    return bSuccess;
 }
 
 IExpression* CVariable::GetRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance)

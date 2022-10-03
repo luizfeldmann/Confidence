@@ -30,6 +30,10 @@ public:
     CVariableTableModel(CVariable& rVar, const CProject& rProj, wxDataViewCtrl* pCtrl);
     ~CVariableTableModel();
 
+    //! @brief Deletes the expression in the provided cell
+    //! @return True if success
+    bool DeleteCell(const wxDataViewItem& rCellRow, const wxDataViewColumn* pCellColumn);
+
     /* wxDataViewModel overrides */
     unsigned int GetColumnCount() const wxOVERRIDE;
     bool HasValue(const wxDataViewItem& item, unsigned col) const wxOVERRIDE;

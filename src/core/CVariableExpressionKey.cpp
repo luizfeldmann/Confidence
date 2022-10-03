@@ -34,21 +34,29 @@ CInstance* CVariableExpressionKey::GetInstance() const
 
 bool CVariableExpressionKey::PreSerialize()
 {
+    bool bValid = true;
+
     // Update configuration name before serialization
     const CConfiguration* const pConfig = GetConfiguration();
     if (pConfig)
         m_strConfiguration = pConfig->GetName();
     else
+    {
+        bValid = false;
         m_strConfiguration.clear();
+    }
 
     // Update instance name before serialization
     const CInstance* const pInst = GetInstance();
     if (pInst)
         m_strInstance = pInst->GetName();
     else
+    {
+        bValid = false;
         m_strInstance.clear();
+    }
 
-    return true;
+    return bValid;
 }
 
 bool CVariableExpressionKey::PostDeserialize()

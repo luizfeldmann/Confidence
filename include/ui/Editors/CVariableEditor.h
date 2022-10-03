@@ -4,6 +4,7 @@
 #include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/IVariableEditor.h"
 #include "ui/Models/CVariableTableModel.h"
+#include "ui/CAcceleratorEntry.h"
 #include "core/CVariable.h"
 
 //! @brief Item editor for variable types
@@ -16,9 +17,13 @@ protected:
     //! Pointer to the model managing the data view table for the variable
     CVariableTableModel* m_pModel;
 
+    //! Manages keyboard shortcuts
+    wxAcceleratorTable m_cAccTbl;
+
 public:
     CVariableEditorUI(wxWindow* pParent, CVariable& rVar);
 
+    void onDeleteCell(wxCommandEvent& event) override;
 };
 
 //! @copydoc CVariableEditorUI
