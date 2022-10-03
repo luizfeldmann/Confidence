@@ -47,6 +47,11 @@ void CTreeItemEditorManager::ActivateItem(IProjTreeItem& pEditItem)
 
 void CTreeItemEditorManager::ItemDeleted(IProjTreeItem& pEditItem)
 {
+    // Close editors of child items
+    for (IProjTreeItem::ref_t& rChild : pEditItem.SubItems())
+        ItemDeleted(rChild.get());
+
+    // Close own editor
     VecPtrEditor::iterator itFoundEditor = FindEditor(pEditItem);
     if (m_vEditors.end() != itFoundEditor)
     {
