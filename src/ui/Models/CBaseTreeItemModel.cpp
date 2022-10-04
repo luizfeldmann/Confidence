@@ -1,8 +1,13 @@
 #include "ui/Models/CBaseTreeItemModel.h"
 
-/* static */ IProjTreeItem* CBaseTreeItemModel::GetItem(const wxDataViewItem& item)
+/* static */ IProjTreeItem* CBaseTreeItemModel::GetPointer(const wxDataViewItem& item)
 {
     return static_cast<IProjTreeItem*>(item.GetID());
+}
+
+/* static */ wxDataViewItem CBaseTreeItemModel::GetViewItem(const IProjTreeItem* pItem)
+{
+    return wxDataViewItem((void*)pItem);
 }
 
 wxDataViewItem CBaseTreeItemModel::GetParent(const wxDataViewItem& item) const
@@ -17,7 +22,7 @@ unsigned int CBaseTreeItemModel::GetChildren(const wxDataViewItem& parent, wxDat
 
     if (NULL == parent.GetID())
     {
-        wxDataViewItem item((void*)&GetRootItem());
+        wxDataViewItem item = GetViewItem(&GetRootItem());
         array.push_back(item);
         uiCount = 1;
 
@@ -25,18 +30,18 @@ unsigned int CBaseTreeItemModel::GetChildren(const wxDataViewItem& parent, wxDat
     }
     else
     {
-        const IProjTreeItem* pParent = GetItem(parent);
+        const IProjTreeItem* pParent = GetPointer(parent);
         assert(nullptr != pParent);
 
         ITreeItemCollection::vec_cref_t vSubitems = pParent->SubItems();
         for (const ITreeItemCollection::cref_t& rChild : vSubitems)
         {
             const IProjTreeItem* pChild = &rChild.get();
-            wxDataViewItem child((void*)pChild);
-            array.push_back(child);
+            wxDataViewItem cChild = GetViewItem(pChild);
+            array.push_back(cChild);
             uiCount++;
 
-            m_mapParents[child] = parent;
+            m_mapParents[cChild] = parent;
         }
     }
 

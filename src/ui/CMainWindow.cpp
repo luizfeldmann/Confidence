@@ -139,15 +139,14 @@ void CMainWindow::onEditorItemNameDescChanged(wxCommandEvent& evt)
     IProjTreeItem* pItem = static_cast<IProjTreeItem*>(evt.GetClientData());
     assert(nullptr != pItem);
 
-    wxDataViewModel* pModel = m_dataViewCtrlBrowser->GetModel();
-    pModel->ItemChanged(wxDataViewItem(pItem));
+    m_pTreeModel->ItemChanged(CBaseTreeItemModel::GetViewItem(pItem));
 
     m_editorManager.OnAnyItemRenamed(*pItem);
 }
 
 void CMainWindow::onTreeItemActivate(wxDataViewEvent& event)
 {
-    IProjTreeItem* pSelected = CTreeBrowserModel::GetItem(m_dataViewCtrlBrowser->GetSelection());
+    IProjTreeItem* pSelected = CTreeBrowserModel::GetPointer(m_dataViewCtrlBrowser->GetSelection());
 
     if (nullptr != pSelected)
         m_editorManager.ActivateItem(*pSelected);
@@ -156,7 +155,8 @@ void CMainWindow::onTreeItemActivate(wxDataViewEvent& event)
 void CMainWindow::onBtnNewItemMenu(wxCommandEvent& evt)
 {
     // Get parent collection of subitems
-    IProjTreeItem* pSelected = CTreeBrowserModel::GetItem(m_dataViewCtrlBrowser->GetSelection());
+    const wxDataViewItem cSelected = m_dataViewCtrlBrowser->GetSelection();
+    IProjTreeItem* const pSelected = CTreeBrowserModel::GetPointer(cSelected);
     assert((nullptr != pSelected) && "Parent item must be selected before creating it's child");
 
     // Get information about the class of subitem we wish to append
@@ -171,12 +171,11 @@ void CMainWindow::onBtnNewItemMenu(wxCommandEvent& evt)
 
     if (pSelected->AddItem(pNewChild))
     {
-        wxDataViewItem parentItem(pSelected);
-        wxDataViewItem newItem(pNewChild);
+        wxDataViewItem newItem = CBaseTreeItemModel::GetViewItem(pNewChild);
 
-        m_pTreeModel->ItemAdded(parentItem, newItem);
+        m_pTreeModel->ItemAdded(cSelected, newItem);
 
-        m_dataViewCtrlBrowser->Expand(parentItem);
+        m_dataViewCtrlBrowser->Expand(cSelected);
         m_dataViewCtrlBrowser->SetSelections(wxDataViewItemArray(1, newItem));
 
         m_editorManager.OnItemCreated(*pNewChild, *pSelected);
@@ -193,7 +192,7 @@ void CMainWindow::onBtnNewItemMenu(wxCommandEvent& evt)
 
 void CMainWindow::onBtnNewItem(wxCommandEvent& event)
 {
-    IProjTreeItem* pSelected = CTreeBrowserModel::GetItem(m_dataViewCtrlBrowser->GetSelection());
+    IProjTreeItem* pSelected = CTreeBrowserModel::GetPointer(m_dataViewCtrlBrowser->GetSelection());
 
     // You may only add new items inside an existing parent
     if (nullptr == pSelected)
@@ -271,12 +270,12 @@ void CMainWindow::onBtnItemPaste(wxCommandEvent& event)
 
         if (m_pTreeModel->InsertItem(parentItem, m_pCutClipboard.get()))
         {
-            wxDataViewItem pasteItem(m_pCutClipboard.get());
+            wxDataViewItem pasteItem( CBaseTreeItemModel::GetViewItem(m_pCutClipboard.get()) );
 
             m_dataViewCtrlBrowser->Expand(parentItem);
             m_dataViewCtrlBrowser->SetSelections(wxDataViewItemArray(1, pasteItem));
 
-            m_editorManager.OnItemCreated(*m_pCutClipboard, *CTreeBrowserModel::GetItem(parentItem));
+            m_editorManager.OnItemCreated(*m_pCutClipboard, *CTreeBrowserModel::GetPointer(parentItem));
 
             m_pCutClipboard.release();
         }
@@ -299,8 +298,8 @@ void CMainWindow::ReloadProject()
     m_editorManager.Clear();
 
     // Update tree: delete and re-add the project
-    wxDataViewItem root(0);
-    wxDataViewItem project(&m_rProject);
+    wxDataViewItem root = CBaseTreeItemModel::GetViewItem(nullptr);
+    wxDataViewItem project = CBaseTreeItemModel::GetViewItem(&m_rProject);
     m_pTreeModel->ItemDeleted(root, project);
     m_pTreeModel->ItemAdded(root, project);
 }

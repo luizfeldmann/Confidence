@@ -16,8 +16,11 @@ protected:
     virtual const IProjTreeItem& GetRootItem() const = 0;
 
 public:
-    //! @brief Casts the DataViewItem into a ProjectItem
-    static IProjTreeItem* GetItem(const wxDataViewItem& item);
+    //! @brief Casts the DataViewItem into a ProjectItem pointer
+    static IProjTreeItem* GetPointer(const wxDataViewItem& item);
+
+    //! @brief Casts the project tree item into a data view item
+    static wxDataViewItem GetViewItem(const IProjTreeItem* pItem);
 
     /* wxDataViewModel overrides */
     wxDataViewItem GetParent(const wxDataViewItem& item) const wxOVERRIDE;

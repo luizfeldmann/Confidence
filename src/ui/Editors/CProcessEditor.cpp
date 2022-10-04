@@ -29,7 +29,7 @@ CRunProcessEditorUI::CRunProcessEditorUI(wxWindow* pParent, CRunProcess& cEdit)
     m_pModel->DecRef();
 
     // Draw all initial items
-    wxDataViewItem wxRoot(nullptr);
+    wxDataViewItem wxRoot = CProcessArgsModel::GetViewItem(nullptr);
     wxDataViewItemArray arrItems;
 
     m_pModel->GetChildren(wxRoot, arrItems);
@@ -50,7 +50,7 @@ CProcessArgument* CRunProcessEditorUI::GetSelectedArgument() const
 void CRunProcessEditorUI::onToolNewArg(wxCommandEvent& event)
 {
     CProcessArgument* pNewItem = m_pModel->NewItem();
-    m_dataViewCtrlArgs->Select(wxDataViewItem(pNewItem));
+    m_dataViewCtrlArgs->Select(CProcessArgsModel::GetViewItem(pNewItem));
 }
 
 void CRunProcessEditorUI::onToolDelArg(wxCommandEvent& event)
@@ -72,7 +72,7 @@ void CRunProcessEditorUI::onToolMoveUp(wxCommandEvent& event)
         CProcessArgument* pSwap = m_pModel->MoveItem(pSelected, true);
 
         if (pSwap)
-            m_dataViewCtrlArgs->Select(wxDataViewItem(pSwap));
+            m_dataViewCtrlArgs->Select(CProcessArgsModel::GetViewItem(pSwap));
     }
 }
 
@@ -85,7 +85,7 @@ void CRunProcessEditorUI::onToolMoveDown(wxCommandEvent& event)
         CProcessArgument* pSwap = m_pModel->MoveItem(pSelected, false);
 
         if (pSwap)
-            m_dataViewCtrlArgs->Select(wxDataViewItem(pSwap));
+            m_dataViewCtrlArgs->Select(CProcessArgsModel::GetViewItem(pSwap));
     }
 }
 

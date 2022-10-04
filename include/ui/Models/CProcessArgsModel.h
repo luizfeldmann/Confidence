@@ -39,6 +39,12 @@ public:
 
     /* Public interface */
 
+    //! @brief Casts the DataViewItem into a process argument pointer
+    static CProcessArgument* GetPointer(const wxDataViewItem& item);
+
+    //! @brief Casts a process argument pointer into a DataViewItem
+    static wxDataViewItem GetViewItem(const CProcessArgument* pArg);
+
     //! @brief Creates a new argument item
     //! @returns Pointer to the new item
     CProcessArgument* NewItem();

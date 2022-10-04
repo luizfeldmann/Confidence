@@ -1,10 +1,14 @@
 #include "ui/Models/CProcessArgsModel.h"
 #include "core/CRunProcess.h"
 
-//! @brief Casts the DataViewItem into a process argument
-static inline CProcessArgument* GetItem(const wxDataViewItem& item)
+/* static */ CProcessArgument* CProcessArgsModel::GetPointer(const wxDataViewItem& item)
 {
     return static_cast<CProcessArgument*>(item.GetID());
+}
+
+/* static */ wxDataViewItem CProcessArgsModel::GetViewItem(const CProcessArgument* pArg)
+{
+    return wxDataViewItem((void*)pArg);
 }
 
 class CArgumentDescriptionModelColumnHandler : public IModelColumnHandler
@@ -19,7 +23,7 @@ public:
 
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
-        CProcessArgument* pItem = GetItem(rItem);
+        const CProcessArgument* const pItem = CProcessArgsModel::GetPointer(rItem);
         assert(pItem);
 
         const wxString strDesc = pItem->GetDescription();
@@ -33,7 +37,7 @@ public:
 
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
-        CProcessArgument* pItem = GetItem(rItem);
+        CProcessArgument* const pItem = CProcessArgsModel::GetPointer(rItem);
         assert(pItem);
 
         wxString strDesc = value.GetString();
@@ -54,7 +58,7 @@ public:
 
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
-        CProcessArgument* pItem = GetItem(rItem);
+        const CProcessArgument* const pItem = CProcessArgsModel::GetPointer(rItem);
         assert(pItem);
 
         const wxString strExpr = pItem->GetExpression();
@@ -68,7 +72,7 @@ public:
 
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
-        CProcessArgument* pItem = GetItem(rItem);
+        CProcessArgument* const pItem = CProcessArgsModel::GetPointer(rItem);
         assert(pItem);
 
         wxString strExpr = value.GetString();
@@ -106,7 +110,7 @@ CProcessArgument* CProcessArgsModel::NewItem()
 
     CProcessArgument* pNewItem = &rvArgs.back();
 
-    ItemAdded(wxDataViewItem(nullptr), wxDataViewItem(pNewItem));
+    ItemAdded(GetViewItem(nullptr), GetViewItem(pNewItem));
     
     return pNewItem;
 }
@@ -121,7 +125,7 @@ bool CProcessArgsModel::DeleteItem(CProcessArgument* pDeleteItem)
     if (rvArgs.end() != itFound)
     {
         rvArgs.erase(itFound);
-        ItemDeleted(wxDataViewItem(nullptr), wxDataViewItem(pDeleteItem));
+        ItemDeleted(GetViewItem(nullptr), GetViewItem(pDeleteItem));
         bSuccess = true;
     }
 
@@ -158,7 +162,7 @@ CProcessArgument* CProcessArgsModel::MoveItem(CProcessArgument* pMoveItem, bool 
     std::iter_swap(itMove, itSwap);
 
     // Update the data list view
-    wxDataViewItem cItem(pMoveItem);
+    wxDataViewItem cItem = GetViewItem(pMoveItem);
     wxDataViewItem cParent = GetParent(cItem);
 
     ItemDeleted(cParent, cItem);
@@ -196,7 +200,7 @@ unsigned int CProcessArgsModel::GetColumnCount() const
 
 wxDataViewItem CProcessArgsModel::GetParent(const wxDataViewItem& item) const
 {
-    return wxDataViewItem(nullptr);
+    return GetViewItem(nullptr);
 }
 
 bool CProcessArgsModel::IsContainer(const wxDataViewItem& item) const
@@ -211,7 +215,7 @@ unsigned int CProcessArgsModel::GetChildren(const wxDataViewItem& parent, wxData
     if (nullptr == parent.GetID())
     {
         for (CProcessArgument& rArg : m_rEdit.GetArguments())
-            array.push_back( wxDataViewItem(&rArg) );
+            array.push_back( GetViewItem(&rArg) );
     }
 
     return uCount;

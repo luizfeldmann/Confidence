@@ -3,6 +3,7 @@
 #include "ui/STreeItemTypeInfo.h"
 #include "core/CInstance.h"
 #include "core/CVariable.h"
+#include "ui/Models/CBaseTreeItemModel.h"
 
 /* CInstanceColumn */
 
@@ -133,7 +134,8 @@ void CVariableTableModel::OnItemCreated(const IProjTreeItem& rItem, const IProjT
         ReloadColumns();
     else if (EConfig == eType)
     {
-        ItemAdded(wxDataViewItem((void*)&rParent), wxDataViewItem((void*)&rItem));
+        ItemAdded(CBaseTreeItemModel::GetViewItem(&rParent),
+            CBaseTreeItemModel::GetViewItem(&rItem));
     }
 }
 
@@ -141,7 +143,7 @@ void CVariableTableModel::OnAnyItemErased(const IProjTreeItem& rItem)
 {
     if (EConfig == rItem.GetType())
     {
-        wxDataViewItem deletedItem((void*)&rItem);
+        wxDataViewItem deletedItem = GetViewItem(&rItem);
         ItemDeleted(GetParent(deletedItem), deletedItem);
     }
 }
@@ -165,7 +167,7 @@ void CVariableTableModel::OnAnyItemRenamed(const IProjTreeItem& rItem)
     // Rename the row if a configuration was renamed
     const CConfiguration* const pConfig = dynamic_cast<const CConfiguration*>(&rItem);
     if (pConfig)
-        ItemChanged(wxDataViewItem((void*)pConfig));
+        ItemChanged(CBaseTreeItemModel::GetViewItem(pConfig));
 }
 
 void CVariableTableModel::ReloadColumns()
@@ -224,7 +226,7 @@ void CVariableTableModel::GetValue(wxVariant& variant, const wxDataViewItem& ite
     if ((unsigned)EVariableColumns::Configuration == col)
     {
         // First column - name of the configuration
-        const IProjTreeItem* const pItem = GetItem(item);
+        const IProjTreeItem* const pItem = GetPointer(item);
         assert(nullptr != pItem);
 
         const std::string strName = pItem->GetName();

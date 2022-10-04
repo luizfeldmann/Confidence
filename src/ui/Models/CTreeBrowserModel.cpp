@@ -37,7 +37,7 @@ public:
 
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
-        IProjTreeItem* pItem = CBaseTreeItemModel::GetItem(rItem);
+        const IProjTreeItem* pItem = CBaseTreeItemModel::GetPointer(rItem);
         assert(pItem);
 
         #define REGICON(RESNAME) wxIcon(RESNAME, wxBITMAP_TYPE_ICO_RESOURCE, 24, 24)
@@ -55,7 +55,7 @@ public:
 
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
-        IProjTreeItem* pItem = CBaseTreeItemModel::GetItem(rItem);
+        IProjTreeItem* pItem = CBaseTreeItemModel::GetPointer(rItem);
         assert(pItem);
 
         wxDataViewIconText iconAndText;
@@ -93,7 +93,7 @@ public:
 
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
-        IProjTreeItem* pItem = CBaseTreeItemModel::GetItem(rItem);
+        const IProjTreeItem* const pItem = CBaseTreeItemModel::GetPointer(rItem);
         assert(pItem);
 
         const wxString strDesc = pItem->GetDescription();
@@ -171,7 +171,7 @@ bool CTreeBrowserModel::IsContainer(const wxDataViewItem& item) const
         bIsContainer = true; // This is the invisible root node, which contains the project
     else
     {
-        const IProjTreeItem* pItem = GetItem(item);
+        const IProjTreeItem* const pItem = GetPointer(item);
         assert(nullptr != pItem);
 
         bIsContainer = (EInvalid != pItem->GetSupportedChildTypes());
@@ -189,8 +189,9 @@ ITreeItemCollection::ptr_t CTreeBrowserModel::TakeItem(const wxDataViewItem& rIt
 {
     ITreeItemCollection::ptr_t pTakeItem;
 
-    IProjTreeItem* pChild = GetItem(rItem);
-    IProjTreeItem* pParent = GetItem(GetParent(rItem));
+    IProjTreeItem* const pChild = GetPointer(rItem);
+    const wxDataViewItem cItemParent = GetParent(rItem);
+    IProjTreeItem* pParent = GetPointer(cItemParent);
 
     if (!pChild || !pParent)
         CWARNING("You must select a child item for this operation");
@@ -200,7 +201,7 @@ ITreeItemCollection::ptr_t CTreeBrowserModel::TakeItem(const wxDataViewItem& rIt
 
         if (pTakeItem)
         {
-            ItemDeleted(wxDataViewItem(pParent), rItem);
+            ItemDeleted(cItemParent, rItem);
         }
         else
         {
@@ -219,8 +220,9 @@ bool CTreeBrowserModel::MoveItem(const wxDataViewItem& rItem, bool bUp)
     // Ensure there is a selected item for us to operate
     // If the parent is root, then the project itself is selected
     // We cannot move/cut/delete the project itself
-    IProjTreeItem* const pChild = GetItem(rItem);
-    IProjTreeItem* const pParent = GetItem(GetParent(rItem));
+    IProjTreeItem* const pChild = GetPointer(rItem);
+    const wxDataViewItem cParent = GetParent(rItem);
+    IProjTreeItem* const pParent = GetPointer(cParent);
 
     if (!pChild || !pParent)
         CWARNING("Cannot move the root item");
@@ -254,10 +256,8 @@ bool CTreeBrowserModel::MoveItem(const wxDataViewItem& rItem, bool bUp)
 
         if (pParent->SwapItems(*iterSwap, *iterChild))
         {
-            wxDataViewItem wxParent(pParent);
-
-            ItemDeleted(wxParent, rItem);
-            ItemAdded(wxParent, rItem);
+            ItemDeleted(cParent, rItem);
+            ItemAdded(cParent, rItem);
 
             bSuccess = true;
         }
@@ -270,7 +270,7 @@ bool CTreeBrowserModel::InsertItem(const wxDataViewItem& rParent, IProjTreeItem*
 {
     bool bSuccess = false;
 
-    IProjTreeItem* const pParent = GetItem(rParent);
+    IProjTreeItem* const pParent = GetPointer(rParent);
 
     if (!pParent || !pInsertItem)
         CERROR("Item is NULL");
@@ -293,7 +293,7 @@ bool CTreeBrowserModel::InsertItem(const wxDataViewItem& rParent, IProjTreeItem*
         }
         else if (pParent->AddItem(pInsertItem))
         {
-            ItemAdded(rParent, wxDataViewItem(pInsertItem));
+            ItemAdded(rParent, GetViewItem(pInsertItem));
             bSuccess = true;
         }
         else
