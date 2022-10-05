@@ -12,7 +12,11 @@
 
 wxDataViewItem CBaseTreeItemModel::GetParent(const wxDataViewItem& item) const
 {
-    return m_mapParents.at(item);
+    parent_map_t::const_iterator itFind = m_mapParents.find(item);
+    
+    return (m_mapParents.cend() == itFind)
+        ? GetViewItem(nullptr)
+        : itFind->second;
 }
 
 unsigned int CBaseTreeItemModel::GetChildren(const wxDataViewItem& parent, wxDataViewItemArray& array) const

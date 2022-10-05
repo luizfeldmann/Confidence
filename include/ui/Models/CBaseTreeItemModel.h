@@ -10,7 +10,8 @@ class CBaseTreeItemModel : virtual public wxDataViewModel
 {
 protected:
     //! Maps child (key) to parent (value)
-    mutable std::map<wxDataViewItem, wxDataViewItem> m_mapParents;
+    using parent_map_t = std::map<wxDataViewItem, wxDataViewItem>;
+    mutable parent_map_t m_mapParents;
 
     //! @brief Gets the root item of the tree view
     virtual const IProjTreeItem& GetRootItem() const = 0;
