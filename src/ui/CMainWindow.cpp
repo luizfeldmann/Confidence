@@ -112,6 +112,11 @@ void CMainWindow::onBtnSaveAsProject(wxCommandEvent& event)
     m_rProject.SaveToFile(saveFileDialog.GetPath().ToStdString());
 }
 
+void CMainWindow::onBtnDocumentation(wxCommandEvent& event)
+{
+    m_rProject.ExportDocumentation();
+}
+
 void CMainWindow::onBtnRunProject(wxCommandEvent& event)
 {
 

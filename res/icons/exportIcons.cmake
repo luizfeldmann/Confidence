@@ -15,6 +15,7 @@ SET(ICONS_SOURCE
     "SAVE2"
     "RUN"
     "STOP"
+    "DOCSEXPORT"
     "ARROWUP"
     "ARROWDOWN"
     "SCISSORS"

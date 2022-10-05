@@ -4,6 +4,7 @@
 #include "util/CGuid.h"
 #include "core/CInstanceGroup.h"
 #include "core/CConfigurationGroup.h"
+#include "docs/IDocumentable.h"
 
 //! @brief Top level item in the project tree / the main project document
 class CProject : public IProjTreeItem
@@ -11,6 +12,7 @@ class CProject : public IProjTreeItem
                , public CStoredDescriptionItem
                , public CStoredItemCollection
                , public IIdentifiable
+               , public IDocumentable
 {
 public:
     //! @brief Creates a new, empty project
@@ -70,9 +72,18 @@ public:
     //! @brief Stops the current execution, if any
     void Stop();
 
+    using ptr_exporter_t = std::unique_ptr<IDocExporter>;
+    using vec_exporters_t = std::vector<ptr_exporter_t>;
+
+    //! @brief Gets a reference to the collection of documentation exporters
+    vec_exporters_t& GetDocumentationExporters();
+
     //! @brief Generates the documentation associated to this project
     //! @return True if success
     bool ExportDocumentation();
+
+    //! @copydoc IDocumentable::Document
+    bool Document(IDocExporter& rExporter) const override;
 
 protected:
     /************/
@@ -84,6 +95,9 @@ protected:
 
     //! Stores the version of the application that created this project file
     std::string m_strAppVersion;
+
+    //! Stores the collection of exporters
+    vec_exporters_t m_vExportDocumentation;
 
     //! Group of all configurations supported by the project
     CConfigurationGroup m_cConfigurations;
