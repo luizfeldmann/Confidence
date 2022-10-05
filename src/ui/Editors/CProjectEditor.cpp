@@ -3,6 +3,7 @@
 #include "core/CProject.h"
 #include "ui/SDocExporterTypeInfo.h"
 #include <wx/menu.h>
+#include <array>
 
 /* CProjectEditorUI */
 CProjectEditorUI::CProjectEditorUI(wxWindow* pParent, CProject& rEdit)
@@ -20,6 +21,16 @@ CProjectEditorUI::CProjectEditorUI(wxWindow* pParent, CProject& rEdit)
 
     m_pModel->GetChildren(wxRoot, arrItems);
     m_pModel->ItemsAdded(wxRoot, arrItems);
+
+    // Configure accelerator
+    using acc_entry_t = CAcceleratorEntry;
+    const std::array<acc_entry_t, 2> arrAccEntry{
+        acc_entry_t(wxACCEL_CTRL,    (int)'N',   m_toolNewDoc),
+        acc_entry_t(wxACCEL_NORMAL,  WXK_DELETE, m_toolDeleteDoc),
+    };
+
+    m_cAccTbl = wxAcceleratorTable(arrAccEntry.size(), arrAccEntry.data());
+    m_dataViewCtrlDocs->SetAcceleratorTable(m_cAccTbl);
 }
 
 void CProjectEditorUI::onBtnNewItemMenu(wxCommandEvent& evt)

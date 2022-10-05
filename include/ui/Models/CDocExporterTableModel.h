@@ -47,7 +47,7 @@ public:
     static wxDataViewItem GetViewItem(const IDocExporter* pItem);
 
     //! @brief Creates a new exporter in the list
-    //! @returns Pointer to the new item
+    //! @returns Handle to the new item
     const wxDataViewItem NewItem(EDocExporter eType);
 
     //! @brief Deletes the item from the list

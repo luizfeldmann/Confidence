@@ -6,7 +6,7 @@
     return static_cast<CProcessArgument*>(item.GetID());
 }
 
-/* static */ wxDataViewItem CProcessArgsModel::GetViewItem(const CProcessArgument* pArg)
+/* static */ const wxDataViewItem CProcessArgsModel::GetViewItem(const CProcessArgument* pArg)
 {
     return wxDataViewItem((void*)pArg);
 }
@@ -103,72 +103,86 @@ static CRunProcess::vec_args_t::iterator FindArg(CRunProcess::vec_args_t& rvArgs
         });
 }
 
-CProcessArgument* CProcessArgsModel::NewItem()
+const wxDataViewItem CProcessArgsModel::NewItem()
 {
     CRunProcess::vec_args_t& rvArgs = m_rEdit.GetArguments();
     rvArgs.emplace_back();
 
     CProcessArgument* pNewItem = &rvArgs.back();
+    const wxDataViewItem cNewItem = GetViewItem(pNewItem);
 
-    ItemAdded(GetViewItem(nullptr), GetViewItem(pNewItem));
+    ItemAdded(GetParent(cNewItem), cNewItem);
     
-    return pNewItem;
+    return cNewItem;
 }
 
-bool CProcessArgsModel::DeleteItem(CProcessArgument* pDeleteItem)
+bool CProcessArgsModel::DeleteItem(const wxDataViewItem& rDeleteItem)
 {
     bool bSuccess = false;
 
-    CRunProcess::vec_args_t& rvArgs = m_rEdit.GetArguments();
-    CRunProcess::vec_args_t::iterator itFound = FindArg(rvArgs, pDeleteItem);
+    const CProcessArgument* const pDeleteItem = GetPointer(rDeleteItem);
 
-    if (rvArgs.end() != itFound)
+    if (nullptr != pDeleteItem)
     {
-        rvArgs.erase(itFound);
-        ItemDeleted(GetViewItem(nullptr), GetViewItem(pDeleteItem));
-        bSuccess = true;
+        CRunProcess::vec_args_t& rvArgs = m_rEdit.GetArguments();
+        CRunProcess::vec_args_t::iterator itFound = FindArg(rvArgs, pDeleteItem);
+
+        if (rvArgs.end() != itFound)
+        {
+            rvArgs.erase(itFound);
+            ItemDeleted(GetParent(rDeleteItem), rDeleteItem);
+
+            bSuccess = true;
+        }
     }
 
     return bSuccess;
 }
 
-CProcessArgument* CProcessArgsModel::MoveItem(CProcessArgument* pMoveItem, bool bUp)
+const wxDataViewItem CProcessArgsModel::MoveItem(const wxDataViewItem& rMoveItem, bool bUp)
 {
-    // Find the item on the collection
-    CRunProcess::vec_args_t& rvArgs = m_rEdit.GetArguments();
-    CRunProcess::vec_args_t::iterator itMove = FindArg(rvArgs, pMoveItem);
+    wxDataViewItem cSwapItem = GetViewItem(nullptr);
 
-    if (rvArgs.end() == itMove)
-        return nullptr; // cannot move item - it's not on the collection
-
-    // Get iterator to the swap item
-    CRunProcess::vec_args_t::iterator itSwap;
-
-    if (bUp)
+    const CProcessArgument* const pMoveItem = GetPointer(rMoveItem);
+    if (nullptr != pMoveItem)
     {
-        itSwap = (rvArgs.begin() == itMove)
-            ? std::prev(rvArgs.end())
-            : std::prev(itMove);
+        // Find the item on the collection
+        CRunProcess::vec_args_t& rvArgs = m_rEdit.GetArguments();
+        CRunProcess::vec_args_t::iterator itMove = FindArg(rvArgs, pMoveItem);
+
+        if (rvArgs.end() != itMove)
+        {
+            // Get iterator to the swap item
+            CRunProcess::vec_args_t::iterator itSwap;
+
+            if (bUp)
+            {
+                itSwap = (rvArgs.begin() == itMove)
+                    ? std::prev(rvArgs.end())
+                    : std::prev(itMove);
+            }
+            else
+            {
+                itSwap = std::next(itMove);
+
+                if (rvArgs.end() == itSwap)
+                    itSwap = rvArgs.begin();
+            }
+
+            // Swap in the collection
+            std::iter_swap(itMove, itSwap);
+
+            // Update the data list view
+            wxDataViewItem cParent = GetParent(rMoveItem);
+
+            ItemDeleted(cParent, rMoveItem);
+            ItemAdded(cParent, rMoveItem);
+
+            cSwapItem = GetViewItem(&*itSwap);
+        }
     }
-    else
-    {
-        itSwap = std::next(itMove);
 
-        if (rvArgs.end() == itSwap)
-            itSwap = rvArgs.begin();
-    }
-
-    // Swap in the collection
-    std::iter_swap(itMove, itSwap);
-
-    // Update the data list view
-    wxDataViewItem cItem = GetViewItem(pMoveItem);
-    wxDataViewItem cParent = GetParent(cItem);
-
-    ItemDeleted(cParent, cItem);
-    ItemAdded(cParent, cItem);
-
-    return &(*itSwap);
+    return cSwapItem;
 }
 
 IModelColumnHandler* CProcessArgsModel::GetColumnInfo(unsigned int nModelColumn)

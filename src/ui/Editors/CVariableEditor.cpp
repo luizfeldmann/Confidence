@@ -16,7 +16,7 @@ CVariableEditorUI::CVariableEditorUI(wxWindow* pParent, CVariable& rVar)
     };
 
     m_cAccTbl = wxAcceleratorTable(arrAccEntry.size(), arrAccEntry.data());
-    SetAcceleratorTable(m_cAccTbl);
+    m_dataView->SetAcceleratorTable(m_cAccTbl);
 
     m_toolBar->ToggleTool(m_toolExportEnv->GetId(), m_rVar.m_bExportToEnvironment);
 }

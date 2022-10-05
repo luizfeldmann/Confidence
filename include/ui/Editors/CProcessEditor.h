@@ -4,6 +4,7 @@
 #include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/IRunProcessEditor.h"
 #include "core/CRunProcess.h"
+#include "ui/CAcceleratorEntry.h"
 
 class CProcessArgsModel;
 
@@ -17,8 +18,8 @@ protected:
     //! The model used to manage the list of arguments
     CProcessArgsModel* const m_pModel;
 
-    //! Gets the pointer to the currently selected argument
-    CProcessArgument* GetSelectedArgument() const;
+    //! Manages keyboard shortcuts
+    wxAcceleratorTable m_cAccTbl;
 
     //! Loads the combo box of "policy" type
     EProcessPolicy GetCurrentPolicy() const;

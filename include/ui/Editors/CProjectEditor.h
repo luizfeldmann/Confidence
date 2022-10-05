@@ -3,6 +3,7 @@
 
 #include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/IProjectEditor.h"
+#include "ui/CAcceleratorEntry.h"
 
 class CProject;
 class CDocExporterTableModel;
@@ -16,6 +17,9 @@ protected:
 
     //! The model used to manage the list of exporters
     CDocExporterTableModel* const m_pModel;
+
+    //! Manages keyboard shortcuts
+    wxAcceleratorTable m_cAccTbl;
 
     //! Event fired when the user choses the type of exporter to add, from the popup menu
     void onBtnNewItemMenu(wxCommandEvent& evt);

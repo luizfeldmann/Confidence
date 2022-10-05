@@ -43,19 +43,19 @@ public:
     static CProcessArgument* GetPointer(const wxDataViewItem& item);
 
     //! @brief Casts a process argument pointer into a DataViewItem
-    static wxDataViewItem GetViewItem(const CProcessArgument* pArg);
+    static const wxDataViewItem GetViewItem(const CProcessArgument* pArg);
 
     //! @brief Creates a new argument item
-    //! @returns Pointer to the new item
-    CProcessArgument* NewItem();
+    //! @returns Handle to the new item
+    const wxDataViewItem NewItem();
 
     //! @brief Deletes the argument item from the list
     //! @returns True if success
-    bool DeleteItem(CProcessArgument* pDeleteItem);
+    bool DeleteItem(const wxDataViewItem&);
 
     //! @brief Moves the given item up or down in the list
-    //! @returns Pointer to the swapped item
-    CProcessArgument* MoveItem(CProcessArgument* pMoveItem, bool bUp);
+    //! @returns Handle to the swapped item
+    const wxDataViewItem MoveItem(const wxDataViewItem& rMoveItem, bool bUp);
 
     /* wxDataViewModel overrides */
     unsigned int GetColumnCount() const wxOVERRIDE;

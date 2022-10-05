@@ -2,6 +2,7 @@
 #include "ui/Models/CProcessArgsModel.h"
 #include "core/CProcessFireForget.h"
 #include "core/CProcessWaitCompletion.h"
+#include <array>
 
 /* Utils */
 static constexpr int c_nChoiceIndexToEnumOffset = 1;
@@ -40,52 +41,54 @@ CRunProcessEditorUI::CRunProcessEditorUI(wxWindow* pParent, CRunProcess& cEdit)
     m_choiceWindowMode->SetSelection(ChoiceIndexFromWindowMode(m_cEdit.m_eStartMode));
     m_choicePolicy->SetSelection((int)GetCurrentPolicy());
     LoadWaitCompletion();
-}
 
-CProcessArgument* CRunProcessEditorUI::GetSelectedArgument() const
-{
-    return static_cast<CProcessArgument*>(m_dataViewCtrlArgs->GetSelection().GetID());
+    // Configure accelerator
+    using acc_entry_t = CAcceleratorEntry;
+    const std::array<acc_entry_t, 4> arrAccEntry{
+        acc_entry_t(wxACCEL_CTRL,    (int)'N',   m_toolArgNew),
+        acc_entry_t(wxACCEL_NORMAL,  WXK_DELETE, m_toolArgDel),
+        acc_entry_t(wxACCEL_CTRL,    WXK_UP,     m_toolArgUp),
+        acc_entry_t(wxACCEL_CTRL,    WXK_DOWN,   m_toolArgDown),
+    };
+
+    m_cAccTbl = wxAcceleratorTable(arrAccEntry.size(), arrAccEntry.data());
+    m_dataViewCtrlArgs->SetAcceleratorTable(m_cAccTbl);
 }
 
 void CRunProcessEditorUI::onToolNewArg(wxCommandEvent& event)
 {
-    CProcessArgument* pNewItem = m_pModel->NewItem();
-    m_dataViewCtrlArgs->Select(CProcessArgsModel::GetViewItem(pNewItem));
+    const wxDataViewItem cNewItem = m_pModel->NewItem();
+    m_dataViewCtrlArgs->Select(cNewItem);
 }
 
 void CRunProcessEditorUI::onToolDelArg(wxCommandEvent& event)
 {
-    CProcessArgument* pSelected = GetSelectedArgument();
-
-    if (nullptr != pSelected)
+    if (m_dataViewCtrlArgs->HasSelection())
     {
-        m_pModel->DeleteItem(pSelected);
+        const wxDataViewItem cSelection = m_dataViewCtrlArgs->GetSelection();
+        m_pModel->DeleteItem(cSelection);
     }
 }
 
 void CRunProcessEditorUI::onToolMoveUp(wxCommandEvent& event)
 {
-    CProcessArgument* pSelected = GetSelectedArgument();
-
-    if (nullptr != pSelected)
+    if (m_dataViewCtrlArgs->HasSelection())
     {
-        CProcessArgument* pSwap = m_pModel->MoveItem(pSelected, true);
+        const wxDataViewItem cSelection = m_dataViewCtrlArgs->GetSelection();
+        const wxDataViewItem cSwapItem = m_pModel->MoveItem(cSelection, true);
 
-        if (pSwap)
-            m_dataViewCtrlArgs->Select(CProcessArgsModel::GetViewItem(pSwap));
+        m_dataViewCtrlArgs->Select(cSwapItem);
     }
 }
 
 void CRunProcessEditorUI::onToolMoveDown(wxCommandEvent& event)
 {
-    CProcessArgument* pSelected = GetSelectedArgument();
-
-    if (nullptr != pSelected)
+    if (m_dataViewCtrlArgs->HasSelection())
     {
-        CProcessArgument* pSwap = m_pModel->MoveItem(pSelected, false);
+        const wxDataViewItem cSelection = m_dataViewCtrlArgs->GetSelection();
+        const wxDataViewItem cSwapItem = m_pModel->MoveItem(cSelection, false);
 
-        if (pSwap)
-            m_dataViewCtrlArgs->Select(CProcessArgsModel::GetViewItem(pSwap));
+        m_dataViewCtrlArgs->Select(cSwapItem);
     }
 }
 
