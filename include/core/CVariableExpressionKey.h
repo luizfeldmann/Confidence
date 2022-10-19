@@ -4,12 +4,14 @@
 #include <string>
 #include "util/CGuid.h"
 #include "ISerializationNotify.h"
+#include "CStoredExpression.h"
+#include "docs/IDocumentable.h"
 
 class CInstance;
 class CConfiguration;
 
 //! @brief A "key" used to identify an object based on associated configuration and instance
-class CVariableExpressionKey : public ISerializationNotify
+class CVariableExpressionKey : public ISerializationNotify, public CStoredExpression, public IDocumentable
 {
 protected:
     //! The name of the associated configuration
@@ -48,6 +50,9 @@ public:
 
     //! @copydoc ISerializationNotify::PreSerialize
     bool PreSerialize() override;
+
+    //! @copydoc IDocumentable::Document
+    bool Document(IDocExporter& rExporter) const override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CVariableExpressionKey);

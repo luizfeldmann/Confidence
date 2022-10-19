@@ -6,6 +6,7 @@
 DEFINE_SERIALIZATION_SCHEME(CVariableExpressionKey,
     SERIALIZATION_MEMBER(m_strConfiguration)
     SERIALIZATION_MEMBER(m_strInstance)
+    SERIALIZATION_INHERIT(CStoredExpression)
 )
 
 CVariableExpressionKey::CVariableExpressionKey()
@@ -82,4 +83,29 @@ bool CVariableExpressionKey::PostDeserialize()
     }
 
     return bResult;
+}
+
+bool CVariableExpressionKey::Document(IDocExporter& rExporter) const
+{
+    // Read names of keys
+    std::string strConfigName   = "<INVALID CONFIG>";
+    std::string strInstanceName = "<INVALID INSTANCE>";
+
+    {
+        const CConfiguration* const pConfig = GetConfiguration();
+        if (pConfig)
+            strConfigName = pConfig->GetName();
+
+        const CInstance* const pInst = GetInstance();
+        if (pInst)
+            strInstanceName = pInst->GetName();
+    }
+
+    bool bStatus = rExporter.FormField("Configuration:", strConfigName)
+        && rExporter.FormField("Instance:", strInstanceName)
+        && rExporter.Paragraph()
+        && rExporter.Code(GetExpression())
+        && rExporter.PopStack();
+
+    return bStatus;
 }

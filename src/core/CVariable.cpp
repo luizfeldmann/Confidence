@@ -102,3 +102,19 @@ bool CVariable::DocumentName(IDocExporter& rExporter) const
 {
     return IProjTreeItem::DocumentName(rExporter, "VARIABLE:");
 }
+
+bool CVariable::DocumentCustom(IDocExporter& rExporter) const
+{
+    bool bStatus = rExporter.List();
+
+    for (vec_rules_t::const_iterator it = m_vRules.cbegin(); bStatus && (it != m_vRules.cend()); ++it)
+    {
+        bStatus = rExporter.Item()
+            && it->Document(rExporter)
+            && rExporter.PopStack();
+    }
+
+    bStatus = bStatus && rExporter.PopStack();
+
+    return bStatus;
+}

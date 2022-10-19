@@ -5,7 +5,7 @@
 #include "CStoredNameItem.h"
 #include "CStoredDescriptionItem.h"
 #include "CNoChildren.h"
-#include "CStoredExpression.h"
+#include "CVariableExpressionKey.h"
 
 //! @brief Stores a constant or an expression
 class CVariable : public IProjTreeItem
@@ -14,7 +14,7 @@ class CVariable : public IProjTreeItem
                 , public CNoChildren
 {
 protected:
-    using vec_rules_t = std::vector<CStoredExpression>;
+    using vec_rules_t = std::vector<CVariableExpressionKey>;
 
     //! @brief Collection of expressions keyed by configurations and instances
     vec_rules_t m_vRules;
@@ -23,6 +23,9 @@ protected:
 
     //! @copydoc IProjTreeItem::DocumentName
     bool DocumentName(IDocExporter& rExporter) const override;
+
+    //! @copydoc IProjTreeItem::DocumentCustom
+    bool DocumentCustom(IDocExporter& rExporter) const override;
 
 public:
     //! @brief Creates a new, empty variable
