@@ -66,3 +66,9 @@ bool CFileTextProvider::SetFilePath(const std::string& strPath)
     m_strFilePath = strPath;
     return true;
 }
+
+bool CFileTextProvider::Document(IDocExporter& rExporter) const
+{
+    bool bStatus = rExporter.FormField("Template File:", GetFilePath(), true);
+    return bStatus;
+}

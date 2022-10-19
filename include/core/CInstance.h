@@ -14,6 +14,10 @@ class CInstance : public IProjTreeItem
     , public CNoChildren
     , public IFindByName<CInstance>
 {
+protected:
+    //! @copydoc IProjTreeItem::DocumentName
+    bool DocumentName(IDocExporter& rExporter) const;
+
 public:
     //! @brief Creates a new, empty instance
     CInstance();

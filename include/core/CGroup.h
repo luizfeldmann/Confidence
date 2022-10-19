@@ -12,6 +12,10 @@ class CGroup : public IProjTreeItem
              , public CStoredDescriptionItem
              , public CStoredItemCollection
 {
+protected:
+    //! @copydoc IProjTreeItem::DocumentName
+    bool DocumentName(IDocExporter& rExporter) const override;
+
 public:
     //! @brief Creates a new, empty group
     CGroup();

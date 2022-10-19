@@ -30,3 +30,8 @@ ETreeItemType CGroup::GetType() const
 {
     return EGroup;
 }
+
+bool CGroup::DocumentName(IDocExporter& rExporter) const
+{
+    return IProjTreeItem::DocumentName(rExporter, "GROUP:");
+}

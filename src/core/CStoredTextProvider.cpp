@@ -26,3 +26,15 @@ bool CStoredTextProvider::SetText(const std::string& strText)
     m_strText = strText;
     return true;
 }
+
+bool CStoredTextProvider::Document(IDocExporter& rExporter) const
+{
+    bool bStatus = rExporter.Collapsible()
+        && rExporter.Summary()
+        && rExporter.Text("Contents:")
+        && rExporter.PopStack()
+        && rExporter.Code(GetText())
+        && rExporter.PopStack();
+
+    return bStatus;
+}

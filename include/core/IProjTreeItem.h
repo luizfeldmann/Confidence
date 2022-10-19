@@ -5,6 +5,7 @@
 #include "IDescribedItem.h"
 #include "ITreeItemCollection.h"
 #include "ISerializationNotify.h"
+#include "docs/IDocumentable.h"
 
 #pragma warning(disable: 4250)
 
@@ -13,6 +14,7 @@ class IProjTreeItem : public virtual INamedItem
                     , public virtual IDescribedItem
                     , public virtual ITreeItemCollection
                     , public ISerializationNotify
+                    , public IDocumentable
 {
 private:
     //! @brief Deleted copy-constructor; class is non-copyable
@@ -20,6 +22,22 @@ private:
 
     //! @brief Deleted copy-assignment operator; class is non-copyable
     IProjTreeItem& operator=(const IProjTreeItem&) = delete;
+
+protected:
+    //! @brief Documents the name of the item using the given category prefix
+    virtual bool DocumentName(IDocExporter& rExporter, const std::string& strPrefix) const;
+
+    //! @brief Documents the name of the item
+    virtual bool DocumentName(IDocExporter& rExporter) const;
+
+    //! @brief Documents the description of the item
+    virtual bool DocumentDescription(IDocExporter& rExporter) const;
+
+    //! @brief Documents any class-specific information
+    virtual bool DocumentCustom(IDocExporter& rExporter) const;
+
+    //! @brief Documents the children of this item
+    virtual bool DocumentChildren(IDocExporter& rExporter) const;
 
 public:
     //! @brief Constructs an empty item
@@ -40,6 +58,9 @@ public:
 
     //! @copydoc ISerializationNotify::PreSerialize
     bool PreSerialize() override;
+
+    //! @copydoc IDocumentable::Document
+    virtual bool Document(IDocExporter& rExporter) const override;
 };
 
 #endif

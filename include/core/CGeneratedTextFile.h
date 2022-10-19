@@ -21,6 +21,12 @@ protected:
     std::unique_ptr<ITextProvider> m_cProvider;
     SERIALIZATION_FRIEND(CGeneratedTextFile);
 
+    //! @copydoc IProjTreeItem::DocumentName
+    bool DocumentName(IDocExporter& rExporter) const override;
+
+    //! @copydoc IProjTreeItem::DocumentCustom
+    bool DocumentCustom(IDocExporter& rExporter) const override;
+
 public:
     //! @brief Creates a new, empty group
     CGeneratedTextFile();

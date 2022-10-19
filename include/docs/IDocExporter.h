@@ -18,6 +18,59 @@ public:
     IDocExporter() = default;
     virtual ~IDocExporter() = default;
 
+    /* Heading */
+
+    //! @brief Gets the current heading level (title, subtitle, section ...)
+    virtual int GetHeading() const = 0;
+
+    //! @brief Increments the heading (more nested)
+    virtual void IncrementHeading() = 0;
+
+    //! @brief Decrements the heading (less nested)
+    virtual void DecrementHeading() = 0;
+
+    //! @brief Starts a heading and pushes to the stack
+    virtual bool Heading() = 0;
+
+    //! @brief Pops the last node from the stack
+    virtual bool PopStack() = 0;
+
+    /* Style */
+
+    //! @brief Pushes the "strong" style to the stack
+    virtual bool Strong() = 0;
+
+    //! @brief Pushes the "emphasis" style to the stack
+    virtual bool Emphasis() = 0;
+
+    /* Content */
+
+    //! @brief Starts a new paragraph and pushes to the stack
+    virtual bool Paragraph() = 0;
+
+    //! @brief Appends text to the current paragraph in the stack
+    virtual bool Text(const std::string&) = 0;
+
+    //! @brief Appends a text in format 'Label: Value', where the Label is styled with emphasis
+    virtual bool FormField(const std::string& strLabel, const std::string& strValue, bool bCode = false) = 0;
+
+    //! @brief Starts a new list and pushes it in the stack
+    virtual bool List() = 0;
+
+    //! @brief Appends a new item and pushes it in the stack
+    virtual bool Item() = 0;
+
+    //! @brief Appends a code block to the document tree and pushes it to the stack
+    virtual bool Code(const std::string& strText) = 0;
+
+    //! @brief Appends a collapsible section and pushes it to the stack
+    virtual bool Collapsible() = 0;
+
+    //! @brief Appends a summary tag inside a collapsible
+    virtual bool Summary() = 0;
+
+    /* Control */
+
     //! @brief Starts the exporter to the provided stream
     //! @return True if success
     virtual bool Start(std::ostream& rOutput) = 0;

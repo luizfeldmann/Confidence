@@ -40,3 +40,8 @@ ETreeItemType CConfiguration::GetType() const
 {
     return EConfig;
 }
+
+bool CConfiguration::DocumentName(IDocExporter& rExporter) const
+{
+    return IProjTreeItem::DocumentName(rExporter, "CONFIG:");
+}

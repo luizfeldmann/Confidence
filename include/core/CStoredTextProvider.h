@@ -26,6 +26,9 @@ public:
 
     //! @copydoc ITextProvider::SetText
     bool SetText(const std::string&) override;
+
+    //! @copydoc IDocumentable:Document
+    bool Document(IDocExporter& rExporter) const override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CStoredTextProvider);

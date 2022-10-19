@@ -158,12 +158,6 @@ bool CProject::ExportDocumentation()
     return bGeneralStatus;
 }
 
-bool CProject::Document(IDocExporter& rExporter) const
-{
-    CERROR("FEATURE NOT YET IMPLEMENTED");
-    return false;
-}
-
 /* OVERRIDES FROM ITreeItemCollection */
 
 CProject::vec_ref_t CProject::SubItems()

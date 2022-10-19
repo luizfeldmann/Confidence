@@ -21,6 +21,9 @@ public:
     //! @brief Reads the (optional) checked return code
     const opt_returncode_t GetExpectedReturnCode() const;
 
+    //! @copydoc IDocumentable::Document
+    bool Document(IDocExporter& rExporter) const override;
+
 protected:
     //! @brief If true, the return code must be compared to m_nExpectedReturnCode when the process returns
     bool m_bCheckReturnCode;

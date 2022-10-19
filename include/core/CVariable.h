@@ -21,6 +21,9 @@ protected:
 
     SERIALIZATION_FRIEND(CVariable);
 
+    //! @copydoc IProjTreeItem::DocumentName
+    bool DocumentName(IDocExporter& rExporter) const override;
+
 public:
     //! @brief Creates a new, empty variable
     CVariable();

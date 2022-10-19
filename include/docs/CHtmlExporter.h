@@ -4,12 +4,29 @@
 #include "CStoredOutputFileName.h"
 #include "CCommonMarkExporter.h"
 
+class CMarkCustomBlock;
+
 //! @copydoc EDocExporter::HTML
 class CHtmlExporter : public CCommonMarkExporter
                     , public CStoredOutputFileName
 {
+private:
+    bool CreateHtml();
+    bool CreateHead(CMarkCustomBlock&);
+    bool CreateStyles(CMarkCustomBlock&);
+    bool CreateBody(CMarkCustomBlock&);
+
 public:
     CHtmlExporter();
+
+    //! @copydoc IDocExporter::IncrementHeading
+    void IncrementHeading() override;
+
+    //! @copydoc IDocExporter::DecrementHeading
+    void DecrementHeading() override;
+
+    //! @copydoc IDocExporter::Start
+    bool Start(std::ostream& rOutput) override;
 
     //! @copydoc IDocExporter::Finish
     bool Finish() override;

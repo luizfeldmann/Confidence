@@ -11,6 +11,9 @@ public:
 
     //! @copydoc IProcessPolicy::GetType
     EProcessPolicy GetType() const override;
+
+    //! @copydoc IDocumentable::Document
+    bool Document(IDocExporter& rExporter) const override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CProcessFireAndForget);

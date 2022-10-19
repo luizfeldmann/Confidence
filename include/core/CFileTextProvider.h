@@ -38,6 +38,9 @@ public:
     //! @param[in] strPath New path to set
     //! @return True if success
     bool SetFilePath(const std::string& strPath);
+
+    //! @copydoc IDocumentable:Document
+    bool Document(IDocExporter& rExporter) const override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CFileTextProvider);

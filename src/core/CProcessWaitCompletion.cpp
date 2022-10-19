@@ -32,3 +32,16 @@ const CProcessWaitCompletion::opt_returncode_t CProcessWaitCompletion::GetExpect
         ? opt_returncode_t(m_nExpectedReturnCode) 
         : opt_returncode_t();
 }
+
+//! @copydoc IDocumentable::Document
+bool CProcessWaitCompletion::Document(IDocExporter& rExporter) const
+{
+    bool bStatus = rExporter.FormField("Wait for completion:", "The project will continue execution only after this process returns.");
+
+    if (bStatus && m_bCheckReturnCode)
+    {
+        bStatus = rExporter.FormField("Expected return code:", std::to_string(m_nExpectedReturnCode));
+    }
+
+    return bStatus;
+}

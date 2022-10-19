@@ -50,3 +50,18 @@ void CGeneratedTextFile::SetOutputPath(const std::string& strNewPath)
 {
     m_strOutputPath = strNewPath;
 }
+
+bool CGeneratedTextFile::DocumentName(IDocExporter& rExporter) const
+{
+    return IProjTreeItem::DocumentName(rExporter, "FILE:");
+}
+
+bool CGeneratedTextFile::DocumentCustom(IDocExporter& rExporter) const
+{
+    bool bStatus = rExporter.FormField("Destination Path:", GetOutputPath(), true);
+
+    if (bStatus && m_cProvider)
+        bStatus = m_cProvider->Document(rExporter);
+
+    return bStatus;
+}

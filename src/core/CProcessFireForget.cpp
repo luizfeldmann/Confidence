@@ -15,3 +15,10 @@ EProcessPolicy CProcessFireAndForget::GetType() const
 {
     return EProcessPolicy::FireForget;
 }
+
+bool CProcessFireAndForget::Document(IDocExporter& rExporter) const
+{
+    bool bStatus = rExporter.FormField("Fire and forget:", "The started process will not block the project execution.");
+
+    return bStatus;
+}

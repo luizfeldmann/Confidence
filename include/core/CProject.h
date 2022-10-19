@@ -4,7 +4,6 @@
 #include "util/CGuid.h"
 #include "core/CInstanceGroup.h"
 #include "core/CConfigurationGroup.h"
-#include "docs/IDocumentable.h"
 
 //! @brief Top level item in the project tree / the main project document
 class CProject : public IProjTreeItem
@@ -12,7 +11,6 @@ class CProject : public IProjTreeItem
                , public CStoredDescriptionItem
                , public CStoredItemCollection
                , public IIdentifiable
-               , public IDocumentable
 {
 public:
     //! @brief Creates a new, empty project
@@ -81,9 +79,6 @@ public:
     //! @brief Generates the documentation associated to this project
     //! @return True if success
     bool ExportDocumentation();
-
-    //! @copydoc IDocumentable::Document
-    bool Document(IDocExporter& rExporter) const override;
 
 protected:
     /************/

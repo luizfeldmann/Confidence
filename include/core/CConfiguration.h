@@ -14,6 +14,10 @@ class CConfiguration : public IProjTreeItem
     , public CStoredItemCollection
     , public IFindByName<CConfiguration>
 {
+protected:
+    //! @copydoc IProjTreeItem::DocumentName
+    bool DocumentName(IDocExporter& rExporter) const override;
+
 public:
     //! @brief Creates a new, empty configuration
     CConfiguration();

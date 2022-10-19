@@ -97,3 +97,8 @@ IExpression* CVariable::GetRule(const CConfiguration& rKeyConfig, const CInstanc
 
     return pFoundRule;
 }
+
+bool CVariable::DocumentName(IDocExporter& rExporter) const
+{
+    return IProjTreeItem::DocumentName(rExporter, "VARIABLE:");
+}

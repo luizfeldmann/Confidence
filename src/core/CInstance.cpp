@@ -30,3 +30,9 @@ ETreeItemType CInstance::GetType() const
 {
     return EInstance;
 }
+
+
+bool CInstance::DocumentName(IDocExporter& rExporter) const
+{
+    return IProjTreeItem::DocumentName(rExporter, "INSTANCE:");
+}

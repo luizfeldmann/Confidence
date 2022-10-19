@@ -2,6 +2,7 @@
 #define _ITEXTPROVIDER_H_
 
 #include <string>
+#include "docs/IDocumentable.h"
 
 //! @brief Reflection types of ITextProvider implementations
 enum  class ETextProviderType
@@ -11,7 +12,7 @@ enum  class ETextProviderType
 };
 
 //! @brief Generic interface for access of text
-class ITextProvider
+class ITextProvider : public IDocumentable
 {
 public:
     ITextProvider() = default;

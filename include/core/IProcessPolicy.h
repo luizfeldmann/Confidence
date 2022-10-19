@@ -2,6 +2,7 @@
 #define _IPROCESSPOLICY_H_
 
 #include <JInterface/JsonSerialization.h>
+#include <docs/IDocumentable.h>
 
 //! @brief Types of process policies
 enum class EProcessPolicy : int
@@ -12,7 +13,7 @@ enum class EProcessPolicy : int
 };
 
 //! @brief Defines the behaviour when starting a process
-class IProcessPolicy
+class IProcessPolicy : public IDocumentable
 {
 public:
     IProcessPolicy() = default;

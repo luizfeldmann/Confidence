@@ -22,6 +22,13 @@ class CRunProcess   : public IProjTreeItem
                     , public CStoredDescriptionItem
                     , public CNoChildren
 {
+protected:
+    //! @copydoc IProjTreeItem::DocumentName
+    bool DocumentName(IDocExporter& rExporter) const override;
+
+    //! @copydoc IProjTreeItem::DocumentCustom
+    bool DocumentCustom(IDocExporter& rExporter) const override;
+
 public:
     //! @brief Starts a new process and optionally waits for output
     CRunProcess();
