@@ -4,6 +4,8 @@
 #include <JInterface/JsonSerialization.h>
 #include <docs/IDocumentable.h>
 
+class CExecutionContext;
+
 //! @brief Types of process policies
 enum class EProcessPolicy : int
 {
@@ -21,6 +23,14 @@ public:
 
     //! @brief Reflects the type of the object
     virtual EProcessPolicy GetType() const = 0;
+
+    using vec_args_t = std::vector<std::string>;
+
+    //! @brief Executes the process using the provided context and arguments
+    //! @param[in] rContext Reference to the execution context
+    //! @param[in] vArgs Vector of arguments to start the process
+    //! @return True if success
+    virtual bool Execute(CExecutionContext& rContext, const vec_args_t& vArgs) const = 0;
 };
 
 DECLARE_SERIALIZATION_SCHEME(IProcessPolicy);

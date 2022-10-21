@@ -31,6 +31,21 @@ ETreeItemType CGroup::GetType() const
     return EGroup;
 }
 
+bool CGroup::Execute(CExecutionContext& rContext) const
+{
+    bool bStatus = true;
+
+    bool bCondition = true; // TODO: Check we must execute this group
+
+    if (bCondition)
+    {
+        LogExecution();
+        bStatus = ExecuteChildren(rContext);
+    }
+
+    return bStatus;
+}
+
 bool CGroup::DocumentName(IDocExporter& rExporter) const
 {
     return IProjTreeItem::DocumentName(rExporter, "GROUP:");

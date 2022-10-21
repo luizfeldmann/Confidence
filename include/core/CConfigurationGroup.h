@@ -19,6 +19,9 @@ public:
 
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;
+
+    //! @copydoc IExecutable::Execute
+    bool Execute(CExecutionContext&) const override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CConfigurationGroup)

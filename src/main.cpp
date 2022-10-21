@@ -109,7 +109,7 @@ static int RunProj(const std::string& rFileName, const std::string& rConfigName)
     CProject theProject;
     if (theProject.OpenFile(rFileName))
     {
-        bSuccess = theProject.Run();
+        bSuccess = theProject.Run(rConfigName);
         if (bSuccess)
         {
             system("PAUSE");

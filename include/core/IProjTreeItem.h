@@ -6,6 +6,8 @@
 #include "ITreeItemCollection.h"
 #include "ISerializationNotify.h"
 #include "docs/IDocumentable.h"
+#include "core/IExecutable.h"
+#include <optional>
 
 #pragma warning(disable: 4250)
 
@@ -15,6 +17,7 @@ class IProjTreeItem : public virtual INamedItem
                     , public virtual ITreeItemCollection
                     , public ISerializationNotify
                     , public IDocumentable
+                    , public IExecutable
 {
 private:
     //! @brief Deleted copy-constructor; class is non-copyable
@@ -24,6 +27,12 @@ private:
     IProjTreeItem& operator=(const IProjTreeItem&) = delete;
 
 protected:
+    //! @brief Returns a reference to a subitem with a given name, if it exists
+    static std::optional<cref_t> FindSubitemByName(const std::string strFindName, const IProjTreeItem& rParent);
+
+    //! @copydoc FindSubitemByName
+    std::optional<cref_t> FindSubitemByName(const std::string strFindName) const;
+
     //! @brief Documents the name of the item using the given category prefix
     virtual bool DocumentName(IDocExporter& rExporter, const std::string& strPrefix) const;
 
@@ -38,6 +47,12 @@ protected:
 
     //! @brief Documents the children of this item
     virtual bool DocumentChildren(IDocExporter& rExporter) const;
+
+    //! @brief Logs the execution of this item
+    void LogExecution() const;
+
+    //! @brief Executes each subitem
+    bool ExecuteChildren(CExecutionContext&) const;
 
 public:
     //! @brief Constructs an empty item

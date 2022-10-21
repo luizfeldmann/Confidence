@@ -50,6 +50,9 @@ public:
 
     //! @brief Sets the output path for this file
     void SetOutputPath(const std::string& strNewPath);
+
+    //! @copydoc IExecutable::Execute
+    bool Execute(CExecutionContext&) const override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CGeneratedTextFile)

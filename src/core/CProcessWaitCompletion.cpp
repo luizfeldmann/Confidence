@@ -45,3 +45,8 @@ bool CProcessWaitCompletion::Document(IDocExporter& rExporter) const
 
     return bStatus;
 }
+
+bool CProcessWaitCompletion::Execute(CExecutionContext& rContext, const vec_args_t& vArgs) const
+{
+    return true; // TODO
+}

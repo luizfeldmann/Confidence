@@ -117,14 +117,76 @@ void CMainWindow::onBtnDocumentation(wxCommandEvent& event)
     m_rProject.ExportDocumentation();
 }
 
+static size_t RunMenuAddConfigurations(wxMenu& rMenu, const IProjTreeItem& rParent)
+{
+    size_t nCount = 1;
+    wxMenuItem* pNewItem = rMenu.Append(wxID_ANY, rParent.GetName());
+    
+    ITreeItemCollection::vec_cref_t vSubitems = rParent.SubItems();
+    for (const ITreeItemCollection::cref_t& rSub : vSubitems)
+        nCount += RunMenuAddConfigurations(rMenu, rSub.get());
+
+    return nCount;
+}
+
 void CMainWindow::onBtnRunProject(wxCommandEvent& event)
 {
+    wxMenu menu;
+    menu.Connect(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CMainWindow::onBtnRunSelected), NULL, this);
 
+    RunMenuAddConfigurations(menu, m_rProject.GetConfigurations());
+
+    PopupMenu(&menu);
+}
+
+void CMainWindow::onBtnRunSelected(wxCommandEvent& event)
+{
+    const int nClickedMenuItemId = event.GetId();
+
+    wxMenu* pMenu = dynamic_cast<wxMenu*>(event.GetEventObject());
+    if (pMenu)
+    {
+        const wxMenuItemList& vMenuItems = pMenu->GetMenuItems();
+        
+        wxMenuItemList::const_iterator itSelected = std::find_if(vMenuItems.begin(), vMenuItems.end(),
+            [nClickedMenuItemId](wxMenuItem* pSearch)->bool {
+                return (pSearch && pSearch->GetId() == nClickedMenuItemId);
+            }
+        );
+
+        if (vMenuItems.end() != itSelected)
+        {
+            // Block the UI before running
+            SetRunMode(true);
+
+            // Run the process
+            const wxString strSelectedItem = (*itSelected)->GetItemLabelText();
+            bool bStatus = m_rProject.Run(strSelectedItem.ToStdString());
+        }
+    }
 }
 
 void CMainWindow::onBtnStopProject(wxCommandEvent& event)
 {
+    m_rProject.Stop();
+    SetRunMode(false);
+}
 
+void CMainWindow::SetRunMode(bool bRun)
+{
+    const std::initializer_list<wxToolBarToolBase*> arrTools = {
+        m_toolNewProject,
+        m_toolOpenProject,
+        m_toolSaveProject,
+        m_toolSaveAsProject,
+        m_toolDocumentation,
+        m_toolRunProject
+    };
+
+    for (wxToolBarToolBase* pTool : arrTools)
+        m_toolBarMain->EnableTool(pTool->GetId(), !bRun);
+
+    m_splitterMain->Enable(!bRun);
 }
 
 /// =======================================================

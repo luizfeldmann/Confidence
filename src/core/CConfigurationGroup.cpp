@@ -21,3 +21,8 @@ ETreeItemType CConfigurationGroup::GetType() const
 {
     return EConfGroup;
 }
+
+bool CConfigurationGroup::Execute(CExecutionContext&) const
+{
+    return true; // Do nothing
+}

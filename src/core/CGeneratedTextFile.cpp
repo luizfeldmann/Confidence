@@ -65,3 +65,8 @@ bool CGeneratedTextFile::DocumentCustom(IDocExporter& rExporter) const
 
     return bStatus;
 }
+
+bool CGeneratedTextFile::Execute(CExecutionContext&) const
+{
+    return true; // TODO
+}

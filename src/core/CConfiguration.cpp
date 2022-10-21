@@ -45,3 +45,8 @@ bool CConfiguration::DocumentName(IDocExporter& rExporter) const
 {
     return IProjTreeItem::DocumentName(rExporter, "CONFIG:");
 }
+
+bool CConfiguration::Execute(CExecutionContext&) const
+{
+    return true; // Do nothing
+}

@@ -25,3 +25,8 @@ ETreeItemType CInstanceGroup::GetType() const
 {
     return EInstGroup;
 }
+
+bool CInstanceGroup::Execute(CExecutionContext&) const
+{
+    return true; // Do nothing
+}

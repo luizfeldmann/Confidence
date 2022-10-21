@@ -1,4 +1,6 @@
 #include "core/CVariable.h"
+#include "core/CConfiguration.h"
+#include "util/Log.h"
 
 DEFINE_SERIALIZATION_SCHEME(CVariable,
     SERIALIZATION_INHERIT(CStoredNameItem)
@@ -9,6 +11,33 @@ DEFINE_SERIALIZATION_SCHEME(CVariable,
 
 REGISTER_POLYMORPHIC_CLASS(CVariable);
 
+/* CFindRulePredicate */
+
+//! @brief Functor used to std::find_if a CVariableExpressionKey of matching configuration and instance
+class CFindRulePredicate
+{
+protected:
+    const CConfiguration& m_rKeyConfig;
+    const CInstance& m_rKeyInstance;
+
+public:
+    CFindRulePredicate(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance)
+        : m_rKeyConfig(rKeyConfig)
+        , m_rKeyInstance(rKeyInstance)
+    {
+
+    }
+
+    bool operator ()(const CVariableExpressionKey& rSearch) const
+    {
+        const CConfiguration* const pConfig = rSearch.GetConfiguration();
+        const CInstance* const pInst = rSearch.GetInstance();
+
+        return (&m_rKeyConfig == pConfig) && (&m_rKeyInstance == pInst);
+    }
+};
+
+/* CVariable */
 CVariable::CVariable()
     : CStoredNameItem("<new variable>")
     , CStoredDescriptionItem("<no variable description>")
@@ -83,16 +112,21 @@ IExpression* CVariable::GetRule(const CConfiguration& rKeyConfig, const CInstanc
 {
     IExpression* pFoundRule = nullptr;
 
-    vec_rules_t::iterator itFind = std::find_if(m_vRules.begin(), m_vRules.end(),
-        [&rKeyConfig, &rKeyInstance](const CVariableExpressionKey& rSearch) -> bool {
-            const CConfiguration* const pConfig = rSearch.GetConfiguration();
-            const CInstance* const pInst = rSearch.GetInstance();
-
-            return (&rKeyConfig == pConfig) && (&rKeyInstance == pInst);
-        }
-    );
+    vec_rules_t::iterator itFind = std::find_if(m_vRules.begin(), m_vRules.end(), CFindRulePredicate(rKeyConfig, rKeyInstance));
 
     if (m_vRules.end() != itFind)
+        pFoundRule = &*itFind;
+
+    return pFoundRule;
+}
+
+const IExpression* CVariable::GetRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance) const
+{
+    const IExpression* pFoundRule = nullptr;
+
+    vec_rules_t::const_iterator itFind = std::find_if(m_vRules.cbegin(), m_vRules.cend(), CFindRulePredicate(rKeyConfig, rKeyInstance));
+
+    if (m_vRules.cend() != itFind)
         pFoundRule = &*itFind;
 
     return pFoundRule;
@@ -115,6 +149,43 @@ bool CVariable::DocumentCustom(IDocExporter& rExporter) const
     }
 
     bStatus = bStatus && rExporter.PopStack();
+
+    return bStatus;
+}
+
+bool CVariable::Execute(CExecutionContext& rContext) const
+{
+    LogExecution();
+
+    bool bStatus = true;
+    const std::string strVarName = GetName();
+
+    const IExpression* pExpression = nullptr;
+    const CConfiguration* pConfiguration = &rContext.m_rConfiguration;
+    
+    do
+    {
+        pExpression = GetRule(*pConfiguration, rContext.m_rInstance);
+
+        if (!pExpression)
+            pConfiguration = dynamic_cast<const CConfiguration*>(rContext.GetParent(*pConfiguration));
+
+    } while (pConfiguration && !pExpression);
+
+    if (!pExpression)
+        CINFO("Variable '%s' is undefined", strVarName.c_str());
+    else
+    {
+        if (pConfiguration && pConfiguration != &rContext.m_rConfiguration)
+        {
+            const std::string strCfgName = pConfiguration->GetName();
+            CINFO("Variable '%s' inherits from configuration '%s'", strVarName.c_str(), strCfgName.c_str());
+        }
+
+        const std::string strValue = pExpression->GetExpression();
+
+        bStatus = rContext.SetVariableEvaluate(strVarName, strValue);
+    }
 
     return bStatus;
 }

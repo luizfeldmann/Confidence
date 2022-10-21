@@ -50,6 +50,13 @@ protected:
 	//! @brief When an item's name or description was changed on the editor
 	void onEditorItemNameDescChanged(wxCommandEvent& evt);
 
+	//! @brief Called when the user choses a configuration to run on the popup menu
+	void onBtnRunSelected(wxCommandEvent& evt);
+
+	//! @brief Enables/disables UI elements according to the run state of the project
+	//! @param[in] bRun True if the project is currently running
+	void SetRunMode(bool bRun);
+
 	/* Auto generated GUI event handlers */
 	void onBtnNewProject(wxCommandEvent& event) override;
 	void onBtnOpenProject(wxCommandEvent& event) override;

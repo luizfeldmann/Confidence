@@ -123,7 +123,7 @@ enum class EContainerStyle : int
 void CTextStyler::OnStyleNeeded(wxStyledTextEvent& event)
 {
     // Regex used to highlight variables
-    const static std::regex c_varRegex("(\\$\\((\\w|\\d)+\\))");
+    const static std::regex c_varRegex("\\$\\(([\\w|\\d]+)\\)");
 
     // Get range of text requiring the styling
     int iEndPos = m_rSTC.GetCurrentPos();

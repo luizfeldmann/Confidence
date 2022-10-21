@@ -31,6 +31,10 @@ ETreeItemType CInstance::GetType() const
     return EInstance;
 }
 
+bool CInstance::Execute(CExecutionContext&) const
+{
+    return true; // Do nothing
+}
 
 bool CInstance::DocumentName(IDocExporter& rExporter) const
 {

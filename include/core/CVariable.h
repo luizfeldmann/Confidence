@@ -45,6 +45,9 @@ public:
     //! @brief Returns an expression associated to a provided configuration and instance, if such exists
     IExpression* GetRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance);
 
+    //! @copydoc GetRule
+    const IExpression* GetRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance) const;
+
     //! @brief Returns a new instance of this class
     static IProjTreeItem* Create();
 
@@ -56,6 +59,9 @@ public:
 
     //! @copydoc ISerializationNotify::PreSerialize
     bool PreSerialize() override;
+
+    //! @copydoc IExecutable::Execute
+    bool Execute(CExecutionContext&) const override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CVariable)

@@ -24,6 +24,9 @@ public:
     //! @copydoc IDocumentable::Document
     bool Document(IDocExporter& rExporter) const override;
 
+    //! @copydoc IProcessPolicy::Execute
+    bool Execute(CExecutionContext& rContext, const vec_args_t& vArgs) const override;
+
 protected:
     //! @brief If true, the return code must be compared to m_nExpectedReturnCode when the process returns
     bool m_bCheckReturnCode;

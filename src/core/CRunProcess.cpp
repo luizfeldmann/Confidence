@@ -1,4 +1,5 @@
 #include "core/CRunProcess.h"
+#include "util/Log.h"
 
 DEFINE_SERIALIZATION_SCHEME(CRunProcess,
     SERIALIZATION_INHERIT(CStoredNameItem)
@@ -101,6 +102,39 @@ bool CRunProcess::DocumentCustom(IDocExporter& rExporter) const
         }
 
         bStatus = bStatus && rExporter.PopStack();
+    }
+
+    return bStatus;
+}
+
+bool CRunProcess::Execute(CExecutionContext& rContext) const
+{
+    LogExecution();
+    bool bStatus = true;
+
+    // Evaluate each argument expression to a literal
+    std::vector<std::string> vEvalArguments;
+
+    for (const CProcessArgument& rArgument : GetArguments())
+    {
+        std::string strExpression = rArgument.GetExpression();
+        bStatus = rContext.Evaluate(strExpression);
+
+        if (!bStatus)
+            break;
+
+        vEvalArguments.push_back(strExpression);
+    }
+
+    if (!m_pPolicy)
+    {
+        const std::string strName = GetName();
+        CWARNING("Process '%s' execution policy is undefined", strName.c_str());
+        bStatus = false;
+    }
+    else if (bStatus)
+    {
+        bStatus = m_pPolicy->Execute(rContext, vEvalArguments);
     }
 
     return bStatus;

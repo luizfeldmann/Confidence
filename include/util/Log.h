@@ -24,7 +24,9 @@ public:
 
 #define LOG_ENDL "\n"
 
-#ifndef NDEBUG
+//#define LOG_TRACE !NDEBUG
+
+#ifdef LOG_TRACE
     #define CLOG(szFormat, ...) CLog::Log("Log: " __FUNCTION__ ": " szFormat LOG_ENDL, __VA_ARGS__)
     #define CINFO(szFormat, ...) CLog::Info("Info: " __FUNCTION__ ": " szFormat  LOG_ENDL, __VA_ARGS__)
     #define CWARNING(szFormat, ...) CLog::Warning("Warning: " __FUNCTION__ ": " szFormat  LOG_ENDL, __VA_ARGS__)

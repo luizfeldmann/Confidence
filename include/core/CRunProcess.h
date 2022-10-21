@@ -63,6 +63,9 @@ public:
     //! @bcopydoc GetArguments
     const vec_args_t& GetArguments() const;
 
+    //! @copydoc IExecutable::Execute
+    bool Execute(CExecutionContext&) const override;
+
 protected:
     //! Policy to start this process
     std::unique_ptr<IProcessPolicy> m_pPolicy;

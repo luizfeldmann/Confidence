@@ -22,3 +22,8 @@ bool CProcessFireAndForget::Document(IDocExporter& rExporter) const
 
     return bStatus;
 }
+
+bool CProcessFireAndForget::Execute(CExecutionContext& rContext, const vec_args_t& vArgs) const
+{
+    return true; // TODO
+}

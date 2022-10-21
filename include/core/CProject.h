@@ -5,6 +5,8 @@
 #include "core/CInstanceGroup.h"
 #include "core/CConfigurationGroup.h"
 
+class CProjectExecutionContext;
+
 //! @brief Top level item in the project tree / the main project document
 class CProject : public IProjTreeItem
                , public CStoredNameItem
@@ -16,13 +18,8 @@ public:
     //! @brief Creates a new, empty project
     CProject();
     ~CProject();
-
-    //! @brief Default move-constructor
-    CProject(CProject&&) = default;
-
-    //! @brief Default move-assignment operator
-    CProject& operator=(CProject&&) = default;
-
+    CProject(CProject&&) noexcept;
+    CProject& operator=(CProject&&) noexcept;
     /********************************/
     /* OVERRIDES FROM IProjTreeItem */
     /********************************/
@@ -63,12 +60,15 @@ public:
     //! @brief Gets a reference to the project's instances
     const CInstanceGroup& GetInstances() const;
 
-    //! @brief Executes the project
+    //! @brief Executes the project using a provided configuration
     //! @return True if success
-    bool Run();
+    bool Run(const std::string& strConfigName);
 
     //! @brief Stops the current execution, if any
     void Stop();
+
+    //! @copydoc IExecutable::Execute
+    bool Execute(CExecutionContext&) const override;
 
     using ptr_exporter_t = std::unique_ptr<IDocExporter>;
     using vec_exporters_t = std::vector<ptr_exporter_t>;
@@ -99,6 +99,9 @@ protected:
 
     //! Group of all instances on this project
     CInstanceGroup m_cInstances;
+
+    //! Stores the current state of execution
+    std::unique_ptr<CProjectExecutionContext> m_pExecution;
 
     SERIALIZATION_FRIEND(CProject);
 

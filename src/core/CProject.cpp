@@ -4,6 +4,8 @@
 #include "util/version.h"
 #include "core/CVariable.h"
 #include "core/CGroup.h"
+#include "core/CInstance.h"
+#include "core/CExecutionContext.h"
 
 DEFINE_SERIALIZATION_SCHEME(CProject,
     SERIALIZATION_INHERIT(CStoredNameItem)
@@ -17,6 +19,23 @@ DEFINE_SERIALIZATION_SCHEME(CProject,
 )
 
 REGISTER_POLYMORPHIC_CLASS(CProject);
+
+/* CProjectExecutionContext */
+
+/* Stores the state of the current project execution*/
+class CProjectExecutionContext
+{
+private:
+    CProjectExecutionContext(const CProjectExecutionContext&) = delete;
+    CProjectExecutionContext& operator=(const CProjectExecutionContext&) = delete;
+
+public:
+    CProjectExecutionContext() = default;
+    ~CProjectExecutionContext() = default;
+
+    //! Stores the execution context of each instance during the project execution
+    std::list<CExecutionContext> m_contexts;
+};
 
 /* CProject */
 
@@ -32,6 +51,10 @@ CProject::~CProject()
 {
 
 }
+
+CProject::CProject(CProject&&) noexcept = default;
+
+CProject& CProject::operator=(CProject&&) noexcept = default;
 
 const CConfigurationGroup& CProject::GetConfigurations() const
 {
@@ -93,15 +116,50 @@ const std::string& CProject::GetCurrentPath() const
     return m_currentPath;
 }
 
-bool CProject::Run()
+bool CProject::Run(const std::string& strConfigName)
 {
-    CERROR("FEATURE NOT YET IMPLEMENTED");
-    return false;
+    bool bStatus;
+
+    // Create a new context for the global project execution
+    m_pExecution.reset( new CProjectExecutionContext );
+
+    // Find the configuration to execute
+    std::optional<cref_t> optFindCfg = FindSubitemByName(strConfigName);
+
+    if (!optFindCfg.has_value())
+    {
+        CERROR("Configuration '%s' does not exist", strConfigName.c_str());
+        bStatus = false;
+    }
+    else
+    {
+        bStatus = true;
+        const CConfiguration& rConfig = dynamic_cast<const CConfiguration&>(optFindCfg.value().get());
+
+        // Execute each instance in the project
+        vec_ref_t vInstances = m_cInstances.SubItems();
+        for (vec_ref_t::iterator it = vInstances.begin(); bStatus && (it != vInstances.end()); ++it)
+        {
+            const CInstance& rInstance = dynamic_cast<const CInstance&>(it->get());
+
+            // Create one execution context for each instance
+            m_pExecution->m_contexts.emplace_back( *this, rInstance, rConfig );
+            bStatus = Execute(m_pExecution->m_contexts.back());
+
+            if (!bStatus)
+            {
+                const std::string strInstName = rInstance.GetName();
+                CERROR("The execution of instance '%s' failed", strInstName.c_str());
+            }
+        }
+    }
+
+    return bStatus;
 }
 
 void CProject::Stop()
 {
-    CERROR("FEATURE NOT YET IMPLEMENTED");
+    m_pExecution.reset();
 }
 
 CProject::vec_exporters_t& CProject::GetDocumentationExporters()
@@ -192,4 +250,30 @@ bool CProject::PreSerialize()
     m_strAppVersion = Version::szVersion;
 
     return IProjTreeItem::PreSerialize();
+}
+
+bool CProject::Execute(CExecutionContext& rContext) const
+{
+    // Log the current execution
+    #define PROJ_LOG_MSG_START \
+        "Run project: %s \r\n" \
+        "Configuration: %s \r\n" \
+        "Instance: %s \r\n" \
+        "----------------------------------------"
+
+    #define PROJ_LOG_MSG_END \
+        "========================================\r\n"
+
+    const std::string strNameProj = rContext.m_rProject.GetName();
+    const std::string strNameConf = rContext.m_rConfiguration.GetName();
+    const std::string strNameInst = rContext.m_rInstance.GetName();
+
+    CLOG(PROJ_LOG_MSG_START, strNameProj.c_str(), strNameConf.c_str(), strNameInst.c_str());
+
+    // Execute each subitem in the project
+    bool bStatus = ExecuteChildren(rContext);
+
+    CLOG(PROJ_LOG_MSG_END);
+
+    return bStatus;
 }
