@@ -171,9 +171,7 @@ bool CProject::ExportDocumentation()
 {
     bool bGeneralStatus = true; //! Result of *all* the exporters
 
-    CInstance cDummyInstance;   //! Dummy instance used to export the documentation
-    cDummyInstance.SetName("Documentation");
-    CExecutionContext cContext(*this, cDummyInstance, m_cConfigurations);
+    CExecutionContextBase cContext(*this);
 
     for (const ptr_exporter_t& pExporter : m_vExportDocumentation)
     {

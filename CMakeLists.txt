@@ -32,6 +32,10 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
 
     # Core
     "include/core/IExecutable.h"
+    "include/core/CEvaluationContext.h"
+    "src/core/CEvaluationContext.cpp"
+    "include/core/CExecutionContextBase.h"
+    "src/core/CExecutionContextBase.cpp"
     "include/core/CExecutionContext.h"
     "include/core/IContextStorage.h"
     "src/core/CExecutionContext.cpp" 
