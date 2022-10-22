@@ -1,10 +1,23 @@
 #include "docs/CStoredOutputFileName.h"
-
+#include "core/EBuiltInVariables.h"
+#include <filesystem>
 DEFINE_SERIALIZATION_SCHEME(CStoredOutputFileName,
     SERIALIZATION_MEMBER(m_strOutputPath)
 )
 
-/* static */ const std::string CStoredOutputFileName::strDefaultPath = "$(ProjectDir)/docs/$(ProjectName)";
+static std::filesystem::path GetDefaultPath()
+{
+    std::filesystem::path path = MakeExpression(GetBuiltinName(EBuiltInVariable::ProjectDir));
+    path /= MakeExpression(GetBuiltinName(EBuiltInVariable::ProjectName));
+
+    return path;
+}
+
+/* static */ const std::string& CStoredOutputFileName::GetDefaultPath()
+{
+    static const std::string strDefaultPath = ::GetDefaultPath().string();
+    return strDefaultPath;
+}
 
 CStoredOutputFileName::CStoredOutputFileName(const std::string& strInitial)
     : m_strOutputPath(strInitial)

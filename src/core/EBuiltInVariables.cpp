@@ -18,3 +18,15 @@ const std::string& GetBuiltinName(EBuiltInVariable e)
 
     return m_map.at(e);
 }
+
+const std::regex& GetVariableRegex()
+{
+    static const std::regex c_varRegex("\\$\\(([\\w|\\d]+)\\)");
+
+    return c_varRegex;
+}
+
+std::string MakeExpression(const std::string& strVariableName)
+{
+    return "$(" + strVariableName + ")";
+}

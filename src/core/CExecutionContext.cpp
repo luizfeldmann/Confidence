@@ -79,7 +79,7 @@ std::optional<std::string> CExecutionContext::GetVariable(const std::string& str
 bool CExecutionContext::Evaluate(std::string& strExpression) const
 {
     //! Regex to find expressions in format $(VariableName)
-    const static std::regex c_varRegex("\\$\\(([\\w|\\d]+)\\)");
+    const std::regex& rVarRegex = GetVariableRegex();
 
     //! Indexes the match groups of the Regex
     enum class EGroupIndex : int
@@ -93,7 +93,7 @@ bool CExecutionContext::Evaluate(std::string& strExpression) const
 
     // While any matches exist, keep modifying the string
     std::smatch match;
-    while (std::regex_search(strExpression, match, c_varRegex) && match.size() == (int)EGroupIndex::Count)
+    while (std::regex_search(strExpression, match, rVarRegex) && match.size() == (int)EGroupIndex::Count)
     {
         const std::ssub_match matchWhole = match[(int)EGroupIndex::WholeMatch];
         const std::ssub_match matchName  = match[(int)EGroupIndex::VariableName];

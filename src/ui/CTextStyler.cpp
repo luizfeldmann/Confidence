@@ -1,6 +1,7 @@
 #include <regex>
 #include "ui/CTextStyler.h"
 #include "util/Log.h"
+#include "core/EBuiltInVariables.h"
 
 /* SColor */
 DEFINE_SERIALIZATION_SCHEME(SColor,
@@ -123,7 +124,7 @@ enum class EContainerStyle : int
 void CTextStyler::OnStyleNeeded(wxStyledTextEvent& event)
 {
     // Regex used to highlight variables
-    const static std::regex c_varRegex("\\$\\(([\\w|\\d]+)\\)");
+    const std::regex& rVarRegex = GetVariableRegex();
 
     // Get range of text requiring the styling
     int iEndPos = m_rSTC.GetCurrentPos();
@@ -144,7 +145,7 @@ void CTextStyler::OnStyleNeeded(wxStyledTextEvent& event)
     m_rSTC.SetStyling(iEndPos - iStartPos, (int)EContainerStyle::ERegular);
 
     // Iterate over matching variables
-    auto itBegin = std::sregex_iterator(strText.begin(), strText.end(), c_varRegex);
+    auto itBegin = std::sregex_iterator(strText.begin(), strText.end(), rVarRegex);
     auto itEnd   = std::sregex_iterator();
 
     for (std::sregex_iterator i = itBegin; i != itEnd; ++i)

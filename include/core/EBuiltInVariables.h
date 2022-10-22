@@ -2,6 +2,7 @@
 #define _EBUILTINVARIABLES_H_
 
 #include <string>
+#include <regex>
 
 //! @brief Enumeration of variables tacitly defined for the project execution
 enum class EBuiltInVariable
@@ -16,5 +17,13 @@ enum class EBuiltInVariable
 //! @brief Returns the string name of the variable
 //! @param[in] eVariable Identifies the variable whose name is requested
 const std::string& GetBuiltinName(EBuiltInVariable eVariable);
+
+//! @brief Wraps the variable name in the expression marker
+//! @param[in] strVariableName Name of variable for the expression
+//! @returns String in format $(strVariableName)
+std::string MakeExpression(const std::string& strVariableName);
+
+//! @brief Gets the standard regex used to process variables
+const std::regex& GetVariableRegex();
 
 #endif

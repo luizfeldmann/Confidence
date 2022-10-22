@@ -27,7 +27,7 @@ static const char* g_szCssStyles =
 }
 
 CHtmlExporter::CHtmlExporter()
-    : CStoredOutputFileName(strDefaultPath + ".html")
+    : CStoredOutputFileName(GetDefaultPath() + ".html")
 {
 }
 

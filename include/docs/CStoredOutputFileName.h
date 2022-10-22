@@ -24,7 +24,7 @@ public:
     void SetOutputFileName(const std::string&) override;
 
     //! @brief The default / suggested file path
-    static const std::string strDefaultPath;
+    static const std::string& GetDefaultPath();
 };
 
 DECLARE_SERIALIZATION_SCHEME(CStoredOutputFileName);

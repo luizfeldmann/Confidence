@@ -14,7 +14,7 @@ REGISTER_POLYMORPHIC_CLASS(CMarkdownExporter);
 }
 
 CMarkdownExporter::CMarkdownExporter()
-    : CStoredOutputFileName(strDefaultPath + ".md")
+    : CStoredOutputFileName(GetDefaultPath() + ".md")
 {
 
 }

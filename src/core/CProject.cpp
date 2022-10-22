@@ -171,34 +171,41 @@ bool CProject::ExportDocumentation()
 {
     bool bGeneralStatus = true; //! Result of *all* the exporters
 
+    CInstance cDummyInstance;   //! Dummy instance used to export the documentation
+    cDummyInstance.SetName("Documentation");
+    CExecutionContext cContext(*this, cDummyInstance, m_cConfigurations);
+
     for (const ptr_exporter_t& pExporter : m_vExportDocumentation)
     {
-        bool bLocalStatus = false; //! Status of *current* exporter
-        const std::string strPath = pExporter->GetOutputFileName();
+        std::string strPath = pExporter->GetOutputFileName();
+        
+        //! Status of *current* exporter
+        bool bLocalStatus = cContext.Evaluate(strPath); 
 
-        // TODO: evaluate expressions in strPath
-
-        std::ofstream ofs(strPath, std::ios::binary | std::ios::trunc);
-        if (!ofs.is_open())
-            CERROR("Failed to create file '%s' for documentation exporter", strPath.c_str());
-        else
+        if (bLocalStatus)
         {
-            bLocalStatus = pExporter->Start(ofs);
-
-            if (bLocalStatus)
+            std::ofstream ofs(strPath, std::ios::binary | std::ios::trunc);
+            if (!ofs.is_open())
+                CERROR("Failed to create file '%s' for documentation exporter", strPath.c_str());
+            else
             {
-                bLocalStatus = Document(*pExporter);
+                bLocalStatus = pExporter->Start(ofs);
 
-                // If the exporter Start()'ed, Finish() it even in case of error for safe cleanup  
-                bLocalStatus = bLocalStatus && pExporter->Finish();
+                if (bLocalStatus)
+                {
+                    bLocalStatus = Document(*pExporter);
+
+                    // If the exporter Start()'ed, Finish() it even in case of error for safe cleanup  
+                    bLocalStatus = bLocalStatus && pExporter->Finish();
+                }
+
+                // Dangerous case of failure
+                // Inaccurate documentation may be generated, let the user know
+                if (!bLocalStatus)
+                    CERROR("The documentation exporter failed. "
+                        "Output file '%s' may be incomplete or corrupted.",
+                        strPath.c_str());
             }
-
-            // Dangerous case of failure
-            // Inaccurate documentation may be generated, let the user know
-            if (!bLocalStatus)
-                CERROR("The documentation exporter failed. "
-                    "Output file '%s' may be incomplete or corrupted.",
-                    strPath.c_str());         
         }
 
         // General result is 'success' only if *all* the exporters succeed
