@@ -113,7 +113,9 @@ bool CRunProcess::Execute(CExecutionContext& rContext) const
     bool bStatus = true;
 
     // Evaluate each argument expression to a literal
-    std::vector<std::string> vEvalArguments;
+    SProcessStartInfo sProc;
+    sProc.m_bRunAsAdmin = m_bRunAsAdmin;
+    sProc.m_eStartMode = m_eStartMode;
 
     for (const CProcessArgument& rArgument : GetArguments())
     {
@@ -123,7 +125,7 @@ bool CRunProcess::Execute(CExecutionContext& rContext) const
         if (!bStatus)
             break;
 
-        vEvalArguments.push_back(strExpression);
+        sProc.m_vArguments.push_back(strExpression);
     }
 
     if (!m_pPolicy)
@@ -134,7 +136,7 @@ bool CRunProcess::Execute(CExecutionContext& rContext) const
     }
     else if (bStatus)
     {
-        bStatus = m_pPolicy->Execute(rContext, vEvalArguments);
+        bStatus = m_pPolicy->Execute(rContext, sProc);
     }
 
     return bStatus;

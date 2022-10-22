@@ -16,7 +16,7 @@ public:
     bool Document(IDocExporter& rExporter) const override;
 
     //! @copydoc IProcessPolicy::Execute
-    bool Execute(CExecutionContext& rContext, const vec_args_t& vArgs) const override;
+    bool Execute(CExecutionContext& rContext, const SProcessStartInfo& rInfo) const override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CProcessFireAndForget);

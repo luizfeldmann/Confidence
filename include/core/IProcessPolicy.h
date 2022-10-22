@@ -3,6 +3,7 @@
 
 #include <JInterface/JsonSerialization.h>
 #include <docs/IDocumentable.h>
+#include "core/SProcessStartInfo.h"
 
 class CExecutionContext;
 
@@ -24,13 +25,11 @@ public:
     //! @brief Reflects the type of the object
     virtual EProcessPolicy GetType() const = 0;
 
-    using vec_args_t = std::vector<std::string>;
-
     //! @brief Executes the process using the provided context and arguments
     //! @param[in] rContext Reference to the execution context
-    //! @param[in] vArgs Vector of arguments to start the process
+    //! @param[in] rInfo Contains all specifications on how to start the process
     //! @return True if success
-    virtual bool Execute(CExecutionContext& rContext, const vec_args_t& vArgs) const = 0;
+    virtual bool Execute(CExecutionContext& rContext, const SProcessStartInfo& rInfo) const = 0;
 };
 
 DECLARE_SERIALIZATION_SCHEME(IProcessPolicy);

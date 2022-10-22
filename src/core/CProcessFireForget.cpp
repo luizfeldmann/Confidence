@@ -1,4 +1,5 @@
 #include "core/CProcessFireForget.h"
+#include "util/StartProcess.h"
 
 DEFINE_SERIALIZATION_SCHEME(CProcessFireAndForget,
     SERIALIZATION_INHERIT(IProcessPolicy)
@@ -23,7 +24,9 @@ bool CProcessFireAndForget::Document(IDocExporter& rExporter) const
     return bStatus;
 }
 
-bool CProcessFireAndForget::Execute(CExecutionContext& rContext, const vec_args_t& vArgs) const
+bool CProcessFireAndForget::Execute(CExecutionContext& rContext, const SProcessStartInfo& rInfo) const
 {
-    return true; // TODO
+    bool bStatus = StartProcess(rInfo, nullptr);
+
+    return bStatus;
 }

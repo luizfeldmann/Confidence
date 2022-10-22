@@ -70,6 +70,7 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/core/CConfiguration.cpp"
     "include/core/CConfigurationGroup.h"
     "src/core/CConfigurationGroup.cpp"
+    "include/core/SProcessStartInfo.h"
     "include/core/CRunProcess.h"
     "include/core/IProcessPolicy.h"
     "src/core/IProcessPolicy.cpp"
@@ -180,6 +181,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/util/IIdentifiable.cpp"
     "include/util/CTempFile.h"
     "src/util/CTempFile.cpp"
+    "include/util/StartProcess.h"
+    "src/util/StartProcess.cpp"
 
     # Resources
     ${RESOURCESFILE}

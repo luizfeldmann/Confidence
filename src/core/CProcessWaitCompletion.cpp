@@ -1,4 +1,6 @@
 #include "core/CProcessWaitCompletion.h"
+#include "util/StartProcess.h"
+#include "util/Log.h"
 
 DEFINE_SERIALIZATION_SCHEME(CProcessWaitCompletion,
     SERIALIZATION_INHERIT(IProcessPolicy)
@@ -46,7 +48,30 @@ bool CProcessWaitCompletion::Document(IDocExporter& rExporter) const
     return bStatus;
 }
 
-bool CProcessWaitCompletion::Execute(CExecutionContext& rContext, const vec_args_t& vArgs) const
+bool CProcessWaitCompletion::Execute(CExecutionContext& rContext, const SProcessStartInfo& rInfo) const
 {
-    return true; // TODO
+    void* hProcess = nullptr;
+    bool bStatus = StartProcess(rInfo, &hProcess);
+
+    if (bStatus)
+    {
+        if (!m_bCheckReturnCode)
+            bStatus = WaitProcess(hProcess, nullptr);
+        else
+        {
+            unsigned long ulExitCode = 0;
+
+            bStatus = WaitProcess(hProcess, &ulExitCode);
+
+            if (bStatus)
+            {
+                bStatus = (ulExitCode == m_nExpectedReturnCode);
+
+                if (!bStatus)
+                    CERROR("Process exited with code 0x%X but expected code was 0x%X", ulExitCode, m_nExpectedReturnCode);
+            }
+        }
+    }
+
+    return bStatus;
 }
