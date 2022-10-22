@@ -224,7 +224,7 @@ void CGeneratedTextFileEditorUI::onOpenEditor(wxCommandEvent& event)
         {
             // Prompt the user to reload the contents after edit
             wxMessageDialog msgDiag(GetParent(),
-                "The file '%s' was editted outside this application.\r\nDo you wish to reload the contents ?",
+                "The file was editted outside this application.\r\nDo you wish to reload the contents ?",
                 "Reload file ?",
                 wxYES_NO | wxICON_QUESTION);
 

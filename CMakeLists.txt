@@ -196,6 +196,11 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     ${ICONS_LIST_EXPORTED}
 
     # Virtual file system
+    "include/vfs/IFileGenerator.h"
+    "include/vfs/CPersistentFileGenerator.h"
+    "src/vfs/CPersistentFileGenerator.cpp"
+    "include/vfs/CTempSymlinkGenerator.h"
+    "src/vfs/CTempSymlinkGenerator.cpp"
     "include/vfs/IProjectedFileSystemProvider.h"
     "src/vfs/IProjectedFileSystemProvider.cpp"  )
 

@@ -1,4 +1,6 @@
 #include "core/CGeneratedTextFile.h"
+#include "vfs/CTempSymlinkGenerator.h"
+#include "util/Log.h"
 
 DEFINE_SERIALIZATION_SCHEME(CGeneratedTextFile,
     SERIALIZATION_INHERIT(CStoredNameItem)
@@ -66,7 +68,40 @@ bool CGeneratedTextFile::DocumentCustom(IDocExporter& rExporter) const
     return bStatus;
 }
 
-bool CGeneratedTextFile::Execute(CExecutionContext&) const
+bool CGeneratedTextFile::Execute(CExecutionContext& rContext) const
 {
-    return true; // TODO
+    static CTempSymlinkGenerator generator;
+
+    bool bStatus = false;
+    
+    // Sanity check
+    const std::string strName = GetName();
+
+    if (!m_cProvider)
+        CWARNING("Unespecified content provider for file '%s'", strName.c_str());
+    else
+    {
+        // Evaluate the contents and the destination
+        IFileGenerator::sptr_t pFile;
+        std::string strContents = m_cProvider->GetText();
+        std::string strDestination = GetOutputPath();
+
+        bStatus = rContext.Evaluate(strContents)
+            && rContext.Evaluate(strDestination);
+
+
+        if (bStatus)
+            pFile = generator.NewFile(strDestination);
+
+        if (pFile && pFile->IsValid())
+        {
+            std::ostream& os = pFile->GetStream();
+            os << strContents;
+            os.flush();
+
+            rContext.Store(pFile);
+        }
+    }
+    
+    return bStatus;
 }
