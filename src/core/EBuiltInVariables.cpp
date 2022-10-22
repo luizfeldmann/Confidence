@@ -11,7 +11,9 @@ const std::string& GetBuiltinName(EBuiltInVariable e)
     static const std::map<EBuiltInVariable, std::string> m_map {
         ENUM_PAIR(ProjectName),
         ENUM_PAIR(InstanceName),
-        ENUM_PAIR(ConfigurationName)
+        ENUM_PAIR(ConfigurationName),
+        ENUM_PAIR(ProjectFile),
+        ENUM_PAIR(ProjectDir),
     };
 
     return m_map.at(e);

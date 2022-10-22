@@ -5,6 +5,7 @@
 #include "core/EBuiltInVariables.h"
 #include "util/Log.h"
 #include <regex>
+#include <filesystem>
 
 CExecutionContext::CExecutionContext(const CProject& rProj, const CInstance& rInst, const CConfiguration& rCfg)
     : m_rProject(rProj)
@@ -17,6 +18,13 @@ CExecutionContext::CExecutionContext(const CProject& rProj, const CInstance& rIn
     m_mVariables[GetBuiltinName(EBuiltInVariable::ProjectName)] = m_rProject.GetName();
     m_mVariables[GetBuiltinName(EBuiltInVariable::ConfigurationName)] = m_rConfiguration.GetName();
     m_mVariables[GetBuiltinName(EBuiltInVariable::InstanceName)] = m_rInstance.GetName();
+
+    const std::string strProjectFile = m_rProject.GetCurrentPath();
+    if (!strProjectFile.empty())
+    {
+        m_mVariables[GetBuiltinName(EBuiltInVariable::ProjectFile)] = strProjectFile;
+        m_mVariables[GetBuiltinName(EBuiltInVariable::ProjectDir)] = std::filesystem::path(strProjectFile).parent_path().string();
+    }
 }
 
 void CExecutionContext::MapParents(const IProjTreeItem& rParent)

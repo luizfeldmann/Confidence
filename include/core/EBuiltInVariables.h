@@ -9,6 +9,8 @@ enum class EBuiltInVariable
     ProjectName,        //!< The name of the project being executed
     InstanceName,       //!< The name of the current instance
     ConfigurationName,  //!< The name of the current configuration
+    ProjectFile,        //!< Full path to the saved project file
+    ProjectDir,         //!< Directory containing the saved project file
 };
 
 //! @brief Returns the string name of the variable
