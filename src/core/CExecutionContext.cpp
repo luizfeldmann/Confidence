@@ -112,3 +112,8 @@ bool CExecutionContext::Evaluate(std::string& strExpression) const
 
     return bStatus;
 }
+
+void CExecutionContext::Store(std::shared_ptr<IContextStorage> pStore)
+{
+    m_lStorage.push_back(pStore);
+}

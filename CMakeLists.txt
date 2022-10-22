@@ -33,6 +33,7 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     # Core
     "include/core/IExecutable.h"
     "include/core/CExecutionContext.h"
+    "include/core/IContextStorage.h"
     "src/core/CExecutionContext.cpp" 
     "include/core/INamedItem.h"
     "include/core/CStoredNameItem.h"
@@ -57,6 +58,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/core/CVariableExpressionKey.cpp"
     "include/core/EBuiltInVariables.h"
     "src/core/EBuiltInVariables.cpp"
+    "include/core/CEnvironmentVariable.h"
+    "src/core/CEnvironmentVariable.cpp"
     "include/core/CVariable.h"
     "src/core/CVariable.cpp"
     "include/core/CGeneratedTextFile.h"

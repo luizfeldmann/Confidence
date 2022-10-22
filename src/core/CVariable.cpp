@@ -1,6 +1,8 @@
 #include "core/CVariable.h"
 #include "core/CConfiguration.h"
+#include "core/CEnvironmentVariable.h"
 #include "util/Log.h"
+#include <cstdlib>
 
 DEFINE_SERIALIZATION_SCHEME(CVariable,
     SERIALIZATION_INHERIT(CStoredNameItem)
@@ -163,6 +165,8 @@ bool CVariable::Execute(CExecutionContext& rContext) const
     const IExpression* pExpression = nullptr;
     const CConfiguration* pConfiguration = &rContext.m_rConfiguration;
     
+    // Find the expression for the variable
+    // Search in the current and the parent configurations (inheritance)
     do
     {
         pExpression = GetRule(*pConfiguration, rContext.m_rInstance);
@@ -176,15 +180,33 @@ bool CVariable::Execute(CExecutionContext& rContext) const
         CINFO("Variable '%s' is undefined", strVarName.c_str());
     else
     {
+        // Alert user about applied inheritance
         if (pConfiguration && pConfiguration != &rContext.m_rConfiguration)
         {
             const std::string strCfgName = pConfiguration->GetName();
             CINFO("Variable '%s' inherits from configuration '%s'", strVarName.c_str(), strCfgName.c_str());
         }
 
-        const std::string strValue = pExpression->GetExpression();
+        // Evaluate expression to a literal
+        std::string strValue = pExpression->GetExpression();
+        bStatus = rContext.Evaluate(strValue);
 
-        bStatus = rContext.SetVariableEvaluate(strVarName, strValue);
+        if (bStatus)
+        {
+            // Set the variable in the context
+            rContext.SetVariableLiteral(strVarName, strValue);
+
+            // If requested, export to environment
+            if (m_bExportToEnvironment)
+            {
+                std::shared_ptr<CEnvironmentVariable> pEnv = 
+                    std::make_shared<CEnvironmentVariable>(strVarName);
+                
+                bStatus = pEnv && pEnv->Set(strValue.c_str());
+                if (bStatus)
+                    rContext.Store(pEnv);
+            }
+        }
     }
 
     return bStatus;

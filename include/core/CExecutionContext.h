@@ -2,8 +2,11 @@
 #define _CEXECUTIONCONTEXT_H_
 
 #include <map>
+#include <list>
+#include <memory>
 #include <string>
 #include <optional>
+#include "core/IContextStorage.h"
 
 class CProject;
 class CInstance;
@@ -30,6 +33,11 @@ protected:
 
     //! Collection of variables names and values
     variable_map_t m_mVariables;
+
+    using storage_list_t = std::list<std::shared_ptr<IContextStorage>>;
+
+    //! Stores objects for the duration of the execution
+    storage_list_t m_lStorage;
 
 public:
     //! Reference to the project being executed
@@ -68,6 +76,9 @@ public:
     //! @param[in,out] strExpression Expression to evaluate (in place)
     //! @return True if success
     bool Evaluate(std::string& strExpression) const;
+
+    //! @brief Stores an object in this context for the duration of the execution
+    void Store(std::shared_ptr<IContextStorage> pStore);
 };
 
 #endif
