@@ -23,14 +23,20 @@ CVariableExpressionKey::CVariableExpressionKey(const CConfiguration& rConfig, co
 
 }
 
-CConfiguration* CVariableExpressionKey::GetConfiguration() const
+const CConfiguration* CVariableExpressionKey::GetConfiguration() const
 {
     return CConfiguration::FindByID(m_gIdConfiguration);
 }
 
-CInstance* CVariableExpressionKey::GetInstance() const
+const CInstance* CVariableExpressionKey::GetInstance() const
 {
     return CInstance::FindByID(m_gIdInstance);
+}
+
+bool CVariableExpressionKey::Compare(const CConfiguration& rConfig, const CInstance& rInst) const
+{
+    return (rConfig.GetID() == m_gIdConfiguration)
+        && (rInst.GetID() == m_gIdInstance);
 }
 
 bool CVariableExpressionKey::PreSerialize()

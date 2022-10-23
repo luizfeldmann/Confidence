@@ -13,32 +13,6 @@ DEFINE_SERIALIZATION_SCHEME(CVariable,
 
 REGISTER_POLYMORPHIC_CLASS(CVariable);
 
-/* CFindRulePredicate */
-
-//! @brief Functor used to std::find_if a CVariableExpressionKey of matching configuration and instance
-class CFindRulePredicate
-{
-protected:
-    const CConfiguration& m_rKeyConfig;
-    const CInstance& m_rKeyInstance;
-
-public:
-    CFindRulePredicate(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance)
-        : m_rKeyConfig(rKeyConfig)
-        , m_rKeyInstance(rKeyInstance)
-    {
-
-    }
-
-    bool operator ()(const CVariableExpressionKey& rSearch) const
-    {
-        const CConfiguration* const pConfig = rSearch.GetConfiguration();
-        const CInstance* const pInst = rSearch.GetInstance();
-
-        return (&m_rKeyConfig == pConfig) && (&m_rKeyInstance == pInst);
-    }
-};
-
 /* CVariable */
 CVariable::CVariable()
     : CStoredNameItem("<new variable>")
@@ -114,7 +88,8 @@ IExpression* CVariable::GetRule(const CConfiguration& rKeyConfig, const CInstanc
 {
     IExpression* pFoundRule = nullptr;
 
-    vec_rules_t::iterator itFind = std::find_if(m_vRules.begin(), m_vRules.end(), CFindRulePredicate(rKeyConfig, rKeyInstance));
+    vec_rules_t::iterator itFind = std::find_if(m_vRules.begin(), m_vRules.end(), 
+        std::bind(&CVariableExpressionKey::Compare, std::placeholders::_1, std::ref(rKeyConfig), std::ref(rKeyInstance)));
 
     if (m_vRules.end() != itFind)
         pFoundRule = &*itFind;
@@ -126,7 +101,8 @@ const IExpression* CVariable::GetRule(const CConfiguration& rKeyConfig, const CI
 {
     const IExpression* pFoundRule = nullptr;
 
-    vec_rules_t::const_iterator itFind = std::find_if(m_vRules.cbegin(), m_vRules.cend(), CFindRulePredicate(rKeyConfig, rKeyInstance));
+    vec_rules_t::const_iterator itFind = std::find_if(m_vRules.cbegin(), m_vRules.cend(),
+        std::bind(&CVariableExpressionKey::Compare, std::placeholders::_1, std::ref(rKeyConfig), std::ref(rKeyInstance)));
 
     if (m_vRules.cend() != itFind)
         pFoundRule = &*itFind;

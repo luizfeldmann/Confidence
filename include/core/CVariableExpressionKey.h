@@ -34,16 +34,21 @@ protected:
     //! This value is updated on #PostDeserialize
     CGuid m_gIdInstance;
 
+    //! @brief Gets a pointer to the associated configuration
+    const CConfiguration* GetConfiguration() const;
+
+    //! @brief Gets a pointer to the associated instance
+    const CInstance* GetInstance() const;
+
 public:
     CVariableExpressionKey();
 
     CVariableExpressionKey(const CConfiguration& rConfig, const CInstance& rInst);
 
-    //! @brief Gets a pointer to the associated configuration
-    CConfiguration* GetConfiguration() const;
-
-    //! @brief Gets a pointer to the associated instance
-    CInstance* GetInstance() const;
+    //! @brief Checks if the provided pair of instance and configuration match this key's
+    //! @param[in] rConfig The configuration to compare to this'
+    //! @param[in] rInst The instance to compare to this'
+    bool Compare(const CConfiguration& rConfig, const CInstance& rInst) const;
 
     //! @copydoc ISerializationNotify::PostDeserialize
     bool PostDeserialize() override;
