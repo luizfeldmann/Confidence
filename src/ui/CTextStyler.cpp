@@ -127,7 +127,7 @@ void CTextStyler::OnStyleNeeded(wxStyledTextEvent& event)
     const std::regex& rVarRegex = GetVariableRegex();
 
     // Get range of text requiring the styling
-    int iEndPos = m_rSTC.GetCurrentPos();
+    int iEndPos = std::max( m_rSTC.GetCurrentPos(), event.GetPosition() );
     const int iEndLine = m_rSTC.LineFromPosition(iEndPos);
     iEndPos = m_rSTC.GetLineEndPosition(iEndLine); // the end of the last line
 
