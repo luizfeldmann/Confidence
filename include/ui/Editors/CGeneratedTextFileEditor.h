@@ -28,6 +28,9 @@ protected:
     //! @brief Sets the combo box & UI according to the type of ITextProvider
     void ReloadProviderType();
 
+    //! @brief Sets the combo box & UI according to the type of IFileGenerator
+    void ReloadGeneratorType();
+
     //! @brief Called by the text editor when the text is changed
     void OnTextChanged(wxStyledTextEvent& event);
 
@@ -36,6 +39,7 @@ protected:
     void onInputFilePathChanged(wxCommandEvent& event) override;
     void onSelectFile(wxCommandEvent& event) override;
     void onSaveFile(wxCommandEvent& event) override;
+    void onChangeGenerator(wxCommandEvent& event) override;
     void onOutputFilePathChanged(wxCommandEvent& event) override;
     void onOpenEditor(wxCommandEvent& event) override;
 };

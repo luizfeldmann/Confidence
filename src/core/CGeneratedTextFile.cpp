@@ -7,6 +7,7 @@ DEFINE_SERIALIZATION_SCHEME(CGeneratedTextFile,
     SERIALIZATION_INHERIT(CStoredDescriptionItem)
     SERIALIZATION_MEMBER(m_strOutputPath)
     SERIALIZATION_MEMBER(m_cProvider)
+    SERIALIZATION_MEMBER(m_pGenerator)
 )
 
 REGISTER_POLYMORPHIC_CLASS(CGeneratedTextFile);
@@ -43,6 +44,16 @@ void CGeneratedTextFile::SetProvider(ITextProvider* pNewProvider)
     m_cProvider.reset(pNewProvider);
 }
 
+IFileGenerator* CGeneratedTextFile::GetGenerator() const
+{
+    return m_pGenerator.get();
+}
+
+void CGeneratedTextFile::SetGenerator(IFileGenerator* pNewGenerator)
+{
+    m_pGenerator.reset(pNewGenerator);
+}
+
 std::string CGeneratedTextFile::GetOutputPath() const
 {
     return m_strOutputPath;
@@ -70,8 +81,6 @@ bool CGeneratedTextFile::DocumentCustom(IDocExporter& rExporter) const
 
 bool CGeneratedTextFile::Execute(CExecutionContext& rContext) const
 {
-    static CTempSymlinkGenerator generator;
-
     bool bStatus = false;
     
     // Sanity check
@@ -79,6 +88,8 @@ bool CGeneratedTextFile::Execute(CExecutionContext& rContext) const
 
     if (!m_cProvider)
         CWARNING("Unespecified content provider for file '%s'", strName.c_str());
+    else if (!m_pGenerator)
+        CWARNING("Unespecified file generator for file '%s'", strName.c_str());
     else
     {
         // Evaluate the contents and the destination
@@ -89,9 +100,8 @@ bool CGeneratedTextFile::Execute(CExecutionContext& rContext) const
         bStatus = rContext.Evaluate(strContents)
             && rContext.Evaluate(strDestination);
 
-
         if (bStatus)
-            pFile = generator.NewFile(strDestination);
+            pFile = m_pGenerator->NewFile(strDestination);
 
         if (pFile && pFile->IsValid())
         {

@@ -25,6 +25,13 @@ public:
     virtual std::ostream& GetStream() = 0;
 };
 
+//! @brief Reflection of types of generators
+enum class EFileGeneratorType : int
+{
+    Persistent = 0, //!< Generates real files saved to disk
+    Symlink         //!< Generates symlinks to temporary files
+};
+
 //! @brief Interface for generators of files
 class IFileGenerator
 {
@@ -38,6 +45,9 @@ public:
     //! @param[in] filePath Path where to create the new file
     //! @returns Shared pointer to the created file object
     virtual sptr_t NewFile(const path_t& filePath) const = 0;
+
+    //! @brief Type reflection of this object
+    virtual EFileGeneratorType GetType() const = 0;
 };
 
 #endif

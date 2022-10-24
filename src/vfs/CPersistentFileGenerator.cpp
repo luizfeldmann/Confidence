@@ -1,6 +1,10 @@
 #include "vfs/CPersistentFileGenerator.h"
 #include <fstream>
 
+DEFINE_SERIALIZATION_SCHEME(CPersistentFileGenerator);
+
+REGISTER_POLYMORPHIC_CLASS(CPersistentFileGenerator);
+
 class CPersistentFile : public IGeneratedFile
 {
 private:
@@ -40,7 +44,17 @@ public:
     }
 };
 
+/* static */ IFileGenerator* CPersistentFileGenerator::Create()
+{
+    return new CPersistentFileGenerator;
+}
+
 CPersistentFileGenerator::sptr_t CPersistentFileGenerator::NewFile(const path_t& filePath) const
 {
     return std::make_shared<CPersistentFile>(filePath);
+}
+
+EFileGeneratorType CPersistentFileGenerator::GetType() const
+{
+    return EFileGeneratorType::Persistent;
 }

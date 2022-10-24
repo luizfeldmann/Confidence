@@ -3,6 +3,10 @@
 #include <fstream>
 #include <system_error>
 
+DEFINE_SERIALIZATION_SCHEME(CTempSymlinkGenerator);
+
+REGISTER_POLYMORPHIC_CLASS(CTempSymlinkGenerator);
+
 class CTempSymlinkFile : public IGeneratedFile
 {
 private:
@@ -96,7 +100,17 @@ public:
     }
 };
 
+/* static */ IFileGenerator* CTempSymlinkGenerator::Create()
+{
+    return new CTempSymlinkGenerator;
+}
+
 CTempSymlinkGenerator::sptr_t CTempSymlinkGenerator::NewFile(const path_t& filePath) const
 {
     return std::make_shared<CTempSymlinkFile>(filePath);
+}
+
+EFileGeneratorType CTempSymlinkGenerator::GetType() const
+{
+    return EFileGeneratorType::Symlink;
 }

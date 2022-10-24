@@ -6,6 +6,7 @@
 #include "CStoredDescriptionItem.h"
 #include "CNoChildren.h"
 #include "ITextProvider.h"
+#include "vfs/IFileGenerator.h"
 
 //! @brief Text file with dynamically generated content
 class CGeneratedTextFile : public IProjTreeItem
@@ -19,6 +20,10 @@ protected:
 
     //! Provides the text either from memory or from a file
     std::unique_ptr<ITextProvider> m_cProvider;
+
+    //! Implements generating output files in the filesystem
+    std::unique_ptr<IFileGenerator> m_pGenerator;
+
     SERIALIZATION_FRIEND(CGeneratedTextFile);
 
     //! @copydoc IProjTreeItem::DocumentName
@@ -44,6 +49,13 @@ public:
     //! @brief Sets the underlying text provider
     //! @details The old provider is destroyed; assumes exclusive ownership of the new pointer
     void SetProvider(ITextProvider* pNewProvider);
+
+    //! @brief Gets a pointer to the underlying file generator
+    IFileGenerator* GetGenerator() const;
+
+    //! @brief Sets the underlying file generator
+    //! @details The old generator is destroyed; assumes exclusive ownership of the new generator
+    void SetGenerator(IFileGenerator* pNewGenerator);
 
     //! @brief Reads the path where this file is generated
     std::string GetOutputPath() const;

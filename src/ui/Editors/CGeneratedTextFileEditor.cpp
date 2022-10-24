@@ -1,6 +1,8 @@
 #include "ui/Editors/CGeneratedTextFileEditor.h"
 #include "core/CFileTextProvider.h"
 #include "core/CStoredTextProvider.h"
+#include "vfs/CPersistentFileGenerator.h"
+#include "vfs/CTempSymlinkGenerator.h"
 #include "util/Log.h"
 #include "util/CTempFile.h"
 #include <wx/filedlg.h>
@@ -24,6 +26,7 @@ CGeneratedTextFileEditorUI::CGeneratedTextFileEditorUI(wxWindow* pParent, CGener
     // Load data from the underlying object
     ReloadText();
     ReloadProviderType();
+    ReloadGeneratorType();
 
     m_textCtrlOutputPath->ChangeValue( m_rEdit.GetOutputPath() );
 }
@@ -70,6 +73,17 @@ void CGeneratedTextFileEditorUI::ReloadProviderType()
     m_buttonOpenFile->Show(bIsFile);
     m_buttonSave->Show(bIsFile);
     m_choiceProvider->SetSelection(iSelectedIndex);
+}
+
+void CGeneratedTextFileEditorUI::ReloadGeneratorType()
+{
+    int iSelectedIndex = wxNOT_FOUND;
+
+    IFileGenerator* const pGenerator = m_rEdit.GetGenerator();
+    if (pGenerator)
+        iSelectedIndex = (int)pGenerator->GetType();
+
+    m_choiceGenerator->SetSelection(iSelectedIndex);
 }
 
 bool CGeneratedTextFileEditorUI::SaveText()
@@ -130,6 +144,30 @@ void CGeneratedTextFileEditorUI::onChangeProvider(wxCommandEvent& event)
 
     ReloadProviderType();
     ReloadText();
+}
+
+void CGeneratedTextFileEditorUI::onChangeGenerator(wxCommandEvent& event)
+{
+    using fnNewGenerator_t = std::function<IFileGenerator* ()>;
+    static const std::unordered_map<EFileGeneratorType, fnNewGenerator_t> c_mGeneratorFactory {
+        {EFileGeneratorType::Persistent,   CPersistentFileGenerator::Create },
+        {EFileGeneratorType::Symlink,      CTempSymlinkGenerator::Create },
+    };
+
+    const int iSelected = m_choiceGenerator->GetSelection();
+
+    // Skip changing if invalid selection
+    if (wxNOT_FOUND == iSelected)
+        return;
+
+    // Skip changing if new type is same as old type
+    IFileGenerator* const pGenerator = m_rEdit.GetGenerator();
+    if (pGenerator && iSelected == (int)pGenerator->GetType())
+        return;
+
+    // Create a new generator and assign it
+    IFileGenerator* const pNewProvider = c_mGeneratorFactory.at((EFileGeneratorType)iSelected)();
+    m_rEdit.SetGenerator(pNewProvider);
 }
 
 void CGeneratedTextFileEditorUI::onInputFilePathChanged(wxCommandEvent& event)
