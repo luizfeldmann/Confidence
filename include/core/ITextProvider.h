@@ -3,6 +3,7 @@
 
 #include <string>
 #include "docs/IDocumentable.h"
+#include "core/ISerializationNotify.h"
 
 //! @brief Reflection types of ITextProvider implementations
 enum  class ETextProviderType
@@ -12,7 +13,7 @@ enum  class ETextProviderType
 };
 
 //! @brief Generic interface for access of text
-class ITextProvider : public IDocumentable
+class ITextProvider : public IDocumentable, public ISerializationNotify
 {
 public:
     ITextProvider() = default;

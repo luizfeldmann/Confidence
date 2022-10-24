@@ -57,6 +57,12 @@ public:
     //! @details The old generator is destroyed; assumes exclusive ownership of the new generator
     void SetGenerator(IFileGenerator* pNewGenerator);
 
+    //! @copydoc ISerializationNotify::PostDeserialize
+    bool PostDeserialize() override;
+
+    //! @copydoc ISerializationNotify::PreSerialize
+    bool PreSerialize() override;
+
     //! @brief Reads the path where this file is generated
     std::string GetOutputPath() const;
 

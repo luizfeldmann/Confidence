@@ -51,6 +51,16 @@ bool CFileTextProvider::SetText(const std::string& strText)
     return bSuccess;
 }
 
+bool CFileTextProvider::PostDeserialize()
+{
+    return true;
+}
+
+bool CFileTextProvider::PreSerialize()
+{
+    return true;
+}
+
 std::string CFileTextProvider::GetFilePathAbsolute() const
 {
     return m_strFilePath;

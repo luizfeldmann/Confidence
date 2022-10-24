@@ -25,6 +25,12 @@ public:
     //! @copydoc ITextProvider::SetText
     bool SetText(const std::string&) override;
 
+    //! @copydoc ISerializationNotify::PostDeserialize
+    bool PostDeserialize() override;
+
+    //! @copydoc ISerializationNotify::PreSerialize
+    bool PreSerialize() override;
+
     //! @brief Factory function
     static ITextProvider* Create();
 

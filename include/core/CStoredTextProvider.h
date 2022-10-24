@@ -8,8 +8,12 @@
 class CStoredTextProvider : public ITextProvider
 {
 protected:
-    //! Stores the text
+    //! Stores the text for runtime use
     std::string m_strText;
+
+    //! Stores the text split in lines for (de)-serialization
+    std::vector<std::string> m_vText;
+
     SERIALIZATION_FRIEND(CStoredTextProvider);
 
 public:
@@ -26,6 +30,12 @@ public:
 
     //! @copydoc ITextProvider::SetText
     bool SetText(const std::string&) override;
+
+    //! @copydoc ISerializationNotify::PostDeserialize
+    bool PostDeserialize() override;
+
+    //! @copydoc ISerializationNotify::PreSerialize
+    bool PreSerialize() override;
 
     //! @copydoc IDocumentable:Document
     bool Document(IDocExporter& rExporter) const override;

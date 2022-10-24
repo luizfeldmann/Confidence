@@ -54,6 +54,26 @@ void CGeneratedTextFile::SetGenerator(IFileGenerator* pNewGenerator)
     m_pGenerator.reset(pNewGenerator);
 }
 
+bool CGeneratedTextFile::PostDeserialize()
+{
+    bool bStatus = true;
+
+    if (m_cProvider)
+        bStatus = m_cProvider->PostDeserialize();
+
+    return bStatus;
+}
+
+bool CGeneratedTextFile::PreSerialize()
+{
+    bool bStatus = true;
+
+    if (m_cProvider)
+        bStatus = m_cProvider->PreSerialize();
+
+    return bStatus;
+}
+
 std::string CGeneratedTextFile::GetOutputPath() const
 {
     return m_strOutputPath;
