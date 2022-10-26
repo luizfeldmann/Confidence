@@ -54,12 +54,12 @@ void CGeneratedTextFile::SetGenerator(IFileGenerator* pNewGenerator)
     m_pGenerator.reset(pNewGenerator);
 }
 
-bool CGeneratedTextFile::PostDeserialize()
+bool CGeneratedTextFile::PostDeserialize(CProject& rProject)
 {
     bool bStatus = true;
 
     if (m_cProvider)
-        bStatus = m_cProvider->PostDeserialize();
+        bStatus = m_cProvider->PostDeserialize(rProject);
 
     return bStatus;
 }

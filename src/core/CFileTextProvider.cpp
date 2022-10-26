@@ -51,7 +51,7 @@ bool CFileTextProvider::SetText(const std::string& strText)
     return bSuccess;
 }
 
-bool CFileTextProvider::PostDeserialize()
+bool CFileTextProvider::PostDeserialize(CProject& rProject)
 {
     return true;
 }

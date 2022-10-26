@@ -30,7 +30,7 @@ bool CStoredTextProvider::SetText(const std::string& strText)
     return true;
 }
 
-bool CStoredTextProvider::PostDeserialize()
+bool CStoredTextProvider::PostDeserialize(CProject& rProject)
 {
     m_strText.clear();
 

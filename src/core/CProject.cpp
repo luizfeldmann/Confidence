@@ -5,6 +5,7 @@
 #include "core/CVariable.h"
 #include "core/CGroup.h"
 #include "core/CInstance.h"
+#include "core/CConfiguration.h"
 #include "core/CExecutionContext.h"
 
 DEFINE_SERIALIZATION_SCHEME(CProject,
@@ -72,6 +73,16 @@ const CConfigurationGroup& CProject::GetConfigurations() const
     return m_cConfigurations;
 }
 
+const CConfiguration* CProject::GetConfiguration(const std::string& strName) const
+{
+    return dynamic_cast<const CConfiguration*>( FindSubitemByName(strName, m_cConfigurations) );
+}
+
+const CInstance* CProject::GetInstance(const std::string& strName) const
+{
+    return dynamic_cast<const CInstance*>( FindSubitemByName(strName, m_cInstances) );
+}
+
 const CInstanceGroup& CProject::GetInstances() const
 {
     return m_cInstances;
@@ -92,7 +103,7 @@ bool CProject::OpenFile(const std::string& szOpenFileName)
             CERROR("failed parsing file %s", szOpenFileName.c_str());
         else
         {
-            bSuccess = PostDeserialize();
+            bSuccess = PostDeserialize(*this);
             if (bSuccess)
                 m_currentPath = szOpenFileName;
         }
@@ -135,9 +146,9 @@ bool CProject::Run(const std::string& strConfigName)
     m_pExecution.reset( new CProjectExecutionContext );
 
     // Find the configuration to execute
-    std::optional<cref_t> optFindCfg = FindSubitemByName(strConfigName);
+    const CConfiguration* pConfig = GetConfiguration(strConfigName);
 
-    if (!optFindCfg.has_value())
+    if (!pConfig)
     {
         CERROR("Configuration '%s' does not exist", strConfigName.c_str());
         bStatus = false;
@@ -145,7 +156,6 @@ bool CProject::Run(const std::string& strConfigName)
     else
     {
         bStatus = true;
-        const CConfiguration& rConfig = dynamic_cast<const CConfiguration&>(optFindCfg.value().get());
 
         // Execute each instance in the project
         vec_ref_t vInstances = m_cInstances.SubItems();
@@ -154,7 +164,7 @@ bool CProject::Run(const std::string& strConfigName)
             const CInstance& rInstance = dynamic_cast<const CInstance&>(it->get());
 
             // Create one execution context for each instance
-            m_pExecution->m_contexts.emplace_back( *this, rInstance, rConfig );
+            m_pExecution->m_contexts.emplace_back( *this, rInstance, *pConfig );
             bStatus = Execute(m_pExecution->m_contexts.back());
 
             if (!bStatus)

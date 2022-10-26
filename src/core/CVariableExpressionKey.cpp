@@ -1,6 +1,7 @@
 #include "core/CVariableExpressionKey.h"
 #include "core/CConfiguration.h"
 #include "core/CInstance.h"
+#include "core/CProject.h"
 #include "util/Log.h"
 
 DEFINE_SERIALIZATION_SCHEME(CVariableExpressionKey,
@@ -66,26 +67,31 @@ bool CVariableExpressionKey::PreSerialize()
     return bValid;
 }
 
-bool CVariableExpressionKey::PostDeserialize()
+bool CVariableExpressionKey::PostDeserialize(CProject& rProject)
 {
-    bool bResult = false;
+    bool bResult = true;
 
-    const CConfiguration* const pConfig = CConfiguration::FindByName(m_strConfiguration);
+    const CConfiguration* const pConfig = rProject.GetConfiguration(m_strConfiguration);
 
     if (!pConfig)
+    {
+        bResult = false;
         CERROR("Cannot find configuration named '%s'", m_strConfiguration.c_str());
+    }
     else
     {
         m_gIdConfiguration = pConfig->GetID();
+    }
 
-        const CInstance* const pInst = CInstance::FindByName(m_strInstance);
-        if (!pInst)
-            CERROR("Cannot find instance named '%s'", m_strInstance.c_str());
-        else
-        {
-            m_gIdInstance = pInst->GetID();
-            bResult = true;
-        }
+    const CInstance* const pInst = rProject.GetInstance(m_strInstance);
+    if (!pInst)
+    {
+        bResult = false;
+        CERROR("Cannot find instance named '%s'", m_strInstance.c_str());
+    }
+    else
+    {
+        m_gIdInstance = pInst->GetID();
     }
 
     return bResult;

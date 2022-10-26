@@ -5,14 +5,14 @@
 #include "CStoredNameItem.h"
 #include "CStoredDescriptionItem.h"
 #include "CStoredItemCollection.h"
-#include "core/IFindByName.h"
+#include "util/ITracked.h"
 
 //! @brief A named set of settings that are chosen together
 class CConfiguration : public IProjTreeItem
     , public CStoredNameItem
     , public CStoredDescriptionItem
     , public CStoredItemCollection
-    , public IFindByName<CConfiguration>
+    , public ITracked<CConfiguration>
 {
 protected:
     //! @copydoc IProjTreeItem::DocumentName

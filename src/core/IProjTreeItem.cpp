@@ -1,13 +1,13 @@
 #include "core/IProjTreeItem.h"
 #include "util/Log.h"
 
-bool IProjTreeItem::PostDeserialize()
+bool IProjTreeItem::PostDeserialize(CProject& rProject)
 {
     bool bStatus = true;
 
     const vec_ref_t& vSubItems = SubItems();
     for (const ref_t& rItem : vSubItems)
-        bStatus = bStatus && rItem.get().PostDeserialize();
+        bStatus = bStatus && rItem.get().PostDeserialize(rProject);
 
     return bStatus;
 }
@@ -23,27 +23,22 @@ bool IProjTreeItem::PreSerialize()
     return bStatus;
 }
 
-/*static*/ std::optional<IProjTreeItem::cref_t> IProjTreeItem::FindSubitemByName(const std::string strFindName, const IProjTreeItem& rParent)
+/*static*/ const IProjTreeItem* IProjTreeItem::FindSubitemByName(const std::string strFindName, const IProjTreeItem& rParent)
 {
-    std::optional<IProjTreeItem::cref_t> optFound;
+    const IProjTreeItem* pFound = nullptr;
 
     if (strFindName == rParent.GetName())
-        optFound = rParent;
+        pFound = &rParent;
     else
     {
         using vec_cref_t = ITreeItemCollection::vec_cref_t;
         vec_cref_t vSubitems = rParent.SubItems();
 
-        for (vec_cref_t::const_iterator it = vSubitems.cbegin(); (!optFound.has_value()) && (it != vSubitems.cend()); ++it)
-            optFound = FindSubitemByName(strFindName, it->get());
+        for (vec_cref_t::const_iterator it = vSubitems.cbegin(); (!pFound) && (it != vSubitems.cend()); ++it)
+            pFound = FindSubitemByName(strFindName, it->get());
     }
 
-    return optFound;
-}
-
-std::optional<IProjTreeItem::cref_t> IProjTreeItem::FindSubitemByName(const std::string strFindName) const
-{
-    return FindSubitemByName(strFindName, *this);
+    return pFound;
 }
 
 bool IProjTreeItem::DocumentName(IDocExporter& rExporter) const

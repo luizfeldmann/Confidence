@@ -51,7 +51,7 @@ public:
     bool Compare(const CConfiguration& rConfig, const CInstance& rInst) const;
 
     //! @copydoc ISerializationNotify::PostDeserialize
-    bool PostDeserialize() override;
+    bool PostDeserialize(CProject& rProject) override;
 
     //! @copydoc ISerializationNotify::PreSerialize
     bool PreSerialize() override;

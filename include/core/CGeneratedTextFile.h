@@ -58,7 +58,7 @@ public:
     void SetGenerator(IFileGenerator* pNewGenerator);
 
     //! @copydoc ISerializationNotify::PostDeserialize
-    bool PostDeserialize() override;
+    bool PostDeserialize(CProject& rProject) override;
 
     //! @copydoc ISerializationNotify::PreSerialize
     bool PreSerialize() override;

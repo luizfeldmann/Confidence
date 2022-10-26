@@ -64,8 +64,16 @@ public:
     //! @brief Gets a reference to the project's configurations
     const CConfigurationGroup& GetConfigurations() const;
 
+    //! @brief Finds a configuration with the provided name
+    //! @param[in] strName Name of the configuration to search
+    const CConfiguration* GetConfiguration(const std::string& strName) const;
+
     //! @brief Gets a reference to the project's instances
     const CInstanceGroup& GetInstances() const;
+
+    //! @brief Finds an instance with the provided name
+    //! @param[in] strName Name of the instance to search
+    const CInstance* GetInstance(const std::string& strName) const;
 
     //! @brief Executes the project using a provided configuration
     //! @return True if success

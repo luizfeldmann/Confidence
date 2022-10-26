@@ -37,12 +37,12 @@ ETreeItemType CVariable::GetType() const
     return EVariable;
 }
 
-bool CVariable::PostDeserialize()
+bool CVariable::PostDeserialize(CProject& rProject)
 {
     bool bSuccess = true;
 
     for (CVariableExpressionKey& rKey : m_vRules)
-        bSuccess = bSuccess && rKey.PostDeserialize();
+        bSuccess = bSuccess && rKey.PostDeserialize(rProject);
 
     return bSuccess;
 }

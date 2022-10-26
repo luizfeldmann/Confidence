@@ -7,7 +7,6 @@
 #include "ISerializationNotify.h"
 #include "docs/IDocumentable.h"
 #include "core/IExecutable.h"
-#include <optional>
 
 #pragma warning(disable: 4250)
 
@@ -28,10 +27,7 @@ private:
 
 protected:
     //! @brief Returns a reference to a subitem with a given name, if it exists
-    static std::optional<cref_t> FindSubitemByName(const std::string strFindName, const IProjTreeItem& rParent);
-
-    //! @copydoc FindSubitemByName
-    std::optional<cref_t> FindSubitemByName(const std::string strFindName) const;
+    static const IProjTreeItem* FindSubitemByName(const std::string strFindName, const IProjTreeItem& rParent);
 
     //! @brief Documents the name of the item using the given category prefix
     virtual bool DocumentName(IDocExporter& rExporter, const std::string& strPrefix) const;
@@ -69,7 +65,7 @@ public:
     virtual ETreeItemType GetType() const = 0;
 
     //! @copydoc ISerializationNotify::PostDeserialize
-    bool PostDeserialize() override;
+    bool PostDeserialize(CProject& rProject) override;
 
     //! @copydoc ISerializationNotify::PreSerialize
     bool PreSerialize() override;

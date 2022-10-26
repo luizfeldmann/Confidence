@@ -5,14 +5,14 @@
 #include "CStoredNameItem.h"
 #include "CStoredDescriptionItem.h"
 #include "CNoChildren.h"
-#include "core/IFindByName.h"
+#include "util/ITracked.h"
 
 //! @brief Represents an instance of each entity from the configuration
 class CInstance : public IProjTreeItem
     , public CStoredNameItem
     , public CStoredDescriptionItem
     , public CNoChildren
-    , public IFindByName<CInstance>
+    , public ITracked<CInstance>
 {
 protected:
     //! @copydoc IProjTreeItem::DocumentName
