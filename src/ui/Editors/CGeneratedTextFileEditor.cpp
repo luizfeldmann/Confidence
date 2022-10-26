@@ -284,15 +284,15 @@ void CGeneratedTextFileEditorUI::onOpenEditor(wxCommandEvent& event)
 
 /* CGeneratedTextFileEditor */
 
-CGeneratedTextFileEditor::CGeneratedTextFileEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
-    : CNameDescEditor(rNotebook, rItem)
+CGeneratedTextFileEditor::CGeneratedTextFileEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+    : CNameDescEditor(rMainWindow, rItem)
     , m_pUiTextFile(new CGeneratedTextFileEditorUI(m_pPanel, dynamic_cast<CGeneratedTextFile&>(rItem)))
 {
     m_pSizer->Add(m_pUiTextFile, 1, wxEXPAND, 5);
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CGeneratedTextFileEditor::Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
+ITreeItemEditor* CGeneratedTextFileEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CGeneratedTextFileEditor(rNotebook, rItem);
+    return new CGeneratedTextFileEditor(rMainWindow, rItem);
 }

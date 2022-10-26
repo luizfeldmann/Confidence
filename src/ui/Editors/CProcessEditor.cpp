@@ -193,15 +193,15 @@ void CRunProcessEditorUI::onReturnCodeText(wxCommandEvent& event)
 }
 
 /* CRunProcessEditor */
-CRunProcessEditor::CRunProcessEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
-    : CNameDescEditor(rNotebook, rItem)
+CRunProcessEditor::CRunProcessEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+    : CNameDescEditor(rMainWindow, rItem)
     , m_pUiProc(new CRunProcessEditorUI(m_pPanel, dynamic_cast<CRunProcess&>(rItem)))
 {
     m_pSizer->Add(m_pUiProc, 1, wxEXPAND, 5);
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CRunProcessEditor::Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
+ITreeItemEditor* CRunProcessEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CRunProcessEditor(rNotebook, rItem);
+    return new CRunProcessEditor(rMainWindow, rItem);
 }

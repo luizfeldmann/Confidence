@@ -7,7 +7,7 @@
 class CTreeItemEditorManager : public wxEvtHandler, public INotifyItemOperation
 {
 public:
-    CTreeItemEditorManager(wxAuiNotebook& rNotebook);
+    CTreeItemEditorManager(CMainWindow& rMainWindow);
     ~CTreeItemEditorManager();
 
     //! @brief Creates a tab for the item, or focuses it if already exists
@@ -27,8 +27,8 @@ public:
     void Clear();
 
 protected:
-    //! The tabbed control on the GUI
-    wxAuiNotebook& m_rNotebook;
+    //! The main GUI window
+    CMainWindow& m_rMainWindow;
 
     using PtrEditor = std::unique_ptr<ITreeItemEditor>;
     using VecPtrEditor = std::vector<PtrEditor>;

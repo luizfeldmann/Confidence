@@ -115,8 +115,8 @@ public:
 /// Model logic
 /// =======================================================
 
-CTreeBrowserModel::CTreeBrowserModel(IProjTreeItem& rRootItem)
-    : m_rRootItem(rRootItem)
+CTreeBrowserModel::CTreeBrowserModel(std::weak_ptr<const IProjTreeItem> pNewRoot)
+    : m_pRootItem(pNewRoot)
 {
     m_mapColumns[ETreeBrowserColumn::IconAndName] = std::make_unique<CNameModelColumnHandler>(*this);
     m_mapColumns[ETreeBrowserColumn::Description] = std::make_unique<CDescriptionModelColumnHandler>(*this);
@@ -149,9 +149,18 @@ const IModelColumnHandler* CTreeBrowserModel::GetColumnInfo(unsigned int nModelC
     return pInfo;
 }
 
+void CTreeBrowserModel::SetRoot(std::weak_ptr<const IProjTreeItem> pNewRoot)
+{
+    m_pRootItem = pNewRoot;
+    Cleared();
+}
+
 const IProjTreeItem& CTreeBrowserModel::GetRootItem() const
 {
-    return m_rRootItem;
+    std::shared_ptr<const IProjTreeItem> pRoot = m_pRootItem.lock();
+    assert(pRoot && "Tree model has no root item");
+
+    return *pRoot.get();
 }
 
 /// =======================================================

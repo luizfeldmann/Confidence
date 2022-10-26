@@ -14,9 +14,9 @@ protected:
     //! The variable being edited
     CVariable& m_rVar;
 
-    //! Reference to the project
+    //! Pointer to the project
     //! This is required to query for all instances and configurations
-    const CProject& m_rProj;
+    std::weak_ptr<const CProject> m_pProj;
 
     //! The data view control using this model
     wxDataViewCtrl* const m_pCtrl;
@@ -28,7 +28,7 @@ protected:
     const IProjTreeItem& GetRootItem() const override;
 
 public:
-    CVariableTableModel(CVariable& rVar, const CProject& rProj, wxDataViewCtrl* pCtrl);
+    CVariableTableModel(CVariable& rVar, std::shared_ptr<const CProject> pProj, wxDataViewCtrl* pCtrl);
     ~CVariableTableModel();
 
     //! @brief Deletes the expression in the provided cell

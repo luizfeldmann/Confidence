@@ -20,10 +20,10 @@ protected:
     CGroupEditorUI* const m_pUiGroup;
 
 public:
-    CGroupEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    CGroupEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @brief Returns a new instance of this class
-    static ITreeItemEditor* Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    static ITreeItemEditor* Create(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 };
 
 #endif

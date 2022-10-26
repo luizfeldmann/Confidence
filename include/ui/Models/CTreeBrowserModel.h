@@ -16,8 +16,8 @@ wxDECLARE_EVENT(EVT_TREE_ITEM_RENAME, wxCommandEvent);
 class CTreeBrowserModel : public wxEvtHandler, public CBaseModel, public CBaseTreeItemModel
 {
 protected:
-    //! Reference to the project whose tree is shown/edited
-    IProjTreeItem& m_rRootItem;
+    //! Pointer to the project whose tree is shown/edited
+    std::weak_ptr<const IProjTreeItem> m_pRootItem;
 
     //! @brief Defines the columns shown in the tree browser
     enum class ETreeBrowserColumn
@@ -43,10 +43,12 @@ protected:
 
 public:
     //! @brief Creates a model reflecting the tree structure of a project item
-    //! @param[in] rRootItem The root item of the tree view
-    CTreeBrowserModel(IProjTreeItem& rRootItem);
+    CTreeBrowserModel(std::weak_ptr<const IProjTreeItem> pNewRoot);
 
     ~CTreeBrowserModel();
+
+    //! @brief Changes the root item of the tree model and reload the tree
+    void SetRoot(std::weak_ptr<const IProjTreeItem> pNewRoot);
 
     //! @brief Removes the currently selected item from the tree and takes it's ownership
     //! @param[in] rItem The item to remove from the collection

@@ -51,10 +51,10 @@ protected:
     CGeneratedTextFileEditorUI* const m_pUiTextFile;
 
 public:
-    CGeneratedTextFileEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    CGeneratedTextFileEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @brief Returns a new instance of this class
-    static ITreeItemEditor* Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    static ITreeItemEditor* Create(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 };
 
 #endif

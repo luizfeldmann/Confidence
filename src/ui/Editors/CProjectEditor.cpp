@@ -65,15 +65,15 @@ void CProjectEditorUI::onToolDeleteDoc(wxCommandEvent& event)
 }
 
 /* CProjectEditor */
-CProjectEditor::CProjectEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
-    : CNameDescEditor(rNotebook, rItem)
+CProjectEditor::CProjectEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+    : CNameDescEditor(rMainWindow, rItem)
     , m_pUiProj(new CProjectEditorUI(m_pPanel, dynamic_cast<CProject&>(rItem)))
 {
     m_pSizer->Add(m_pUiProj, 1, wxEXPAND, 5);
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CProjectEditor::Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
+ITreeItemEditor* CProjectEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CProjectEditor(rNotebook, rItem);
+    return new CProjectEditor(rMainWindow, rItem);
 }

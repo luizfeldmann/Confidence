@@ -39,10 +39,10 @@ protected:
     CProjectEditorUI* const m_pUiProj;
 
 public:
-    CProjectEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    CProjectEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @brief Returns a new instance of this class
-    static ITreeItemEditor* Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    static ITreeItemEditor* Create(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 };
 
 #endif

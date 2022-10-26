@@ -49,10 +49,10 @@ protected:
     CRunProcessEditorUI* const m_pUiProc;
 
 public:
-    CRunProcessEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    CRunProcessEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @brief Returns a new instance of this class
-    static ITreeItemEditor* Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    static ITreeItemEditor* Create(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 };
 
 #endif

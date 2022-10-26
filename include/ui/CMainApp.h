@@ -1,8 +1,6 @@
 #ifndef _CMAINAPP_H_
 #define _CMAINAPP_H_
 
-#include "core/CProject.h"
-
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
@@ -21,8 +19,8 @@ public:
     CMainApp();
     virtual bool OnInit();
 
-    //! Stores the current working project of the application
-    static CProject m_cWorkingProject;
+    //! The path to the project to be opened when the editor launches
+    static std::string m_strOpenProjectFileName;
 };
 
 wxDECLARE_APP(CMainApp);

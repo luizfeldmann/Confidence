@@ -6,15 +6,15 @@ CGroupEditorUI::CGroupEditorUI(wxWindow* pParent)
 
 }
 
-CGroupEditor::CGroupEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
-    : CNameDescEditor(rNotebook, rItem)
+CGroupEditor::CGroupEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+    : CNameDescEditor(rMainWindow, rItem)
     , m_pUiGroup(new CGroupEditorUI(m_pPanel))
 {
     m_pSizer->Add(m_pUiGroup, 0, wxEXPAND, 5);
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CGroupEditor::Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
+ITreeItemEditor* CGroupEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CGroupEditor(rNotebook, rItem);
+    return new CGroupEditor(rMainWindow, rItem);
 }

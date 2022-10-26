@@ -107,9 +107,9 @@ static void SetCellStatus(ECellStatus eStatus, wxDataViewIconText& rCell, const 
     rCell.SetIcon(rStyle.cIcon);
 }
 
-CVariableTableModel::CVariableTableModel(CVariable& rVar, const CProject& rProj, wxDataViewCtrl* pCtrl)
+CVariableTableModel::CVariableTableModel(CVariable& rVar, std::shared_ptr<const CProject> pProj, wxDataViewCtrl* pCtrl)
     : m_rVar(rVar)
-    , m_rProj(rProj)
+    , m_pProj(pProj)
     , m_pCtrl(pCtrl)
 {
     ReloadColumns();
@@ -122,7 +122,10 @@ CVariableTableModel::~CVariableTableModel()
 
 const IProjTreeItem& CVariableTableModel::GetRootItem() const
 {
-    return m_rProj.GetConfigurations();
+    std::shared_ptr<const CProject> pProj = m_pProj.lock();
+    assert(pProj);
+
+    return pProj->GetConfigurations();
 }
 
 void CVariableTableModel::OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent)
@@ -180,7 +183,10 @@ void CVariableTableModel::ReloadColumns()
     pColConfig->SetTitle(rHeaderInfo.m_strTypeName);
 
     // Create one column for each instance
-    const CInstanceGroup& rInstances = m_rProj.GetInstances();
+    std::shared_ptr<const CProject> pProj = m_pProj.lock();
+    assert(pProj);
+
+    const CInstanceGroup& rInstances = pProj->GetInstances();
     const ITreeItemCollection::vec_cref_t vSubItems = rInstances.SubItems();
 
     unsigned int nModelColumn = (unsigned int)EVariableColumns::InstanceFirst;

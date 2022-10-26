@@ -66,17 +66,17 @@ void CNameDescEditorUI::onChangedDesc(wxCommandEvent& event)
     }
 }
 
-CNameDescEditor::CNameDescEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
-    : ITreeItemEditor(rNotebook, rItem)
+CNameDescEditor::CNameDescEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+    : ITreeItemEditor(rMainWindow, rItem)
     , m_pUiNameDesc( new CNameDescEditorUI(m_pPanel, *this) )
 {
     m_pSizer->Add(m_pUiNameDesc, 0, wxEXPAND, 5);
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CNameDescEditor::Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
+ITreeItemEditor* CNameDescEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CNameDescEditor(rNotebook, rItem);
+    return new CNameDescEditor(rMainWindow, rItem);
 }
 
 void CNameDescEditor::OnAnyItemRenamed(const IProjTreeItem& rChanged)

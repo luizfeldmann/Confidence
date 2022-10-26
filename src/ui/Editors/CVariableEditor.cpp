@@ -2,10 +2,10 @@
 #include "ui/CMainApp.h"
 #include <array>
 
-CVariableEditorUI::CVariableEditorUI(wxWindow* pParent, CVariable& rVar)
+CVariableEditorUI::CVariableEditorUI(wxWindow* pParent, std::shared_ptr<const CProject> pProject, CVariable& rVar)
     : IVariableEditor(pParent)
     , m_rVar(rVar)
-    , m_pModel(new CVariableTableModel(rVar, CMainApp::m_cWorkingProject, m_dataView))
+    , m_pModel(new CVariableTableModel(rVar, pProject, m_dataView))
 {
     m_dataView->AssociateModel(m_pModel);
     m_pModel->DecRef();
@@ -49,17 +49,17 @@ void CVariableEditorUI::onToolExportEnv(wxCommandEvent& event)
     m_rVar.m_bExportToEnvironment = m_toolExportEnv->IsToggled();
 }
 
-CVariableEditor::CVariableEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
-    : CNameDescEditor(rNotebook, rItem)
-    , m_pUiVar(new CVariableEditorUI(m_pPanel, dynamic_cast<CVariable&>(rItem)))
+CVariableEditor::CVariableEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+    : CNameDescEditor(rMainWindow, rItem)
+    , m_pUiVar(new CVariableEditorUI(m_pPanel, GetProject(), dynamic_cast<CVariable&>(rItem)))
 {
     m_pSizer->Add(m_pUiVar, 1, wxEXPAND, 5);
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CVariableEditor::Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
+ITreeItemEditor* CVariableEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CVariableEditor(rNotebook, rItem);
+    return new CVariableEditor(rMainWindow, rItem);
 }
 
 void CVariableEditor::OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent)

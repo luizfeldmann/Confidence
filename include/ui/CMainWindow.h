@@ -13,14 +13,17 @@ class CMainWindow : public IMainWindow
 {
 public:
 	//! @brief Creates an application window editing the provided project
-	//! @param[in] rProject Reference to the working project
-    CMainWindow(CProject& rProject);
+	//! @param[in] pProject Pointer to the working project
+    CMainWindow(std::shared_ptr<CProject> pProject);
 
     ~CMainWindow();
 
+	//! @brief Gets a pointer to the project being edited
+	std::shared_ptr<const CProject> GetProject() const;
+
 protected:
-	//! Reference to the project being edited
-	CProject& m_rProject;
+	//! Holds the project being edited
+	std::shared_ptr<CProject> m_pProject;
 
 	//! Model managing the project editor tree
 	CTreeBrowserModel* const m_pTreeModel;

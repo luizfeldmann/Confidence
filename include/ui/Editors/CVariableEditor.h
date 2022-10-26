@@ -21,7 +21,7 @@ protected:
     wxAcceleratorTable m_cAccTbl;
 
 public:
-    CVariableEditorUI(wxWindow* pParent, CVariable& rVar);
+    CVariableEditorUI(wxWindow* pParent, std::shared_ptr<const CProject> pProject, CVariable& rVar);
 
     //! @copydoc INotifyItemOperation::OnItemCreated
     void OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent) override;
@@ -44,7 +44,7 @@ protected:
     CVariableEditorUI* const m_pUiVar;
 
 public:
-    CVariableEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    CVariableEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @copydoc INotifyItemOperation::OnItemCreated
     void OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent) override;
@@ -56,7 +56,7 @@ public:
     void OnAnyItemRenamed(const IProjTreeItem& rChanged) override;
 
     //! @brief Returns a new instance of this class
-    static ITreeItemEditor* Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    static ITreeItemEditor* Create(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 };
 
 #endif

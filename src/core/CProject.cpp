@@ -52,9 +52,20 @@ CProject::~CProject()
 
 }
 
-CProject::CProject(CProject&&) noexcept = default;
+/* static */ std::shared_ptr<CProject> CProject::Create()
+{
+    return std::shared_ptr<CProject>(new CProject);
+}
 
-CProject& CProject::operator=(CProject&&) noexcept = default;
+/* static */ std::shared_ptr<CProject> CProject::Create(const std::string& szOpenFileName)
+{
+    std::shared_ptr<CProject> pProject = Create();
+
+    if (pProject && !pProject->OpenFile(szOpenFileName))
+        pProject.reset();
+
+    return pProject;
+}
 
 const CConfigurationGroup& CProject::GetConfigurations() const
 {

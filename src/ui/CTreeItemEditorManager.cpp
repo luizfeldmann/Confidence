@@ -1,15 +1,18 @@
 #include "ui/CTreeItemEditorManager.h"
 #include "ui/STreeItemTypeInfo.h"
+#include "ui/CMainWindow.h"
 
-CTreeItemEditorManager::CTreeItemEditorManager(wxAuiNotebook& rNotebook)
-    : m_rNotebook(rNotebook)
+CTreeItemEditorManager::CTreeItemEditorManager(CMainWindow& rMainWindow)
+    : m_rMainWindow(rMainWindow)
 {
-    m_rNotebook.Bind(wxEVT_AUINOTEBOOK_PAGE_CLOSE, &CTreeItemEditorManager::OnPageClose, this);
+    assert(m_rMainWindow.m_notebookEditor);
+    m_rMainWindow.m_notebookEditor->Bind(wxEVT_AUINOTEBOOK_PAGE_CLOSE, &CTreeItemEditorManager::OnPageClose, this);
 }
 
 CTreeItemEditorManager::~CTreeItemEditorManager()
 {
-    m_rNotebook.Unbind(wxEVT_AUINOTEBOOK_PAGE_CLOSE, &CTreeItemEditorManager::OnPageClose, this);
+    assert(m_rMainWindow.m_notebookEditor);
+    m_rMainWindow.m_notebookEditor->Unbind(wxEVT_AUINOTEBOOK_PAGE_CLOSE, &CTreeItemEditorManager::OnPageClose, this);
 }
 
 CTreeItemEditorManager::VecPtrEditor::iterator CTreeItemEditorManager::FindEditor(IProjTreeItem& rItemFind)
@@ -45,7 +48,7 @@ void CTreeItemEditorManager::ActivateItem(IProjTreeItem& pEditItem)
         const STreeItemTypeInfo& rInfo = STreeItemTypeInfo::GetInfo(pEditItem.GetType());
         
         if (rInfo.m_fnNewEditor)
-            m_vEditors.emplace_back( rInfo.m_fnNewEditor( m_rNotebook, pEditItem) );
+            m_vEditors.emplace_back( rInfo.m_fnNewEditor( m_rMainWindow, pEditItem) );
     }
     else
     {
@@ -85,8 +88,10 @@ void CTreeItemEditorManager::OnItemCreated(const IProjTreeItem& pEditItem, const
 
 void CTreeItemEditorManager::OnPageClose(wxAuiNotebookEvent& event)
 {
+    assert(m_rMainWindow.m_notebookEditor);
+
     const int iPageIndex = event.GetSelection();
-    wxWindow* const pPage = m_rNotebook.GetPage(iPageIndex);
+    wxWindow* const pPage = m_rMainWindow.m_notebookEditor->GetPage(iPageIndex);
 
     VecPtrEditor::iterator itFoundEditor = FindEditor(pPage);
     if (m_vEditors.end() != itFoundEditor)

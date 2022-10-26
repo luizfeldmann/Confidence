@@ -9,11 +9,11 @@
 
 const static wxString g_szProjectFileFilter = "Confidence projects (*.cfx)|*.cfx";
 
-CMainWindow::CMainWindow(CProject& rProject)
+CMainWindow::CMainWindow(std::shared_ptr<CProject> pProject)
     : IMainWindow(nullptr)
-    , m_rProject(rProject)
-    , m_pTreeModel( new CTreeBrowserModel(m_rProject) )
-    , m_editorManager(*m_notebookEditor)
+    , m_pProject(pProject)
+    , m_pTreeModel( new CTreeBrowserModel(m_pProject) )
+    , m_editorManager(*this)
 {
     // Let the logger know we are using GUI
     CLog::m_bShowMessageBox = true;
@@ -62,13 +62,18 @@ CMainWindow::~CMainWindow()
     CLog::m_bShowMessageBox = false;
 }
 
+std::shared_ptr<const CProject> CMainWindow::GetProject() const
+{
+    return m_pProject;
+}
+
 /// =======================================================
 /// Top toolbar
 /// =======================================================
 
 void CMainWindow::onBtnNewProject(wxCommandEvent& event)
 {
-    m_rProject = std::move( CProject() );
+    m_pProject = CProject::Create();
     ReloadProject();
 }
 
@@ -80,41 +85,49 @@ void CMainWindow::onBtnOpenProject(wxCommandEvent& event)
     if (wxID_CANCEL == openFileDialog.ShowModal())
         return;
 
-    CProject openProj;
-    if (openProj.OpenFile(openFileDialog.GetPath().ToStdString()))
+    const std::string strOpenPath = openFileDialog.GetPath().ToStdString();
+    std::shared_ptr<CProject> pOpenProj = CProject::Create(strOpenPath);
+
+    if (pOpenProj)
     {
-        m_rProject = std::move( openProj );
+        m_pProject = pOpenProj;
         ReloadProject();
     }
 }
 
 void CMainWindow::onBtnSaveProject(wxCommandEvent& event)
 {
-    const std::string& szCurrentPath = m_rProject.GetCurrentPath();
+    assert(m_pProject);
+
+    const std::string& szCurrentPath = m_pProject->GetCurrentPath();
+
     if (szCurrentPath.empty())
     {
         onBtnSaveAsProject(event);
     }
     else
     {
-        m_rProject.SaveToFile(szCurrentPath);
+        m_pProject->SaveToFile(szCurrentPath);
     }
 }
 
 void CMainWindow::onBtnSaveAsProject(wxCommandEvent& event)
 {
+    assert(m_pProject);
+
     wxFileDialog saveFileDialog(this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString,
         g_szProjectFileFilter, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
     if (wxID_CANCEL == saveFileDialog.ShowModal())
         return;
 
-    m_rProject.SaveToFile(saveFileDialog.GetPath().ToStdString());
+    m_pProject->SaveToFile(saveFileDialog.GetPath().ToStdString());
 }
 
 void CMainWindow::onBtnDocumentation(wxCommandEvent& event)
 {
-    m_rProject.ExportDocumentation();
+    assert(m_pProject);
+    m_pProject->ExportDocumentation();
 }
 
 static size_t RunMenuAddConfigurations(wxMenu& rMenu, const IProjTreeItem& rParent)
@@ -131,10 +144,12 @@ static size_t RunMenuAddConfigurations(wxMenu& rMenu, const IProjTreeItem& rPare
 
 void CMainWindow::onBtnRunProject(wxCommandEvent& event)
 {
+    assert(m_pProject);
+
     wxMenu menu;
     menu.Connect(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CMainWindow::onBtnRunSelected), NULL, this);
 
-    RunMenuAddConfigurations(menu, m_rProject.GetConfigurations());
+    RunMenuAddConfigurations(menu, m_pProject->GetConfigurations());
 
     PopupMenu(&menu);
 }
@@ -161,14 +176,18 @@ void CMainWindow::onBtnRunSelected(wxCommandEvent& event)
 
             // Run the process
             const wxString strSelectedItem = (*itSelected)->GetItemLabelText();
-            bool bStatus = m_rProject.Run(strSelectedItem.ToStdString());
+
+            assert(m_pProject);
+            bool bStatus = m_pProject->Run(strSelectedItem.ToStdString());
         }
     }
 }
 
 void CMainWindow::onBtnStopProject(wxCommandEvent& event)
 {
-    m_rProject.Stop();
+    assert(m_pProject);
+
+    m_pProject->Stop();
     SetRunMode(false);
 }
 
@@ -365,8 +384,5 @@ void CMainWindow::ReloadProject()
     m_editorManager.Clear();
 
     // Update tree: delete and re-add the project
-    wxDataViewItem root = CBaseTreeItemModel::GetViewItem(nullptr);
-    wxDataViewItem project = CBaseTreeItemModel::GetViewItem(&m_rProject);
-    m_pTreeModel->ItemDeleted(root, project);
-    m_pTreeModel->ItemAdded(root, project);
+    m_pTreeModel->SetRoot(m_pProject);
 }

@@ -1,22 +1,25 @@
 #include "ui/Editors/ITreeItemEditor.h"
 #include "ui/STreeItemTypeInfo.h"
+#include "ui/CMainWindow.h"
 
-ITreeItemEditor::ITreeItemEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem)
-    : m_rNotebook(rNotebook)
+ITreeItemEditor::ITreeItemEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+    : m_rMainWindow(rMainWindow)
     , m_rItem(rItem)
-    , m_pPanel( new wxPanel(&m_rNotebook) )
+    , m_pPanel( new wxPanel(m_rMainWindow.m_notebookEditor) )
     , m_pSizer( new wxBoxSizer(wxVERTICAL) )
 {
     m_pPanel->SetSizer(m_pSizer);
 
     const wxIcon& rIcon = STreeItemTypeInfo::GetIcon(m_rItem.GetType());
-    m_rNotebook.AddPage(m_pPanel, m_rItem.GetName(), true, rIcon);
+    GetNotebook().AddPage(m_pPanel, m_rItem.GetName(), true, rIcon);
 }
 
 ITreeItemEditor::~ITreeItemEditor()
 {
-    const int iPageIndex = m_rNotebook.FindPage(m_pPanel);
-    m_rNotebook.DeletePage(iPageIndex);
+    wxAuiNotebook& rNotebook = GetNotebook();
+
+    const int iPageIndex = rNotebook.FindPage(m_pPanel);
+    rNotebook.DeletePage(iPageIndex);
 }
 
 IProjTreeItem& ITreeItemEditor::GetItem()
@@ -31,7 +34,13 @@ wxPanel* ITreeItemEditor::GetPage()
 
 wxAuiNotebook& ITreeItemEditor::GetNotebook()
 {
-    return m_rNotebook;
+    assert(m_rMainWindow.m_notebookEditor);
+    return *m_rMainWindow.m_notebookEditor;
+}
+
+std::shared_ptr<const CProject> ITreeItemEditor::GetProject()
+{
+    return m_rMainWindow.GetProject();
 }
 
 void ITreeItemEditor::OnAnyItemRenamed(const IProjTreeItem& rChanged)
@@ -39,13 +48,17 @@ void ITreeItemEditor::OnAnyItemRenamed(const IProjTreeItem& rChanged)
     // If the changed item is associated to this tab, then reload the title
     if (&m_rItem == &rChanged)
     {
-        const int iPageIndex = m_rNotebook.FindPage(m_pPanel);
-        m_rNotebook.SetPageText(iPageIndex, m_rItem.GetName());
+        wxAuiNotebook& rNotebook = GetNotebook();
+
+        const int iPageIndex = rNotebook.FindPage(m_pPanel);
+        rNotebook.SetPageText(iPageIndex, m_rItem.GetName());
     }
 }
 
 void ITreeItemEditor::Reactivate()
 {
-    const int iPageIndex = m_rNotebook.FindPage(m_pPanel);
-    m_rNotebook.SetSelection(iPageIndex);
+    wxAuiNotebook& rNotebook = GetNotebook();
+
+    const int iPageIndex = rNotebook.FindPage(m_pPanel);
+    rNotebook.SetSelection(iPageIndex);
 }

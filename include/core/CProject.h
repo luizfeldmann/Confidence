@@ -14,12 +14,12 @@ class CProject : public IProjTreeItem
                , public CStoredItemCollection
                , public IIdentifiable
 {
+private:
+    CProject(const CProject&) = delete;
+    CProject& operator=(const CProject&) = delete;
+
 public:
-    //! @brief Creates a new, empty project
-    CProject();
     ~CProject();
-    CProject(CProject&&) noexcept;
-    CProject& operator=(CProject&&) noexcept;
     /********************************/
     /* OVERRIDES FROM IProjTreeItem */
     /********************************/
@@ -40,6 +40,13 @@ public:
     /************/
     /* CProject */
     /************/
+
+    //! @brief Creates a new empty project
+    static std::shared_ptr<CProject> Create();
+
+    //! @brief Creates a new instance by opening a project file
+    //! @param[in] szOpenFileName Path to the file to be opened 
+    static std::shared_ptr<CProject> Create(const std::string& szOpenFileName);
 
     //! @brief Opens a project from a file
     //! @param[in] szOpenFileName Path to the file to be opened
@@ -84,6 +91,10 @@ protected:
     /************/
     /* CProject */
     /************/
+
+    //! @brief Creates a new, empty project
+    CProject();
+    FACTORY_FRIEND();
 
     //! Stores most recent open/save path to the project file, if any
     std::string m_currentPath;

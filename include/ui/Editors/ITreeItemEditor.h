@@ -6,6 +6,9 @@
 #include "core/IProjTreeItem.h"
 #include "core/INotifyItemOperation.h"
 
+class CMainWindow;
+class CProject;
+
 //! @brief Custom content of the editor tab opened for a specific project tree item
 class ITreeItemEditor : public INotifyItemOperation
 {
@@ -14,8 +17,8 @@ private:
     ITreeItemEditor& operator=(const ITreeItemEditor&) = delete;    //! Non copy-assignable
 
 protected:
-    //! Reference to the tabbed notebook where the editor is displayed
-    wxAuiNotebook& m_rNotebook;
+    //! Reference to the main editor window
+    CMainWindow& m_rMainWindow;
 
     //! Reference to the item being edited
     IProjTreeItem& m_rItem;
@@ -27,17 +30,20 @@ protected:
     wxSizer* const m_pSizer;
 
 public:
-    ITreeItemEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    ITreeItemEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
     virtual ~ITreeItemEditor();
 
     ITreeItemEditor(ITreeItemEditor&&) = default;
     ITreeItemEditor& operator=(ITreeItemEditor&&) = default;
 
     //! Prototype callback used to create a new editor for the provided item
-    using fnFactory_t = std::function<ITreeItemEditor* (wxAuiNotebook&, IProjTreeItem&)>;
+    using fnFactory_t = std::function<ITreeItemEditor* (CMainWindow&, IProjTreeItem&)>;
 
     //! @brief Gets the item being edited
     IProjTreeItem& GetItem();
+
+    //! @brief Get project being editted
+    std::shared_ptr<const CProject> GetProject();
 
     //! @brief Gets the notebook tabbed control that contains this editor
     wxAuiNotebook& GetNotebook();

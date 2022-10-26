@@ -39,10 +39,10 @@ protected:
     CNameDescEditorUI* const m_pUiNameDesc;
 
 public:
-    CNameDescEditor(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    CNameDescEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @brief Returns a new instance of this class
-    static ITreeItemEditor* Create(wxAuiNotebook& rNotebook, IProjTreeItem& rItem);
+    static ITreeItemEditor* Create(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @copydoc INotifyItemOperation::ItemChanged
     void OnAnyItemRenamed(const IProjTreeItem& rChanged) override;
