@@ -37,11 +37,10 @@ unsigned int CBaseTreeItemModel::GetChildren(const wxDataViewItem& parent, wxDat
         const IProjTreeItem* pParent = GetPointer(parent);
         assert(nullptr != pParent);
 
-        ITreeItemCollection::vec_cref_t vSubitems = pParent->SubItems();
-        for (const ITreeItemCollection::cref_t& rChild : vSubitems)
+        ITreeItemCollection::vec_cptr_t vSubitems = pParent->SubItems();
+        for (const ITreeItemCollection::cptr_t& pChild : vSubitems)
         {
-            const IProjTreeItem* pChild = &rChild.get();
-            wxDataViewItem cChild = GetViewItem(pChild);
+            wxDataViewItem cChild = GetViewItem(pChild.get());
             array.push_back(cChild);
             uiCount++;
 

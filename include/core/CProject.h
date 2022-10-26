@@ -32,10 +32,10 @@ public:
     /**************************************/
 
     //! @copydoc ITreeItemCollection::SubItems
-    vec_ref_t SubItems() override;
+    vec_ptr_t SubItems() override;
 
     //! @copydoc ITreeItemCollection::SubItems
-    vec_cref_t SubItems() const override;
+    vec_cptr_t SubItems() const override;
 
     /************/
     /* CProject */
@@ -62,14 +62,14 @@ public:
     const std::string& GetCurrentPath() const;
 
     //! @brief Gets a reference to the project's configurations
-    const CConfigurationGroup& GetConfigurations() const;
+    std::shared_ptr<const CConfiguration> GetConfigurations() const;
 
     //! @brief Finds a configuration with the provided name
     //! @param[in] strName Name of the configuration to search
     const CConfiguration* GetConfiguration(const std::string& strName) const;
 
     //! @brief Gets a reference to the project's instances
-    const CInstanceGroup& GetInstances() const;
+    std::shared_ptr<const CInstanceGroup> GetInstances() const;
 
     //! @brief Finds an instance with the provided name
     //! @param[in] strName Name of the instance to search
@@ -114,10 +114,10 @@ protected:
     vec_exporters_t m_vExportDocumentation;
 
     //! Group of all configurations supported by the project
-    CConfigurationGroup m_cConfigurations;
+    std::shared_ptr<CConfigurationGroup> m_pConfigurations;
 
     //! Group of all instances on this project
-    CInstanceGroup m_cInstances;
+    std::shared_ptr<CInstanceGroup> m_pInstances;
 
     //! Stores the current state of execution
     std::unique_ptr<CProjectExecutionContext> m_pExecution;

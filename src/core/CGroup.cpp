@@ -16,9 +16,9 @@ CGroup::CGroup()
 
 }
 
-IProjTreeItem* CGroup::Create()
+IProjTreeItem::ptr_t CGroup::Create()
 {
-    return new CGroup();
+    return ptr_t(new CGroup());
 }
 
 CGroup::~CGroup()

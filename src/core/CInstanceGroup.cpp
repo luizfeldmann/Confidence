@@ -21,6 +21,11 @@ CInstanceGroup::~CInstanceGroup()
 
 }
 
+/* static */ std::shared_ptr<CInstanceGroup> CInstanceGroup::Create()
+{
+    return std::shared_ptr<CInstanceGroup>(new CInstanceGroup);
+}
+
 ETreeItemType CInstanceGroup::GetType() const
 {
     return EInstGroup;

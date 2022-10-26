@@ -18,11 +18,11 @@ CExecutionContext::CExecutionContext(const CProject& rProj, const CInstance& rIn
 
 void CExecutionContext::MapParents(const IProjTreeItem& rParent)
 {
-    IProjTreeItem::vec_cref_t vSubitems = rParent.SubItems();
-    for (const IProjTreeItem::cref_t& rItem : vSubitems)
+    IProjTreeItem::vec_cptr_t vSubitems = rParent.SubItems();
+    for (const IProjTreeItem::cptr_t& rItem : vSubitems)
     {
-        m_mParents[&rItem.get()] = &rParent;
-        MapParents(rItem.get());
+        m_mParents[rItem.get()] = &rParent;
+        MapParents(*rItem);
     }
 }
 

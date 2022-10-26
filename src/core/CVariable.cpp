@@ -22,9 +22,9 @@ CVariable::CVariable()
 
 }
 
-IProjTreeItem* CVariable::Create()
+IProjTreeItem::ptr_t CVariable::Create()
 {
-    return new CVariable();
+    return ptr_t(new CVariable);
 }
 
 CVariable::~CVariable()

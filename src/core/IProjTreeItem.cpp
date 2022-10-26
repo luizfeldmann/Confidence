@@ -5,9 +5,9 @@ bool IProjTreeItem::PostDeserialize(CProject& rProject)
 {
     bool bStatus = true;
 
-    const vec_ref_t& vSubItems = SubItems();
-    for (const ref_t& rItem : vSubItems)
-        bStatus = bStatus && rItem.get().PostDeserialize(rProject);
+    const vec_ptr_t& vSubItems = SubItems();
+    for (const ptr_t& pItem : vSubItems)
+        bStatus = bStatus && pItem && pItem->PostDeserialize(rProject);
 
     return bStatus;
 }
@@ -16,9 +16,9 @@ bool IProjTreeItem::PreSerialize()
 {
     bool bStatus = true;
 
-    const vec_ref_t& vSubItems = SubItems();
-    for (const ref_t& rItem : vSubItems)
-        bStatus = bStatus && rItem.get().PreSerialize();
+    const vec_ptr_t& vSubItems = SubItems();
+    for (const ptr_t& pItem : vSubItems)
+        bStatus = bStatus && pItem && pItem->PreSerialize();
 
     return bStatus;
 }
@@ -31,11 +31,14 @@ bool IProjTreeItem::PreSerialize()
         pFound = &rParent;
     else
     {
-        using vec_cref_t = ITreeItemCollection::vec_cref_t;
-        vec_cref_t vSubitems = rParent.SubItems();
+        vec_cptr_t vSubitems = rParent.SubItems();
 
-        for (vec_cref_t::const_iterator it = vSubitems.cbegin(); (!pFound) && (it != vSubitems.cend()); ++it)
-            pFound = FindSubitemByName(strFindName, it->get());
+        for (const cptr_t& pItem : vSubitems)
+        {
+            pFound = FindSubitemByName(strFindName, *pItem);
+            if (pFound)
+                break;
+        }
     }
 
     return pFound;
@@ -81,14 +84,14 @@ bool IProjTreeItem::DocumentCustom(IDocExporter& rExporter) const
 bool IProjTreeItem::DocumentChildren(IDocExporter& rExporter) const
 {
     bool bStatus = true;
-    vec_cref_t vSubitems = SubItems();
+    vec_cptr_t vSubitems = SubItems();
 
     if (!vSubitems.empty())
     {
         rExporter.IncrementHeading();
 
-        for (const cref_t& rSubitem : vSubitems)
-            bStatus = bStatus && rSubitem.get().Document(rExporter);
+        for (const cptr_t& pSubitem : vSubitems)
+            bStatus = bStatus && pSubitem && pSubitem->Document(rExporter);
 
         rExporter.DecrementHeading();
     }
@@ -114,11 +117,11 @@ void IProjTreeItem::LogExecution() const
 
 bool IProjTreeItem::ExecuteChildren(CExecutionContext& rContext) const
 {
-    vec_cref_t vSubitems = SubItems();
+    vec_cptr_t vSubitems = SubItems();
 
     bool bStatus = true;
-    for (cref_t rItem : vSubitems)
-        bStatus = bStatus && rItem.get().Execute(rContext);
+    for (const cptr_t& pItem : vSubitems)
+        bStatus = bStatus && pItem && pItem->Execute(rContext);
 
     return bStatus;
 }

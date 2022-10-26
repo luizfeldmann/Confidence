@@ -26,9 +26,9 @@ CRunProcess::~CRunProcess()
 
 }
 
-IProjTreeItem* CRunProcess::Create()
+IProjTreeItem::ptr_t CRunProcess::Create()
 {
-    return new CRunProcess;
+    return ptr_t(new CRunProcess);
 }
 
 ETreeItemType CRunProcess::GetType() const

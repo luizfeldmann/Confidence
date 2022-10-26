@@ -9,13 +9,17 @@
 #include "CProcessArgument.h"
 #include "IProcessPolicy.h"
 
-//! @brief Stores a constant or an expression
+//! @brief Starts a new process and optionally waits for output
 class CRunProcess   : public IProjTreeItem
                     , public CStoredNameItem
                     , public CStoredDescriptionItem
                     , public CNoChildren
 {
 protected:
+    //! @brief Creates a new, empty process
+    CRunProcess();
+    FACTORY_FRIEND();
+
     //! @copydoc IProjTreeItem::DocumentName
     bool DocumentName(IDocExporter& rExporter) const override;
 
@@ -23,9 +27,6 @@ protected:
     bool DocumentCustom(IDocExporter& rExporter) const override;
 
 public:
-    //! @brief Starts a new process and optionally waits for output
-    CRunProcess();
-
     ~CRunProcess();
 
     //! @brief If the process should start as admin
@@ -35,7 +36,7 @@ public:
     EProcessStartWindowMode m_eStartMode;
 
     //! @brief Returns a new instance of this class
-    static IProjTreeItem* Create();
+    static IProjTreeItem::ptr_t Create();
 
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;

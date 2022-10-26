@@ -125,7 +125,7 @@ const IProjTreeItem& CVariableTableModel::GetRootItem() const
     std::shared_ptr<const CProject> pProj = m_pProj.lock();
     assert(pProj);
 
-    return pProj->GetConfigurations();
+    return *pProj->GetConfigurations();
 }
 
 void CVariableTableModel::OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent)
@@ -186,14 +186,14 @@ void CVariableTableModel::ReloadColumns()
     std::shared_ptr<const CProject> pProj = m_pProj.lock();
     assert(pProj);
 
-    const CInstanceGroup& rInstances = pProj->GetInstances();
-    const ITreeItemCollection::vec_cref_t vSubItems = rInstances.SubItems();
+    const ITreeItemCollection::vec_cptr_t vSubItems = pProj->GetInstances()->SubItems();
 
     unsigned int nModelColumn = (unsigned int)EVariableColumns::InstanceFirst;
-    for (const ITreeItemCollection::cref_t& rItem : vSubItems)
+    for (const ITreeItemCollection::cptr_t& pItem : vSubItems)
     {
-        assert(ETreeItemType::EInstance == rItem.get().GetType());
-        const CInstance& rInst = dynamic_cast<const CInstance&>(rItem.get());
+        assert(pItem && ETreeItemType::EInstance == pItem->GetType());
+
+        const CInstance& rInst = dynamic_cast<const CInstance&>(*pItem);
 
         m_pCtrl->AppendColumn( new CInstanceColumn(rInst, nModelColumn++) );
     }

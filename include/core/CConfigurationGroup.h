@@ -6,16 +6,16 @@
 //! @brief The "root" configuration from which all other configurations descend
 class CConfigurationGroup : public CConfiguration
 {
-public:
+protected:
     //! @brief Creates a new, empty configuration group
     CConfigurationGroup();
+    FACTORY_FRIEND();
+
+public:
     ~CConfigurationGroup();
 
-    //! @brief Default move-constructor
-    CConfigurationGroup(CConfigurationGroup&&) = default;
-
-    //! @brief Default move-assignment operator
-    CConfigurationGroup& operator=(CConfigurationGroup&&) = default;
+    //! @brief Instantiates a new item
+    static std::shared_ptr<CConfigurationGroup> Create();
 
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;

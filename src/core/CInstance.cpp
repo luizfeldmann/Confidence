@@ -16,9 +16,9 @@ CInstance::CInstance()
 
 }
 
-IProjTreeItem* CInstance::Create()
+IProjTreeItem::ptr_t CInstance::Create()
 {
-    return new CInstance();
+    return ptr_t(new CInstance);
 }
 
 CInstance::~CInstance()

@@ -12,16 +12,16 @@ class CInstanceGroup : public IProjTreeItem
     , public CStoredDescriptionItem
     , public CStoredItemCollection
 {
-public:
+protected:
     //! @brief Creates a new, empty instances-group
     CInstanceGroup();
+    FACTORY_FRIEND();
+
+public:
     ~CInstanceGroup();
 
-    //! @brief Default move-constructor
-    CInstanceGroup(CInstanceGroup&&) = default;
-
-    //! @brief Default move-assignment operator
-    CInstanceGroup& operator=(CInstanceGroup&&) = default;
+    //! @brief Instantiates a new item
+    static std::shared_ptr<CInstanceGroup> Create();
 
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;

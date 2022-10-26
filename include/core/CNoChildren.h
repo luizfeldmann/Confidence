@@ -10,16 +10,16 @@ public:
     using ITreeItemCollection::ITreeItemCollection;
 
     //! @copydoc ITreeItemCollection::SubItems
-    vec_ref_t SubItems() override;
+    vec_ptr_t SubItems() override;
 
     //! @copydoc ITreeItemCollection::SubItems
-    vec_cref_t SubItems() const override;
+    vec_cptr_t SubItems() const override;
 
     //! @copydoc ITreeItemCollection::TakeItem
     ptr_t TakeItem(const IProjTreeItem& rItem) override;
 
     //! @copydoc ITreeItemCollection::AddItem
-    bool AddItem(IProjTreeItem* pNewItem) override;
+    bool AddItem(ptr_t pNewItem) override;
 
     //! @copydoc ITreeItemCollection::SwapItems
     bool SwapItems(const IProjTreeItem& rA, const IProjTreeItem& rB) override;

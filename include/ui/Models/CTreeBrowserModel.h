@@ -62,7 +62,7 @@ public:
 
     //! @brief Inserts a new item into the parent node
     //! @return True if success - the parent object takes ownership of the pointer \p pInsertItem
-    bool InsertItem(const wxDataViewItem& rParent, IProjTreeItem* pInsertItem);
+    bool InsertItem(const wxDataViewItem& rParent, IProjTreeItem::ptr_t pInsertItem);
 
     /* wxDataViewModel overrides */
     unsigned int GetColumnCount() const wxOVERRIDE;

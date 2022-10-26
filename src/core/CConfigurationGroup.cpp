@@ -17,6 +17,11 @@ CConfigurationGroup::~CConfigurationGroup()
 
 }
 
+/* static */ std::shared_ptr<CConfigurationGroup> CConfigurationGroup::Create()
+{
+    return std::shared_ptr<CConfigurationGroup>(new CConfigurationGroup);
+}
+
 ETreeItemType CConfigurationGroup::GetType() const
 {
     return EConfGroup;

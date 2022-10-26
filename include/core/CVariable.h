@@ -21,6 +21,10 @@ protected:
 
     SERIALIZATION_FRIEND(CVariable);
 
+    //! @brief Creates a new, empty variable
+    CVariable();
+    FACTORY_FRIEND();
+
     //! @copydoc IProjTreeItem::DocumentName
     bool DocumentName(IDocExporter& rExporter) const override;
 
@@ -28,9 +32,6 @@ protected:
     bool DocumentCustom(IDocExporter& rExporter) const override;
 
 public:
-    //! @brief Creates a new, empty variable
-    CVariable();
-
     ~CVariable();
 
     //! If true, the variable is exported to the system environment when evaluated
@@ -49,7 +50,7 @@ public:
     const IExpression* GetRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance) const;
 
     //! @brief Returns a new instance of this class
-    static IProjTreeItem* Create();
+    static IProjTreeItem::ptr_t Create();
 
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;

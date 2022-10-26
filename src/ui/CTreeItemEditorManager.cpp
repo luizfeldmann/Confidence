@@ -59,8 +59,8 @@ void CTreeItemEditorManager::ActivateItem(IProjTreeItem& pEditItem)
 void CTreeItemEditorManager::OnAnyItemErased(const IProjTreeItem& pEditItem)
 {
     // Close editors of child items
-    for (IProjTreeItem::cref_t& rChild : pEditItem.SubItems())
-        OnAnyItemErased(rChild.get());
+    for (IProjTreeItem::cptr_t& rChild : pEditItem.SubItems())
+        OnAnyItemErased(*rChild);
 
     // Notify all editors the item has been erased
     for (const PtrEditor& pEditor : m_vEditors)

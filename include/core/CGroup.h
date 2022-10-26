@@ -13,16 +13,18 @@ class CGroup : public IProjTreeItem
              , public CStoredItemCollection
 {
 protected:
+    //! @brief Creates a new, empty group
+    CGroup();
+    FACTORY_FRIEND();
+
     //! @copydoc IProjTreeItem::DocumentName
     bool DocumentName(IDocExporter& rExporter) const override;
 
 public:
-    //! @brief Creates a new, empty group
-    CGroup();
     ~CGroup();
 
     //! @brief Returns a new instance of this class
-    static IProjTreeItem* Create();
+    static IProjTreeItem::ptr_t Create();
 
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;

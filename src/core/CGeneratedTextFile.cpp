@@ -19,9 +19,9 @@ CGeneratedTextFile::CGeneratedTextFile()
 
 }
 
-IProjTreeItem* CGeneratedTextFile::Create()
+IProjTreeItem::ptr_t CGeneratedTextFile::Create()
 {
-    return new CGeneratedTextFile();
+    return ptr_t(new CGeneratedTextFile);
 }
 
 CGeneratedTextFile::~CGeneratedTextFile()

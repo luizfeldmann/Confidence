@@ -238,16 +238,16 @@ bool CTreeBrowserModel::MoveItem(const wxDataViewItem& rItem, bool bUp)
     else
     {
         // Find the iterator to this item inside it's parent vector
-        IProjTreeItem::vec_ref_t& vSubitems = pParent->SubItems();
+        IProjTreeItem::vec_ptr_t& vSubitems = pParent->SubItems();
 
-        IProjTreeItem::vec_ref_t::iterator iterChild = std::find_if(vSubitems.begin(), vSubitems.end(),
-            [pChild](const IProjTreeItem::ref_t pSearch)->bool {
-                return (&pSearch.get() == pChild);
+        IProjTreeItem::vec_ptr_t::iterator iterChild = std::find_if(vSubitems.begin(), vSubitems.end(),
+            [pChild](const IProjTreeItem::ptr_t& pSearch)->bool {
+                return (pSearch.get() == pChild);
             });
 
         assert(vSubitems.cend() != iterChild);
 
-        IProjTreeItem::vec_ref_t::iterator iterSwap;
+        IProjTreeItem::vec_ptr_t::iterator iterSwap;
         if (bUp)
         {
             iterSwap = (vSubitems.begin() == iterChild)
@@ -263,7 +263,7 @@ bool CTreeBrowserModel::MoveItem(const wxDataViewItem& rItem, bool bUp)
                 iterSwap = vSubitems.begin();
         }
 
-        if (pParent->SwapItems(*iterSwap, *iterChild))
+        if (pParent->SwapItems(**iterSwap, **iterChild))
         {
             ItemDeleted(cParent, rItem);
             ItemAdded(cParent, rItem);
@@ -275,7 +275,7 @@ bool CTreeBrowserModel::MoveItem(const wxDataViewItem& rItem, bool bUp)
     return bSuccess;
 }
 
-bool CTreeBrowserModel::InsertItem(const wxDataViewItem& rParent, IProjTreeItem* pInsertItem)
+bool CTreeBrowserModel::InsertItem(const wxDataViewItem& rParent, IProjTreeItem::ptr_t pInsertItem)
 {
     bool bSuccess = false;
 
@@ -302,7 +302,7 @@ bool CTreeBrowserModel::InsertItem(const wxDataViewItem& rParent, IProjTreeItem*
         }
         else if (pParent->AddItem(pInsertItem))
         {
-            ItemAdded(rParent, GetViewItem(pInsertItem));
+            ItemAdded(rParent, GetViewItem(pInsertItem.get()));
             bSuccess = true;
         }
         else

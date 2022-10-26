@@ -26,9 +26,9 @@ CConfiguration::CConfiguration(const std::string& strName, const std::string& st
 
 }
 
-IProjTreeItem* CConfiguration::Create()
+IProjTreeItem::ptr_t CConfiguration::Create()
 {
-    return new CConfiguration();
+    return ptr_t(new CConfiguration);
 }
 
 CConfiguration::~CConfiguration()

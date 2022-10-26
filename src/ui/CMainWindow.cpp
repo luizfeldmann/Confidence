@@ -130,14 +130,16 @@ void CMainWindow::onBtnDocumentation(wxCommandEvent& event)
     m_pProject->ExportDocumentation();
 }
 
-static size_t RunMenuAddConfigurations(wxMenu& rMenu, const IProjTreeItem& rParent)
+static size_t RunMenuAddConfigurations(wxMenu& rMenu, const IProjTreeItem::cptr_t& pParent)
 {
+    assert(pParent);
+
     size_t nCount = 1;
-    wxMenuItem* pNewItem = rMenu.Append(wxID_ANY, rParent.GetName());
+    wxMenuItem* pNewItem = rMenu.Append(wxID_ANY, pParent->GetName());
     
-    ITreeItemCollection::vec_cref_t vSubitems = rParent.SubItems();
-    for (const ITreeItemCollection::cref_t& rSub : vSubitems)
-        nCount += RunMenuAddConfigurations(rMenu, rSub.get());
+    ITreeItemCollection::vec_cptr_t vSubitems = pParent->SubItems();
+    for (const ITreeItemCollection::cptr_t& pSub : vSubitems)
+        nCount += RunMenuAddConfigurations(rMenu, pSub);
 
     return nCount;
 }
@@ -252,12 +254,12 @@ void CMainWindow::onBtnNewItemMenu(wxCommandEvent& evt)
     assert((nullptr != rInfo.m_fnFactory) && "New item type does not have a factory function");
 
     // Create new child and add to collection
-    IProjTreeItem* pNewChild = rInfo.m_fnFactory();
-    assert((nullptr != pNewChild) && "Factory failed to create instance of new item");
+    IProjTreeItem::ptr_t pNewChild = rInfo.m_fnFactory();
+    assert(pNewChild && "Factory failed to create instance of new item");
 
     if (pSelected->AddItem(pNewChild))
     {
-        wxDataViewItem newItem = CBaseTreeItemModel::GetViewItem(pNewChild);
+        wxDataViewItem newItem = CBaseTreeItemModel::GetViewItem(pNewChild.get());
 
         m_pTreeModel->ItemAdded(cSelected, newItem);
 
@@ -268,9 +270,6 @@ void CMainWindow::onBtnNewItemMenu(wxCommandEvent& evt)
     }
     else
     {
-        delete pNewChild;
-        pNewChild = nullptr;
-
         wxScopedCharBuffer wxTypeName = rInfo.m_strTypeName.utf8_str();
         CERROR("Failed adding item '%s' to collection", wxTypeName.data());
     }
@@ -354,7 +353,7 @@ void CMainWindow::onBtnItemPaste(wxCommandEvent& event)
     {
         const wxDataViewItem parentItem = m_dataViewCtrlBrowser->GetSelection();
 
-        if (m_pTreeModel->InsertItem(parentItem, m_pCutClipboard.get()))
+        if (m_pTreeModel->InsertItem(parentItem, m_pCutClipboard))
         {
             wxDataViewItem pasteItem( CBaseTreeItemModel::GetViewItem(m_pCutClipboard.get()) );
 
@@ -363,7 +362,7 @@ void CMainWindow::onBtnItemPaste(wxCommandEvent& event)
 
             m_editorManager.OnItemCreated(*m_pCutClipboard, *CTreeBrowserModel::GetPointer(parentItem));
 
-            m_pCutClipboard.release();
+            m_pCutClipboard = nullptr;
         }
     }
 }

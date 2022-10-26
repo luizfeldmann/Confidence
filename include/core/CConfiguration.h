@@ -15,12 +15,14 @@ class CConfiguration : public IProjTreeItem
     , public ITracked<CConfiguration>
 {
 protected:
+    //! @brief Creates a new, empty configuration
+    CConfiguration();
+    FACTORY_FRIEND();
+
     //! @copydoc IProjTreeItem::DocumentName
     bool DocumentName(IDocExporter& rExporter) const override;
 
 public:
-    //! @brief Creates a new, empty configuration
-    CConfiguration();
     ~CConfiguration();
 
     //! @brief Creates a new configuration with the provided name and description
@@ -35,7 +37,7 @@ public:
     CConfiguration& operator=(CConfiguration&&) = default;
 
     //! @brief Returns a new instance of this class
-    static IProjTreeItem* Create();
+    static IProjTreeItem::ptr_t Create();
 
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;

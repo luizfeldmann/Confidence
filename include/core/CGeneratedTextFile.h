@@ -26,6 +26,10 @@ protected:
 
     SERIALIZATION_FRIEND(CGeneratedTextFile);
 
+    //! @brief Creates a new, empty text file
+    CGeneratedTextFile();
+    FACTORY_FRIEND();
+
     //! @copydoc IProjTreeItem::DocumentName
     bool DocumentName(IDocExporter& rExporter) const override;
 
@@ -33,12 +37,10 @@ protected:
     bool DocumentCustom(IDocExporter& rExporter) const override;
 
 public:
-    //! @brief Creates a new, empty group
-    CGeneratedTextFile();
     ~CGeneratedTextFile();
 
     //! @brief Returns a new instance of this class
-    static IProjTreeItem* Create();
+    static IProjTreeItem::ptr_t Create();
 
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;

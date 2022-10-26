@@ -1,15 +1,15 @@
 #include "core/CNoChildren.h"
 #include "core/IProjTreeItem.h"
 
-CNoChildren::vec_ref_t CNoChildren::SubItems()
+CNoChildren::vec_ptr_t CNoChildren::SubItems()
 {
-    vec_ref_t vEmpty;
+    vec_ptr_t vEmpty;
     return vEmpty;
 }
 
-CNoChildren::vec_cref_t CNoChildren::SubItems() const
+CNoChildren::vec_cptr_t CNoChildren::SubItems() const
 {
-    vec_cref_t vEmpty;
+    vec_cptr_t vEmpty;
     return vEmpty;
 }
 
@@ -19,7 +19,7 @@ CNoChildren::ptr_t CNoChildren::TakeItem(const IProjTreeItem& rItem)
     return pEmpty;
 }
 
-bool CNoChildren::AddItem(IProjTreeItem* pNewItem)
+bool CNoChildren::AddItem(ptr_t pNewItem)
 {
     return false;
 }

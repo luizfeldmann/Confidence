@@ -1,5 +1,6 @@
 #include "core/CStoredItemCollection.h"
 #include "core/IProjTreeItem.h"
+#include <algorithm>
 
 DEFINE_SERIALIZATION_SCHEME(CStoredItemCollection,
     SERIALIZATION_MEMBER(m_vItems)
@@ -21,24 +22,14 @@ CStoredItemCollection::vstore_t::iterator CStoredItemCollection::find(const IPro
     return it;
 }
 
-CStoredItemCollection::vec_ref_t CStoredItemCollection::SubItems()
+CStoredItemCollection::vec_ptr_t CStoredItemCollection::SubItems()
 {
-    vec_ref_t vGetItems;
-    vGetItems.reserve(m_vItems.size());
-
-    for (ptr_t& pItem : m_vItems)
-        vGetItems.push_back( std::ref( *pItem ) );
-
-    return vGetItems;
+    return m_vItems;
 }
 
-CStoredItemCollection::vec_cref_t CStoredItemCollection::SubItems() const
+CStoredItemCollection::vec_cptr_t CStoredItemCollection::SubItems() const
 {
-    vec_cref_t vGetItems;
-    vGetItems.reserve(m_vItems.size());
-
-    for (const ptr_t& pItem : m_vItems)
-        vGetItems.push_back(std::cref(*pItem));
+    CStoredItemCollection::vec_cptr_t vGetItems(m_vItems.cbegin(), m_vItems.cend());
 
     return vGetItems;
 }
@@ -57,7 +48,7 @@ CStoredItemCollection::ptr_t CStoredItemCollection::TakeItem(const IProjTreeItem
     return pTakeItem;
 }
 
-bool CStoredItemCollection::AddItem(IProjTreeItem* pNewItem)
+bool CStoredItemCollection::AddItem(ptr_t pNewItem)
 {
     m_vItems.emplace_back(pNewItem);
     return true;

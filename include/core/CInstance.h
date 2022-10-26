@@ -15,17 +15,19 @@ class CInstance : public IProjTreeItem
     , public ITracked<CInstance>
 {
 protected:
+    //! @brief Creates a new, empty instance
+    CInstance();
+    FACTORY_FRIEND();
+
     //! @copydoc IProjTreeItem::DocumentName
     bool DocumentName(IDocExporter& rExporter) const;
 
 public:
-    //! @brief Creates a new, empty instance
-    CInstance();
 
     ~CInstance();
 
     //! @brief Returns a new instance of this class
-    static IProjTreeItem* Create();
+    static IProjTreeItem::ptr_t Create();
 
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;

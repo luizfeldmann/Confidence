@@ -1,6 +1,7 @@
 #include "core/CProject.h"
 #include "util/Log.h"
 #include <fstream>
+#include <cassert>
 #include "util/version.h"
 #include "core/CVariable.h"
 #include "core/CGroup.h"
@@ -14,8 +15,8 @@ DEFINE_SERIALIZATION_SCHEME(CProject,
     SERIALIZATION_INHERIT(IIdentifiable)
     SERIALIZATION_MEMBER(m_strAppVersion)
     SERIALIZATION_MEMBER(m_vExportDocumentation)
-    SERIALIZATION_MEMBER(m_cConfigurations)
-    SERIALIZATION_MEMBER(m_cInstances)
+    SERIALIZATION_MEMBER(m_pConfigurations)
+    SERIALIZATION_MEMBER(m_pInstances)
     SERIALIZATION_INHERIT(CStoredItemCollection)
 )
 
@@ -45,6 +46,8 @@ CProject::CProject()
     , CStoredDescriptionItem("<no project description>")
     , CStoredItemCollection(EGroup)
     , m_strAppVersion(Version::szVersion)
+    , m_pConfigurations(CConfigurationGroup::Create())
+    , m_pInstances(CInstanceGroup::Create())
 {
 }
 
@@ -68,24 +71,26 @@ CProject::~CProject()
     return pProject;
 }
 
-const CConfigurationGroup& CProject::GetConfigurations() const
+std::shared_ptr<const CConfiguration> CProject::GetConfigurations() const
 {
-    return m_cConfigurations;
+    assert(m_pConfigurations);
+    return m_pConfigurations;
 }
 
 const CConfiguration* CProject::GetConfiguration(const std::string& strName) const
 {
-    return dynamic_cast<const CConfiguration*>( FindSubitemByName(strName, m_cConfigurations) );
+    return dynamic_cast<const CConfiguration*>( FindSubitemByName(strName, *GetConfigurations() ) );
 }
 
 const CInstance* CProject::GetInstance(const std::string& strName) const
 {
-    return dynamic_cast<const CInstance*>( FindSubitemByName(strName, m_cInstances) );
+    return dynamic_cast<const CInstance*>( FindSubitemByName(strName, *GetInstances() ) );
 }
 
-const CInstanceGroup& CProject::GetInstances() const
+std::shared_ptr<const CInstanceGroup> CProject::GetInstances() const
 {
-    return m_cInstances;
+    assert(m_pInstances);
+    return m_pInstances;
 }
 
 bool CProject::OpenFile(const std::string& szOpenFileName)
@@ -158,19 +163,21 @@ bool CProject::Run(const std::string& strConfigName)
         bStatus = true;
 
         // Execute each instance in the project
-        vec_ref_t vInstances = m_cInstances.SubItems();
-        for (vec_ref_t::iterator it = vInstances.begin(); bStatus && (it != vInstances.end()); ++it)
+        vec_cptr_t vInstances = GetInstances()->SubItems();
+
+        for (const cptr_t& pInstance : vInstances)
         {
-            const CInstance& rInstance = dynamic_cast<const CInstance&>(it->get());
+            assert(pInstance);
 
             // Create one execution context for each instance
-            m_pExecution->m_contexts.emplace_back( *this, rInstance, *pConfig );
+            m_pExecution->m_contexts.emplace_back( *this, dynamic_cast<const CInstance&>(*pInstance), *pConfig );
             bStatus = Execute(m_pExecution->m_contexts.back());
 
             if (!bStatus)
             {
-                const std::string strInstName = rInstance.GetName();
+                const std::string strInstName = pInstance->GetName();
                 CERROR("The execution of instance '%s' failed", strInstName.c_str());
+                break;
             }
         }
     }
@@ -244,22 +251,22 @@ bool CProject::ExportDocumentation()
 
 /* OVERRIDES FROM ITreeItemCollection */
 
-CProject::vec_ref_t CProject::SubItems()
+CProject::vec_ptr_t CProject::SubItems()
 {
-    CProject::vec_ref_t vSubItems = CStoredItemCollection::SubItems();
+    CProject::vec_ptr_t vSubItems = CStoredItemCollection::SubItems();
 
-    vSubItems.emplace(vSubItems.begin(), std::ref(m_cInstances));
-    vSubItems.emplace(vSubItems.begin(), std::ref(m_cConfigurations));
+    vSubItems.emplace(vSubItems.begin(), m_pInstances);
+    vSubItems.emplace(vSubItems.begin(), m_pConfigurations);
 
     return vSubItems;
 }
 
-CProject::vec_cref_t CProject::SubItems() const
+CProject::vec_cptr_t CProject::SubItems() const
 {
-    CProject::vec_cref_t vSubItems = CStoredItemCollection::SubItems();
+    CProject::vec_cptr_t vSubItems = CStoredItemCollection::SubItems();
 
-    vSubItems.emplace(vSubItems.begin(), std::cref(m_cInstances));
-    vSubItems.emplace(vSubItems.begin(), std::cref(m_cConfigurations));
+    vSubItems.emplace(vSubItems.begin(), m_pInstances);
+    vSubItems.emplace(vSubItems.begin(), m_pConfigurations);
 
     return vSubItems;
 }
