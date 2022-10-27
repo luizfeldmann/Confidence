@@ -1,10 +1,14 @@
 #ifndef _CPROJECT_H_
 #define _CPROJECT_H_
 
-#include "util/CGuid.h"
-#include "core/CInstanceGroup.h"
-#include "core/CConfigurationGroup.h"
+#include "util/IIdentifiable.h"
+#include "IProjTreeItem.h"
+#include "CStoredNameItem.h"
+#include "CStoredDescriptionItem.h"
+#include "CStoredItemCollection.h"
 
+class CInstanceGroup;
+class CConfigurationGroup;
 class CProjectExecutionContext;
 
 //! @brief Top level item in the project tree / the main project document
@@ -66,21 +70,21 @@ public:
 
     //! @brief Finds a configuration with the provided name
     //! @param[in] strName Name of the configuration to search
-    const CConfiguration* GetConfiguration(const std::string& strName) const;
+    std::shared_ptr<const CConfiguration> GetConfiguration(const std::string& strName) const;
 
     //! @brief Gets a reference to the project's instances
     std::shared_ptr<const CInstanceGroup> GetInstances() const;
 
     //! @brief Finds an instance with the provided name
     //! @param[in] strName Name of the instance to search
-    const CInstance* GetInstance(const std::string& strName) const;
+    std::shared_ptr<const CInstance> GetInstance(const std::string& strName) const;
 
     //! @brief Executes the project using a provided configuration
     //! @return True if success
-    bool Run(const std::string& strConfigName);
+    bool Run(const std::string& strConfigName) const;
 
     //! @brief Stops the current execution, if any
-    void Stop();
+    void Stop() const;
 
     //! @copydoc IExecutable::Execute
     bool Execute(CExecutionContext&) const override;
@@ -93,7 +97,7 @@ public:
 
     //! @brief Generates the documentation associated to this project
     //! @return True if success
-    bool ExportDocumentation();
+    bool ExportDocumentation() const;
 
 protected:
     /************/
@@ -120,7 +124,7 @@ protected:
     std::shared_ptr<CInstanceGroup> m_pInstances;
 
     //! Stores the current state of execution
-    std::unique_ptr<CProjectExecutionContext> m_pExecution;
+    mutable std::unique_ptr<CProjectExecutionContext> m_pExecution;
 
     SERIALIZATION_FRIEND(CProject);
 

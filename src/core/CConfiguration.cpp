@@ -8,8 +8,6 @@ DEFINE_SERIALIZATION_SCHEME(CConfiguration,
 
 REGISTER_POLYMORPHIC_CLASS(CConfiguration);
 
-CConfiguration::ITracked::set_type CConfiguration::ITracked::m_trackSet;
-
 CConfiguration::CConfiguration()
     : CStoredNameItem("<new configuration>")
     , CStoredDescriptionItem("<no configuration description>")

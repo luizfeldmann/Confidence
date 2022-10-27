@@ -1,5 +1,6 @@
 #include "core/IProjTreeItem.h"
 #include "util/Log.h"
+#include <cassert>
 
 bool IProjTreeItem::PostDeserialize(CProject& rProject)
 {
@@ -23,19 +24,21 @@ bool IProjTreeItem::PreSerialize()
     return bStatus;
 }
 
-/*static*/ const IProjTreeItem* IProjTreeItem::FindSubitemByName(const std::string strFindName, const IProjTreeItem& rParent)
+/*static*/ IProjTreeItem::cptr_t IProjTreeItem::FindSubitemByName(const std::string strFindName, const cptr_t& pParent)
 {
-    const IProjTreeItem* pFound = nullptr;
+    assert(pParent);
 
-    if (strFindName == rParent.GetName())
-        pFound = &rParent;
+    cptr_t pFound;
+
+    if (strFindName == pParent->GetName())
+        pFound = pParent;
     else
     {
-        vec_cptr_t vSubitems = rParent.SubItems();
+        vec_cptr_t vSubitems = pParent->SubItems();
 
         for (const cptr_t& pItem : vSubitems)
         {
-            pFound = FindSubitemByName(strFindName, *pItem);
+            pFound = FindSubitemByName(strFindName, pItem);
             if (pFound)
                 break;
         }

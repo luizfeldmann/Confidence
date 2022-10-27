@@ -59,9 +59,9 @@ bool CVariable::PreSerialize()
     return true;
 }
 
-IExpression& CVariable::AddRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance)
+IExpression& CVariable::AddRule(std::weak_ptr<const CConfiguration> pKeyConfig, std::weak_ptr<const CInstance> pKeyInstance)
 {
-    m_vRules.emplace_back(rKeyConfig, rKeyInstance);
+    m_vRules.emplace_back(pKeyConfig, pKeyInstance);
     return m_vRules.back();
 }
 
@@ -84,12 +84,12 @@ bool CVariable::EraseRule(const IExpression* pExpr)
     return bSuccess;
 }
 
-IExpression* CVariable::GetRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance)
+IExpression* CVariable::GetRule(const CConfiguration* pKeyConfig, const CInstance* pKeyInstance)
 {
     IExpression* pFoundRule = nullptr;
 
     vec_rules_t::iterator itFind = std::find_if(m_vRules.begin(), m_vRules.end(), 
-        std::bind(&CVariableExpressionKey::Compare, std::placeholders::_1, std::ref(rKeyConfig), std::ref(rKeyInstance)));
+        std::bind(&CVariableExpressionKey::Compare, std::placeholders::_1, pKeyConfig, pKeyInstance));
 
     if (m_vRules.end() != itFind)
         pFoundRule = &*itFind;
@@ -97,12 +97,12 @@ IExpression* CVariable::GetRule(const CConfiguration& rKeyConfig, const CInstanc
     return pFoundRule;
 }
 
-const IExpression* CVariable::GetRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance) const
+const IExpression* CVariable::GetRule(const CConfiguration* pKeyConfig, const CInstance* pKeyInstance) const
 {
     const IExpression* pFoundRule = nullptr;
 
     vec_rules_t::const_iterator itFind = std::find_if(m_vRules.cbegin(), m_vRules.cend(),
-        std::bind(&CVariableExpressionKey::Compare, std::placeholders::_1, std::ref(rKeyConfig), std::ref(rKeyInstance)));
+        std::bind(&CVariableExpressionKey::Compare, std::placeholders::_1, pKeyConfig, pKeyInstance));
 
     if (m_vRules.cend() != itFind)
         pFoundRule = &*itFind;
@@ -121,6 +121,11 @@ bool CVariable::DocumentCustom(IDocExporter& rExporter) const
 
     for (vec_rules_t::const_iterator it = m_vRules.cbegin(); bStatus && (it != m_vRules.cend()); ++it)
     {
+        // Skip rules related to deleted configurations and / instances
+        // Those rules will be removed when the project is saved
+        if (!it->IsValid())
+            continue;
+
         bStatus = rExporter.Item()
             && it->Document(rExporter)
             && rExporter.PopStack();
@@ -139,16 +144,16 @@ bool CVariable::Execute(CExecutionContext& rContext) const
     const std::string strVarName = GetName();
 
     const IExpression* pExpression = nullptr;
-    const CConfiguration* pConfiguration = &rContext.m_rConfiguration;
-    
+    std::shared_ptr<const CConfiguration> pConfiguration = rContext.GetConfiguration();
+
     // Find the expression for the variable
     // Search in the current and the parent configurations (inheritance)
     do
     {
-        pExpression = GetRule(*pConfiguration, rContext.m_rInstance);
+        pExpression = GetRule(pConfiguration.get(), rContext.GetInstance().get());
 
         if (!pExpression)
-            pConfiguration = dynamic_cast<const CConfiguration*>(rContext.GetParent(*pConfiguration));
+            pConfiguration = std::dynamic_pointer_cast<const CConfiguration>( rContext.GetParent(pConfiguration.get()) );
 
     } while (pConfiguration && !pExpression);
 
@@ -157,7 +162,7 @@ bool CVariable::Execute(CExecutionContext& rContext) const
     else
     {
         // Alert user about applied inheritance
-        if (pConfiguration && pConfiguration != &rContext.m_rConfiguration)
+        if (pConfiguration && pConfiguration != rContext.GetConfiguration())
         {
             const std::string strCfgName = pConfiguration->GetName();
             CINFO("Variable '%s' inherits from configuration '%s'", strVarName.c_str(), strCfgName.c_str());

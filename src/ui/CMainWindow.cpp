@@ -5,6 +5,7 @@
 #include <wx/filedlg.h>
 #include <wx/menu.h>
 #include "core/CProject.h"
+#include "core/CConfiguration.h"
 #include <array>
 
 const static wxString g_szProjectFileFilter = "Confidence projects (*.cfx)|*.cfx";

@@ -6,7 +6,8 @@
 #include "core/CVariable.h"
 #include "core/CGroup.h"
 #include "core/CInstance.h"
-#include "core/CConfiguration.h"
+#include "core/CInstanceGroup.h"
+#include "core/CConfigurationGroup.h"
 #include "core/CExecutionContext.h"
 
 DEFINE_SERIALIZATION_SCHEME(CProject,
@@ -77,14 +78,14 @@ std::shared_ptr<const CConfiguration> CProject::GetConfigurations() const
     return m_pConfigurations;
 }
 
-const CConfiguration* CProject::GetConfiguration(const std::string& strName) const
+std::shared_ptr<const CConfiguration> CProject::GetConfiguration(const std::string& strName) const
 {
-    return dynamic_cast<const CConfiguration*>( FindSubitemByName(strName, *GetConfigurations() ) );
+    return std::dynamic_pointer_cast<const CConfiguration>( FindSubitemByName(strName, GetConfigurations() ) );
 }
 
-const CInstance* CProject::GetInstance(const std::string& strName) const
+std::shared_ptr<const CInstance> CProject::GetInstance(const std::string& strName) const
 {
-    return dynamic_cast<const CInstance*>( FindSubitemByName(strName, *GetInstances() ) );
+    return std::dynamic_pointer_cast<const CInstance>( FindSubitemByName(strName, GetInstances() ) );
 }
 
 std::shared_ptr<const CInstanceGroup> CProject::GetInstances() const
@@ -143,7 +144,7 @@ const std::string& CProject::GetCurrentPath() const
     return m_currentPath;
 }
 
-bool CProject::Run(const std::string& strConfigName)
+bool CProject::Run(const std::string& strConfigName) const
 {
     bool bStatus;
 
@@ -151,7 +152,7 @@ bool CProject::Run(const std::string& strConfigName)
     m_pExecution.reset( new CProjectExecutionContext );
 
     // Find the configuration to execute
-    const CConfiguration* pConfig = GetConfiguration(strConfigName);
+    std::shared_ptr<const CConfiguration> pConfig = GetConfiguration(strConfigName);
 
     if (!pConfig)
     {
@@ -165,17 +166,22 @@ bool CProject::Run(const std::string& strConfigName)
         // Execute each instance in the project
         vec_cptr_t vInstances = GetInstances()->SubItems();
 
-        for (const cptr_t& pInstance : vInstances)
+        for (const cptr_t& pInstanceItem : vInstances)
         {
-            assert(pInstance);
+            assert(pInstanceItem);
 
             // Create one execution context for each instance
-            m_pExecution->m_contexts.emplace_back( *this, dynamic_cast<const CInstance&>(*pInstance), *pConfig );
+            {
+                std::shared_ptr<const CProject> pProject = std::dynamic_pointer_cast<const CProject>(shared_from_this());
+                std::shared_ptr<const CInstance> pInstance = std::dynamic_pointer_cast<const CInstance>(pInstanceItem);
+
+                m_pExecution->m_contexts.emplace_back(pProject, pInstance, pConfig);
+            }
             bStatus = Execute(m_pExecution->m_contexts.back());
 
             if (!bStatus)
             {
-                const std::string strInstName = pInstance->GetName();
+                const std::string strInstName = pInstanceItem->GetName();
                 CERROR("The execution of instance '%s' failed", strInstName.c_str());
                 break;
             }
@@ -185,7 +191,7 @@ bool CProject::Run(const std::string& strConfigName)
     return bStatus;
 }
 
-void CProject::Stop()
+void CProject::Stop() const
 {
     m_pExecution.reset();
 }
@@ -195,11 +201,11 @@ CProject::vec_exporters_t& CProject::GetDocumentationExporters()
     return m_vExportDocumentation;
 }
 
-bool CProject::ExportDocumentation()
+bool CProject::ExportDocumentation() const
 {
     bool bGeneralStatus = true; //! Result of *all* the exporters
 
-    CExecutionContextBase cContext(*this);
+    CExecutionContextBase cContext( std::dynamic_pointer_cast<const CProject>(shared_from_this()) );
 
     for (const ptr_exporter_t& pExporter : m_vExportDocumentation)
     {
@@ -297,9 +303,9 @@ bool CProject::Execute(CExecutionContext& rContext) const
     #define PROJ_LOG_MSG_END \
         "========================================\r\n"
 
-    const std::string strNameProj = rContext.m_rProject.GetName();
-    const std::string strNameConf = rContext.m_rConfiguration.GetName();
-    const std::string strNameInst = rContext.m_rInstance.GetName();
+    const std::string strNameProj = rContext.GetProject()->GetName();
+    const std::string strNameConf = rContext.GetConfiguration()->GetName();
+    const std::string strNameInst = rContext.GetInstance()->GetName();
 
     CLOG(PROJ_LOG_MSG_START, strNameProj.c_str(), strNameConf.c_str(), strNameInst.c_str());
 

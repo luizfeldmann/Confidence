@@ -3,6 +3,7 @@
 #include "core/CInstance.h"
 #include "core/CProject.h"
 #include "util/Log.h"
+#include <cassert>
 
 DEFINE_SERIALIZATION_SCHEME(CVariableExpressionKey,
     SERIALIZATION_MEMBER(m_strConfiguration)
@@ -11,33 +12,41 @@ DEFINE_SERIALIZATION_SCHEME(CVariableExpressionKey,
 )
 
 CVariableExpressionKey::CVariableExpressionKey()
-    : m_gIdConfiguration(CGuid::Null())
-    , m_gIdInstance(CGuid::Null())
+    : m_pConfiguration()
+    , m_pInstance()
 {
 
 }
 
-CVariableExpressionKey::CVariableExpressionKey(const CConfiguration& rConfig, const CInstance& rInst)
-    : m_gIdConfiguration(rConfig.GetID())
-    , m_gIdInstance(rInst.GetID())
+CVariableExpressionKey::CVariableExpressionKey(const std::weak_ptr<const CConfiguration>& pConfig, const std::weak_ptr<const CInstance>& pInst)
+    : m_pConfiguration(pConfig)
+    , m_pInstance(pInst)
 {
 
 }
 
-const CConfiguration* CVariableExpressionKey::GetConfiguration() const
+std::shared_ptr<const CConfiguration> CVariableExpressionKey::GetConfiguration() const
 {
-    return CConfiguration::FindByID(m_gIdConfiguration);
+    return m_pConfiguration.lock();
 }
 
-const CInstance* CVariableExpressionKey::GetInstance() const
+std::shared_ptr<const CInstance> CVariableExpressionKey::GetInstance() const
 {
-    return CInstance::FindByID(m_gIdInstance);
+    return m_pInstance.lock();
 }
 
-bool CVariableExpressionKey::Compare(const CConfiguration& rConfig, const CInstance& rInst) const
+bool CVariableExpressionKey::Compare(const CConfiguration* pConfig, const CInstance* pInst) const
 {
-    return (rConfig.GetID() == m_gIdConfiguration)
-        && (rInst.GetID() == m_gIdInstance);
+    return (pConfig == GetConfiguration().get())
+        && (pInst == GetInstance().get());
+}
+
+bool CVariableExpressionKey::IsValid() const
+{
+    bool bStatus = GetConfiguration()
+        && GetInstance();
+
+    return bStatus;
 }
 
 bool CVariableExpressionKey::PreSerialize()
@@ -45,7 +54,7 @@ bool CVariableExpressionKey::PreSerialize()
     bool bValid = true;
 
     // Update configuration name before serialization
-    const CConfiguration* const pConfig = GetConfiguration();
+    std::shared_ptr<const CConfiguration> const pConfig = GetConfiguration();
     if (pConfig)
         m_strConfiguration = pConfig->GetName();
     else
@@ -55,7 +64,7 @@ bool CVariableExpressionKey::PreSerialize()
     }
 
     // Update instance name before serialization
-    const CInstance* const pInst = GetInstance();
+    std::shared_ptr<const CInstance> const pInst = GetInstance();
     if (pInst)
         m_strInstance = pInst->GetName();
     else
@@ -71,7 +80,7 @@ bool CVariableExpressionKey::PostDeserialize(CProject& rProject)
 {
     bool bResult = true;
 
-    const CConfiguration* const pConfig = rProject.GetConfiguration(m_strConfiguration);
+    std::shared_ptr<const CConfiguration> const pConfig = rProject.GetConfiguration(m_strConfiguration);
 
     if (!pConfig)
     {
@@ -80,10 +89,10 @@ bool CVariableExpressionKey::PostDeserialize(CProject& rProject)
     }
     else
     {
-        m_gIdConfiguration = pConfig->GetID();
+        m_pConfiguration = pConfig;
     }
 
-    const CInstance* const pInst = rProject.GetInstance(m_strInstance);
+    std::shared_ptr<const CInstance> const pInst = rProject.GetInstance(m_strInstance);
     if (!pInst)
     {
         bResult = false;
@@ -91,7 +100,7 @@ bool CVariableExpressionKey::PostDeserialize(CProject& rProject)
     }
     else
     {
-        m_gIdInstance = pInst->GetID();
+        m_pInstance = pInst;
     }
 
     return bResult;
@@ -99,25 +108,19 @@ bool CVariableExpressionKey::PostDeserialize(CProject& rProject)
 
 bool CVariableExpressionKey::Document(IDocExporter& rExporter) const
 {
-    // Read names of keys
-    std::string strConfigName   = "<INVALID CONFIG>";
-    std::string strInstanceName = "<INVALID INSTANCE>";
+    std::shared_ptr<const CConfiguration> const pConfig = GetConfiguration();
+    std::shared_ptr<const CInstance const> pInst = GetInstance();
 
+    bool bStatus = false;
+    
+    if (pConfig && pInst)
     {
-        const CConfiguration* const pConfig = GetConfiguration();
-        if (pConfig)
-            strConfigName = pConfig->GetName();
-
-        const CInstance* const pInst = GetInstance();
-        if (pInst)
-            strInstanceName = pInst->GetName();
+        bStatus = rExporter.FormField("Configuration:", pConfig->GetName())
+            && rExporter.FormField("Instance:", pInst->GetName())
+            && rExporter.Paragraph()
+            && rExporter.Code(GetExpression())
+            && rExporter.PopStack();
     }
-
-    bool bStatus = rExporter.FormField("Configuration:", strConfigName)
-        && rExporter.FormField("Instance:", strInstanceName)
-        && rExporter.Paragraph()
-        && rExporter.Code(GetExpression())
-        && rExporter.PopStack();
 
     return bStatus;
 }

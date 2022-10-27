@@ -38,16 +38,16 @@ public:
     bool m_bExportToEnvironment;
 
     //! @brief Creates a new rule associated to a provided configuration and instance, and returns a reference to it
-    IExpression& AddRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance);
+    IExpression& AddRule(std::weak_ptr<const CConfiguration> pKeyConfig, std::weak_ptr<const CInstance> pKeyInstance);
 
     //! @brief Erases the specified rule from the collection
     bool EraseRule(const IExpression* pExpr);
 
     //! @brief Returns an expression associated to a provided configuration and instance, if such exists
-    IExpression* GetRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance);
+    IExpression* GetRule(const CConfiguration* pKeyConfig, const CInstance* pKeyInstance);
 
     //! @copydoc GetRule
-    const IExpression* GetRule(const CConfiguration& rKeyConfig, const CInstance& rKeyInstance) const;
+    const IExpression* GetRule(const CConfiguration* pKeyConfig, const CInstance* pKeyInstance) const;
 
     //! @brief Returns a new instance of this class
     static IProjTreeItem::ptr_t Create();

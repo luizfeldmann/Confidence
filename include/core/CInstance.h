@@ -5,14 +5,12 @@
 #include "CStoredNameItem.h"
 #include "CStoredDescriptionItem.h"
 #include "CNoChildren.h"
-#include "util/ITracked.h"
 
 //! @brief Represents an instance of each entity from the configuration
 class CInstance : public IProjTreeItem
     , public CStoredNameItem
     , public CStoredDescriptionItem
     , public CNoChildren
-    , public ITracked<CInstance>
 {
 protected:
     //! @brief Creates a new, empty instance

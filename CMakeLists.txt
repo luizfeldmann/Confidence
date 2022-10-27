@@ -183,7 +183,7 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/util/Log.cpp"
     "include/util/CGuid.h"
     "src/util/CGuid.cpp"
-    "include/util/ITracked.h"
+    
     "include/util/IIdentifiable.h"
     "src/util/IIdentifiable.cpp"
     "include/util/CTempFile.h"

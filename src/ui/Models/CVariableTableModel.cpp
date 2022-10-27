@@ -2,6 +2,8 @@
 #include "core/CProject.h"
 #include "ui/STreeItemTypeInfo.h"
 #include "core/CInstance.h"
+#include "core/CInstanceGroup.h"
+#include "core/CConfiguration.h"
 #include "core/CVariable.h"
 #include "ui/Models/CBaseTreeItemModel.h"
 
@@ -11,8 +13,8 @@
 class CInstanceColumn : public wxDataViewColumn
 {
 protected:
-    //! @brief ID of the instance associated to this column
-    CInstance::id_type m_gInstance;
+    //! @brief Pointer to the instance associated to this column
+    std::weak_ptr<const CInstance> m_pInstance;
 
     //! @brief Returns the icon of the column
     inline static const wxIcon& GetIcon()
@@ -22,26 +24,21 @@ protected:
 
 public:
     //! @brief Creates a column related to a given instance
-    //! @param[in] rInst The instance associated to this column
+    //! @param[in] pInst The instance associated to this column
     //! @param[in] nModelColumn Index used to track this column in the model
-    CInstanceColumn(const CInstance& rInst, unsigned int nModelColumn)
+    CInstanceColumn(std::shared_ptr<const CInstance> pInst, unsigned int nModelColumn)
         : wxDataViewColumn(GetIcon(), new wxDataViewIconTextRenderer(wxDataViewIconTextRenderer::GetDefaultType(), wxDATAVIEW_CELL_EDITABLE), nModelColumn)
-        , m_gInstance(rInst.GetID())
+        , m_pInstance(pInst)
     {
-        const std::string strInstanceName = rInst.GetName();
+        assert(pInst && "Column created from null instance");
+        const std::string strInstanceName = pInst->GetName();
         SetTitle(strInstanceName);
     }
 
     //! @brief Gets a pointer to the associated instance, if any
-    CInstance* GetInstance() const
+    std::shared_ptr<const CInstance> GetInstance() const
     {
-        return CInstance::FindByID(m_gInstance);
-    }
-
-    //! @brief Gets the ID of the associated instance
-    CInstance::id_type GetID() const
-    {
-        return m_gInstance;
+        return m_pInstance.lock();
     }
 
     //! @brief Searches the wxDataViewCtrl for the column with the given model index
@@ -162,7 +159,7 @@ void CVariableTableModel::OnAnyItemRenamed(const IProjTreeItem& rItem)
         {
             CInstanceColumn* const pColumn = dynamic_cast<CInstanceColumn*>(m_pCtrl->GetColumnAt(i));
 
-            if (pColumn && pColumn->GetID() == pInst->GetID())
+            if (pColumn && pColumn->GetInstance().get() == pInst)
                 pColumn->SetTitle(pInst->GetName());
         }
     }
@@ -193,9 +190,7 @@ void CVariableTableModel::ReloadColumns()
     {
         assert(pItem && ETreeItemType::EInstance == pItem->GetType());
 
-        const CInstance& rInst = dynamic_cast<const CInstance&>(*pItem);
-
-        m_pCtrl->AppendColumn( new CInstanceColumn(rInst, nModelColumn++) );
+        m_pCtrl->AppendColumn( new CInstanceColumn( std::dynamic_pointer_cast<const CInstance>(pItem) , nModelColumn++) );
     }
 }
 
@@ -244,8 +239,13 @@ void CVariableTableModel::GetValue(wxVariant& variant, const wxDataViewItem& ite
     else
     {
         // Other columns - associated to instances
-        const CInstanceColumn* const pColumn = CInstanceColumn::GetColumnByModelIndex(col, m_pCtrl);
-        const CInstance* const pInstance = pColumn ? pColumn->GetInstance() : nullptr;
+        
+        std::shared_ptr<const CInstance> pInstance; 
+        {
+            const CInstanceColumn* const pColumn = CInstanceColumn::GetColumnByModelIndex(col, m_pCtrl);
+            if (pColumn)
+                pInstance = pColumn->GetInstance();
+        }
 
         if (!pInstance)
         {
@@ -259,13 +259,13 @@ void CVariableTableModel::GetValue(wxVariant& variant, const wxDataViewItem& ite
 
             do
             {
-                const CConfiguration* pConfig = dynamic_cast<CConfiguration*>((IProjTreeItem*)currentItem.GetID());
+                const CConfiguration* pConfig = dynamic_cast<const CConfiguration*>(GetPointer(currentItem));
 
                 if (!pConfig)
                     break; // Reached root item, no more parents
                 else
                 {
-                    pExpression = m_rVar.GetRule(*pConfig, *pInstance);
+                    pExpression = m_rVar.GetRule(pConfig, pInstance.get());
 
                     if (!pExpression)
                         currentItem = GetParent(currentItem);
@@ -291,15 +291,15 @@ bool CVariableTableModel::SetValue(const wxVariant& variant, const wxDataViewIte
 
     if (pColumn)
     {
-        const CInstance* const pInstance = pColumn->GetInstance();
-        const CConfiguration* const pConfig = dynamic_cast<CConfiguration*>((IProjTreeItem*)item.GetID());
+        std::shared_ptr<const CInstance> const pInstance = pColumn->GetInstance();
+        std::shared_ptr<const CConfiguration> const pConfig = std::dynamic_pointer_cast<const CConfiguration>( GetPointer(item)->shared_from_this() );
 
         if (pConfig && pInstance)
         {
-            IExpression* pExpression = m_rVar.GetRule(*pConfig, *pInstance);
+            IExpression* pExpression = m_rVar.GetRule(pConfig.get(), pInstance.get());
             
             if (!pExpression)
-                pExpression = &m_rVar.AddRule(*pConfig, *pInstance);
+                pExpression = &m_rVar.AddRule(pConfig, pInstance);
 
             wxDataViewIconText value;
             value << variant;
@@ -319,12 +319,12 @@ bool CVariableTableModel::DeleteCell(const wxDataViewItem& rCellRow, const wxDat
 
     if (pColumn)
     {
-        const CInstance* const pInstance = pColumn->GetInstance();
-        const CConfiguration* const pConfig = dynamic_cast<CConfiguration*>((IProjTreeItem*)rCellRow.GetID());
+        std::shared_ptr<const CInstance> const pInstance = pColumn->GetInstance();
+        const CConfiguration* const pConfig = dynamic_cast<CConfiguration*>(GetPointer(rCellRow));
 
         if (pConfig && pInstance)
         {
-            IExpression* const pExpression = m_rVar.GetRule(*pConfig, *pInstance);
+            IExpression* const pExpression = m_rVar.GetRule(pConfig, pInstance.get());
 
             if (pExpression)
             {

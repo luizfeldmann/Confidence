@@ -26,29 +26,32 @@ protected:
 
     SERIALIZATION_FRIEND(CVariableExpressionKey);
 
-    //! The ID of the associated configuration
+    //! The pointer to the associated configuration
     //! This value is updated on #PostDeserialize
-    CGuid m_gIdConfiguration;
+    std::weak_ptr<const CConfiguration> m_pConfiguration;
     
-    //! The ID of the associated instance
+    //! The pointer the associated instance
     //! This value is updated on #PostDeserialize
-    CGuid m_gIdInstance;
+    std::weak_ptr<const CInstance> m_pInstance;
 
     //! @brief Gets a pointer to the associated configuration
-    const CConfiguration* GetConfiguration() const;
+    std::shared_ptr<const CConfiguration> GetConfiguration() const;
 
     //! @brief Gets a pointer to the associated instance
-    const CInstance* GetInstance() const;
+    std::shared_ptr<const CInstance> GetInstance() const;
 
 public:
     CVariableExpressionKey();
 
-    CVariableExpressionKey(const CConfiguration& rConfig, const CInstance& rInst);
+    CVariableExpressionKey(const std::weak_ptr<const CConfiguration>& pConfig, const std::weak_ptr<const CInstance>& pInst);
 
     //! @brief Checks if the provided pair of instance and configuration match this key's
-    //! @param[in] rConfig The configuration to compare to this'
-    //! @param[in] rInst The instance to compare to this'
-    bool Compare(const CConfiguration& rConfig, const CInstance& rInst) const;
+    //! @param[in] pConfig The configuration to compare to this'
+    //! @param[in] pInst The instance to compare to this'
+    bool Compare(const CConfiguration* pConfig, const CInstance* pInst) const;
+
+    //! @brief Checks if this key is associated to instances and configurations that are still valid
+    bool IsValid() const;
 
     //! @copydoc ISerializationNotify::PostDeserialize
     bool PostDeserialize(CProject& rProject) override;

@@ -17,6 +17,7 @@ class IProjTreeItem : public virtual INamedItem
                     , public ISerializationNotify
                     , public IDocumentable
                     , public IExecutable
+                    , public std::enable_shared_from_this<IProjTreeItem>
 {
 private:
     //! @brief Deleted copy-constructor; class is non-copyable
@@ -26,8 +27,8 @@ private:
     IProjTreeItem& operator=(const IProjTreeItem&) = delete;
 
 protected:
-    //! @brief Returns a reference to a subitem with a given name, if it exists
-    static const IProjTreeItem* FindSubitemByName(const std::string strFindName, const IProjTreeItem& rParent);
+    //! @brief Returns a pointer to a subitem with a given name, if it exists
+    static cptr_t FindSubitemByName(const std::string strFindName, const cptr_t& pParent);
 
     //! @brief Documents the name of the item using the given category prefix
     virtual bool DocumentName(IDocExporter& rExporter, const std::string& strPrefix) const;
