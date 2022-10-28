@@ -29,7 +29,7 @@ public:
     {
         if (!m_stream.is_open())
         {
-            CERROR("Failed to create temporary file '%s'", m_tmpPath.c_str());
+            CERROR("Failed to create temporary file '%s'", m_tmpPath.string().c_str());
             m_eStatus = std::make_error_code(std::errc::io_error);
             return;
         }
@@ -37,12 +37,12 @@ public:
         // Delete the destination file if it already exists
         if (std::filesystem::exists(m_dstPath, m_eStatus))
         {
-            CWARNING("Destination file already exists and will be replaced: '%s'", m_dstPath.c_str());
+            CWARNING("Destination file already exists and will be replaced: '%s'", m_dstPath.string().c_str());
 
             if (!std::filesystem::remove(m_dstPath, m_eStatus))
             {
                 std::string strErr = m_eStatus.message();
-                CERROR("Failed to remove file '%s': %s", m_dstPath.c_str(), strErr.c_str());
+                CERROR("Failed to remove file '%s': %s", m_dstPath.string().c_str(), strErr.c_str());
                 return;
             }
         }
@@ -52,7 +52,7 @@ public:
         if (m_eStatus)
         {
             std::string strErr = m_eStatus.message();
-            CERROR("Failed to create symlink '%s' -> '%s': %s", m_tmpPath.c_str(), m_dstPath.c_str(), strErr.c_str());
+            CERROR("Failed to create symlink '%s' -> '%s': %s", m_tmpPath.string().c_str(), m_dstPath.string().c_str(), strErr.c_str());
             return;
         }
     }
@@ -65,7 +65,7 @@ public:
             if (!std::filesystem::remove(m_dstPath, m_eStatus))
             {
                 std::string strErr = m_eStatus.message();
-                CERROR("Failed to remove generated file '%s': %s", m_dstPath.c_str(), strErr.c_str());
+                CERROR("Failed to remove generated file '%s': %s", m_dstPath.string().c_str(), strErr.c_str());
             }
         }
 
@@ -79,7 +79,7 @@ public:
             if (!std::filesystem::remove(m_tmpPath, m_eStatus))
             {
                 std::string strErr = m_eStatus.message();
-                CERROR("Failed to remove temporary file '%s': %s", m_tmpPath.c_str(), strErr.c_str());
+                CERROR("Failed to remove temporary file '%s': %s", m_tmpPath.string().c_str(), strErr.c_str());
             }
         }
     }
