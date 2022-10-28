@@ -6,6 +6,7 @@
 #include "ui/Editors/CProcessEditor.h"
 #include "core/CInstance.h"
 #include "core/CConfiguration.h"
+#include "core/CEnvironmentImport.h"
 #include <map>
 
 const std::vector<ETreeItemType>& STreeItemTypeInfo::GetTypesList()
@@ -20,6 +21,7 @@ const std::vector<ETreeItemType>& STreeItemTypeInfo::GetTypesList()
         EConfig,
         EConfGroup,
         ERunProcess,
+        EImportEnv,
     };
 
     return theList;
@@ -45,7 +47,7 @@ const STreeItemTypeInfo& STreeItemTypeInfo::GetInfo(ETreeItemType eType)
     {
         { EInvalid, 
             STreeItemTypeInfo {
-                "Invalid item",
+                "Invalid Item",
                 REGICON(L"RES_ID_ICON_TREEITEM_ERROR"),
                 nullptr,    // Cannot instantiate a new "invalid" item
                 nullptr,    // Invalid items do not have editors
@@ -77,7 +79,7 @@ const STreeItemTypeInfo& STreeItemTypeInfo::GetInfo(ETreeItemType eType)
         },
         { ETextFile, 
             STreeItemTypeInfo {
-                "Output text file", 
+                "Output Text File", 
                 REGICON(L"RES_ID_ICON_TREEITEM_CODEFILE"),
                 &CGeneratedTextFile::Create,
                 & CGeneratedTextFileEditor::Create
@@ -93,7 +95,7 @@ const STreeItemTypeInfo& STreeItemTypeInfo::GetInfo(ETreeItemType eType)
         },
         { EInstGroup,
             STreeItemTypeInfo {
-                "Instances collection",
+                "Instances Collection",
                 REGICON(L"RES_ID_ICON_TREEITEM_INSTANCES"),
                 nullptr,    // Special item type, cannot be created 
                 nullptr     // Cannot be edited
@@ -121,6 +123,14 @@ const STreeItemTypeInfo& STreeItemTypeInfo::GetInfo(ETreeItemType eType)
                 REGICON(L"RES_ID_ICON_TREEITEM_EXEC"),
                 &CRunProcess::Create,
                 &CRunProcessEditor::Create
+            }
+        },
+        { EImportEnv,
+            STreeItemTypeInfo {
+                "Import Environment",
+                REGICON(L"RES_ID_ICON_TREEITEM_VARENV"),
+                &CEnvironmentImport::Create,
+                &CNameDescEditor::Create
             }
         },
     };

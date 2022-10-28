@@ -68,7 +68,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/core/CVariable.cpp"
     "include/core/CGeneratedTextFile.h"
     "src/core/CGeneratedTextFile.cpp"
-    
+    "include/core/CEnvironmentImport.h"
+    "src/core/CEnvironmentImport.cpp"
     "include/core/CInstance.h"
     "src/core/CInstance.cpp"
     "include/core/CInstanceGroup.h"

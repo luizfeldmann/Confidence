@@ -11,7 +11,7 @@ REGISTER_POLYMORPHIC_CLASS(CGroup);
 CGroup::CGroup()
     : CStoredNameItem("<new group>")
     , CStoredDescriptionItem("<no group description>")
-    , CStoredItemCollection(ETreeItemType(EGroup | EVariable | ETextFile | ERunProcess))
+    , CStoredItemCollection(ETreeItemType(EGroup | EVariable | ETextFile | ERunProcess | EImportEnv))
 {
 
 }

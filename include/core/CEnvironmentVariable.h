@@ -35,6 +35,12 @@ public:
     //! @brief Removes the variable from the environment
     //! @returns True if success
     bool Unset();
+
+    //! @brief Reads the value of an environment variable
+    //! @param[in] strName The name of the variable to read
+    //! @param[out] strValue Receives the read value
+    //! @returns True if success 
+    static bool Read(const std::string& strName, std::string& strValue);
 };
 
 #endif

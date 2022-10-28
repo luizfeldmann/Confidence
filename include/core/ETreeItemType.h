@@ -18,6 +18,7 @@ enum ETreeItemType
     EConfig     = 0x40, //! Complete collection of configurations
     EConfGroup  = 0x80, //! Special group containing only configurations
     ERunProcess = 0x100,//! Creates a new process and (optionally) waits for return code and output
+    EImportEnv  = 0x200,//! Imports a variable from the environment
 };
 
 #endif
