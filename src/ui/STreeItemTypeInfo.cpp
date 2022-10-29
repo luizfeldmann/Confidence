@@ -4,9 +4,11 @@
 #include "ui/Editors/CVariableEditor.h"
 #include "ui/Editors/CGeneratedTextFileEditor.h"
 #include "ui/Editors/CProcessEditor.h"
-#include "core/CInstance.h"
-#include "core/CConfiguration.h"
-#include "core/CEnvironmentImport.h"
+#include "ui/Editors/COperationEditor.h"
+#include "core/items/CInstance.h"
+#include "core/items/CConfiguration.h"
+#include "core/items/CEnvironmentImport.h"
+#include "core/items/file_operation/CFileOperations.h"
 #include <map>
 
 const std::vector<ETreeItemType>& STreeItemTypeInfo::GetTypesList()
@@ -22,6 +24,7 @@ const std::vector<ETreeItemType>& STreeItemTypeInfo::GetTypesList()
         EConfGroup,
         ERunProcess,
         EImportEnv,
+        EOperations,
     };
 
     return theList;
@@ -131,6 +134,14 @@ const STreeItemTypeInfo& STreeItemTypeInfo::GetInfo(ETreeItemType eType)
                 REGICON(L"RES_ID_ICON_TREEITEM_VARENV"),
                 &CEnvironmentImport::Create,
                 &CNameDescEditor::Create
+            }
+        },
+        { EOperations,
+            STreeItemTypeInfo {
+                "File Operations",
+                REGICON(L"RES_ID_ICON_TREEITEM_FILE_OPERATIONS"),
+                &CFileOperations::Create,
+                &COperationEditor::Create
             }
         },
     };

@@ -40,6 +40,7 @@ SET(ICONS_SOURCE
     "TREEITEM_CONFIG"
     "TREEITEM_CONFIGS"
     "TREEITEM_VARENV"
+    "TREEITEM_FILE_OPERATIONS"
 )
 
 # Add build rule for each icon
