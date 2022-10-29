@@ -3,7 +3,7 @@
 
 #include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/IRunProcessEditor.h"
-#include "core/CRunProcess.h"
+#include "core/items/process/CRunProcess.h"
 #include "ui/CAcceleratorEntry.h"
 
 class CProcessArgsModel;

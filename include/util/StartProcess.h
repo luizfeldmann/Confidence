@@ -1,7 +1,7 @@
 #ifndef _STARTPROCESS_H_
 #define _STARTPROCESS_H_
 
-#include "core/SProcessStartInfo.h"
+#include "core/items/process/SProcessStartInfo.h"
 
 //! @brief Starts the process as described by the startup information
 //! @param[in] rInfo Specification for starting the process

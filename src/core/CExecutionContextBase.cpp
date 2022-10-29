@@ -1,6 +1,6 @@
 #include "core/CExecutionContextBase.h"
-#include "core/EBuiltInVariables.h"
-#include "core/CProject.h"
+#include "core/items/variable/EBuiltInVariables.h"
+#include "core/items/CProject.h"
 #include <filesystem>
 #include <cassert>
 

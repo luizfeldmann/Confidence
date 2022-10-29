@@ -3,7 +3,7 @@
 
 #include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/IGroupEditor.h"
-#include "core/CGroup.h"
+#include "core/items/CGroup.h"
 
 //! @brief Item editor for groups
 class CGroupEditorUI : public IGroupEditor

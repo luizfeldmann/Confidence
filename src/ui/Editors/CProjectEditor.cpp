@@ -1,6 +1,6 @@
 #include "ui/Editors/CProjectEditor.h"
 #include "ui/Models/CDocExporterTableModel.h"
-#include "core/CProject.h"
+#include "core/items/CProject.h"
 #include "ui/SDocExporterTypeInfo.h"
 #include <wx/menu.h>
 #include <array>

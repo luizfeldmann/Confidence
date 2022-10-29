@@ -2,7 +2,7 @@
 #include "util/version.h"
 #include "CLI/CLI.hpp"
 #include "ui/CMainApp.h"
-#include "core/CProject.h"
+#include "core/items/CProject.h"
 
 //! @brief Represents the set of options passed to the application when launched
 class CCommandLineArguments

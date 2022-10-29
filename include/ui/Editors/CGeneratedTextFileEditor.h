@@ -3,7 +3,7 @@
 
 #include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/ITextFileEditor.h"
-#include "core/CGeneratedTextFile.h"
+#include "core/items/file_generator/CGeneratedTextFile.h"
 #include "ui/CTextStyler.h"
 
 //! @brief Item editor for generated text files

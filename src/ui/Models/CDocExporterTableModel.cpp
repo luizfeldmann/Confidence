@@ -1,5 +1,5 @@
 #include "ui/Models/CDocExporterTableModel.h"
-#include "core/CProject.h"
+#include "core/items/CProject.h"
 #include "ui/SDocExporterTypeInfo.h"
 
 /* static */ IDocExporter* CDocExporterTableModel::GetPointer(const wxDataViewItem& item)

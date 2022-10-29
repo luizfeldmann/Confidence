@@ -1,5 +1,5 @@
 #include "ui/Models/CProcessArgsModel.h"
-#include "core/CRunProcess.h"
+#include "core/items/process/CRunProcess.h"
 
 /* static */ CProcessArgument* CProcessArgsModel::GetPointer(const wxDataViewItem& item)
 {
@@ -229,7 +229,10 @@ unsigned int CProcessArgsModel::GetChildren(const wxDataViewItem& parent, wxData
     if (nullptr == parent.GetID())
     {
         for (CProcessArgument& rArg : m_rEdit.GetArguments())
-            array.push_back( GetViewItem(&rArg) );
+        {
+            array.push_back(GetViewItem(&rArg));
+            uCount++;
+        }
     }
 
     return uCount;

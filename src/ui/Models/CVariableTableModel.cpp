@@ -1,10 +1,10 @@
 #include "ui/Models/CVariableTableModel.h"
-#include "core/CProject.h"
+#include "core/items/CProject.h"
 #include "ui/STreeItemTypeInfo.h"
-#include "core/CInstance.h"
-#include "core/CInstanceGroup.h"
-#include "core/CConfiguration.h"
-#include "core/CVariable.h"
+#include "core/items/CInstance.h"
+#include "core/items/CInstanceGroup.h"
+#include "core/items/CConfiguration.h"
+#include "core/items/variable/CVariable.h"
 #include "ui/Models/CBaseTreeItemModel.h"
 
 /* CInstanceColumn */

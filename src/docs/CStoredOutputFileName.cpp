@@ -1,6 +1,7 @@
 #include "docs/CStoredOutputFileName.h"
-#include "core/EBuiltInVariables.h"
+#include "core/items/variable/EBuiltInVariables.h"
 #include <filesystem>
+
 DEFINE_SERIALIZATION_SCHEME(CStoredOutputFileName,
     SERIALIZATION_MEMBER(m_strOutputPath)
 )

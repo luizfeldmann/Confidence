@@ -1,7 +1,7 @@
 #include <regex>
 #include "ui/CTextStyler.h"
 #include "util/Log.h"
-#include "core/EBuiltInVariables.h"
+#include "core/items/variable/EBuiltInVariables.h"
 
 /* SColor */
 DEFINE_SERIALIZATION_SCHEME(SColor,

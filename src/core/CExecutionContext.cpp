@@ -1,8 +1,8 @@
 #include "core/CExecutionContext.h"
-#include "core/CProject.h"
-#include "core/CInstance.h"
-#include "core/CConfiguration.h"
-#include "core/EBuiltInVariables.h"
+#include "core/items/CProject.h"
+#include "core/items/CInstance.h"
+#include "core/items/CConfiguration.h"
+#include "core/items/variable/EBuiltInVariables.h"
 #include <cassert>
 
 CExecutionContext::CExecutionContext(const std::shared_ptr<const CProject>& pProject, const std::shared_ptr<const CInstance>& pInstance, const std::shared_ptr<const CConfiguration>& pConfiguration)

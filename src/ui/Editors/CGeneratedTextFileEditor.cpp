@@ -1,6 +1,6 @@
 #include "ui/Editors/CGeneratedTextFileEditor.h"
-#include "core/CFileTextProvider.h"
-#include "core/CStoredTextProvider.h"
+#include "core/items/file_generator/CFileTextProvider.h"
+#include "core/items/file_generator/CStoredTextProvider.h"
 #include "vfs/CPersistentFileGenerator.h"
 #include "vfs/CTempSymlinkGenerator.h"
 #include "util/Log.h"

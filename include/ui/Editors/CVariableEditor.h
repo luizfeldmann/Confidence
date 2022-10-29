@@ -5,7 +5,7 @@
 #include "wxExport/IVariableEditor.h"
 #include "ui/Models/CVariableTableModel.h"
 #include "ui/CAcceleratorEntry.h"
-#include "core/CVariable.h"
+#include "core/items/variable/CVariable.h"
 
 //! @brief Item editor for variable types
 class CVariableEditorUI : public IVariableEditor, public INotifyItemOperation
