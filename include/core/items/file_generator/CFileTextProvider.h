@@ -32,7 +32,7 @@ public:
     bool PreSerialize() override;
 
     //! @brief Factory function
-    static ITextProvider* Create();
+    static std::unique_ptr<ITextProvider> Create();
 
     //! Reads the path to the underlying file
     std::string GetFilePath() const;

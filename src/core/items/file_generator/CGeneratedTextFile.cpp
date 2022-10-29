@@ -6,8 +6,8 @@ DEFINE_SERIALIZATION_SCHEME(CGeneratedTextFile,
     SERIALIZATION_INHERIT(CStoredNameItem)
     SERIALIZATION_INHERIT(CStoredDescriptionItem)
     SERIALIZATION_MEMBER(m_strOutputPath)
-    SERIALIZATION_MEMBER(m_cProvider)
     SERIALIZATION_MEMBER(m_pGenerator)
+    SERIALIZATION_MEMBER(m_pProvider)
 )
 
 REGISTER_POLYMORPHIC_CLASS(CGeneratedTextFile);
@@ -36,12 +36,12 @@ ETreeItemType CGeneratedTextFile::GetType() const
 
 ITextProvider* CGeneratedTextFile::GetProvider() const
 {
-    return m_cProvider.get();
+    return m_pProvider.get();
 }
 
-void CGeneratedTextFile::SetProvider(ITextProvider* pNewProvider)
+void CGeneratedTextFile::SetProvider(provider_ptr_t pNewProvider)
 {
-    m_cProvider.reset(pNewProvider);
+    m_pProvider.swap(pNewProvider);
 }
 
 IFileGenerator* CGeneratedTextFile::GetGenerator() const
@@ -49,17 +49,17 @@ IFileGenerator* CGeneratedTextFile::GetGenerator() const
     return m_pGenerator.get();
 }
 
-void CGeneratedTextFile::SetGenerator(IFileGenerator* pNewGenerator)
+void CGeneratedTextFile::SetGenerator(generator_ptr_t pNewGenerator)
 {
-    m_pGenerator.reset(pNewGenerator);
+    m_pGenerator.swap(pNewGenerator);
 }
 
 bool CGeneratedTextFile::PostDeserialize(CProject& rProject)
 {
     bool bStatus = true;
 
-    if (m_cProvider)
-        bStatus = m_cProvider->PostDeserialize(rProject);
+    if (m_pProvider)
+        bStatus = m_pProvider->PostDeserialize(rProject);
 
     return bStatus;
 }
@@ -68,8 +68,8 @@ bool CGeneratedTextFile::PreSerialize()
 {
     bool bStatus = true;
 
-    if (m_cProvider)
-        bStatus = m_cProvider->PreSerialize();
+    if (m_pProvider)
+        bStatus = m_pProvider->PreSerialize();
 
     return bStatus;
 }
@@ -93,8 +93,8 @@ bool CGeneratedTextFile::DocumentCustom(IDocExporter& rExporter) const
 {
     bool bStatus = rExporter.FormField("Destination Path:", GetOutputPath(), true);
 
-    if (bStatus && m_cProvider)
-        bStatus = m_cProvider->Document(rExporter);
+    if (bStatus && m_pProvider)
+        bStatus = m_pProvider->Document(rExporter);
 
     return bStatus;
 }
@@ -106,7 +106,7 @@ bool CGeneratedTextFile::Execute(CExecutionContext& rContext) const
     // Sanity check
     const std::string strName = GetName();
 
-    if (!m_cProvider)
+    if (!m_pProvider)
         CWARNING("Unespecified content provider for file '%s'", strName.c_str());
     else if (!m_pGenerator)
         CWARNING("Unespecified file generator for file '%s'", strName.c_str());
@@ -114,7 +114,7 @@ bool CGeneratedTextFile::Execute(CExecutionContext& rContext) const
     {
         // Evaluate the contents and the destination
         IFileGenerator::sptr_t pFile;
-        std::string strContents = m_cProvider->GetText();
+        std::string strContents = m_pProvider->GetText();
         std::string strDestination = GetOutputPath();
 
         bStatus = rContext.Evaluate(strContents)

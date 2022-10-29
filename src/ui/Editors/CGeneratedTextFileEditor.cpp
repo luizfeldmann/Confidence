@@ -121,7 +121,7 @@ void CGeneratedTextFileEditorUI::OnTextChanged(wxStyledTextEvent& event)
 
 void CGeneratedTextFileEditorUI::onChangeProvider(wxCommandEvent& event)
 {
-    using fnNewProvider_t = std::function<ITextProvider* ()>;
+    using fnNewProvider_t = std::function<CGeneratedTextFile::provider_ptr_t()>;
     static const std::unordered_map<ETextProviderType, fnNewProvider_t> c_mProviderFactory {
         {ETextProviderType::EStored,    CStoredTextProvider::Create },
         {ETextProviderType::EFile,      CFileTextProvider::Create },
@@ -139,8 +139,10 @@ void CGeneratedTextFileEditorUI::onChangeProvider(wxCommandEvent& event)
         return;
 
     // Create a new provider and assign it
-    ITextProvider* const pNewProvider = c_mProviderFactory.at((ETextProviderType)iSelected)();
-    m_rEdit.SetProvider(pNewProvider);
+    {
+        CGeneratedTextFile::provider_ptr_t pNewProvider = c_mProviderFactory.at((ETextProviderType)iSelected)();
+        m_rEdit.SetProvider(std::move(pNewProvider));
+    }
 
     ReloadProviderType();
     ReloadText();
@@ -148,7 +150,7 @@ void CGeneratedTextFileEditorUI::onChangeProvider(wxCommandEvent& event)
 
 void CGeneratedTextFileEditorUI::onChangeGenerator(wxCommandEvent& event)
 {
-    using fnNewGenerator_t = std::function<IFileGenerator* ()>;
+    using fnNewGenerator_t = std::function<CGeneratedTextFile::generator_ptr_t()>;
     static const std::unordered_map<EFileGeneratorType, fnNewGenerator_t> c_mGeneratorFactory {
         {EFileGeneratorType::Persistent,   CPersistentFileGenerator::Create },
         {EFileGeneratorType::Symlink,      CTempSymlinkGenerator::Create },
@@ -166,8 +168,10 @@ void CGeneratedTextFileEditorUI::onChangeGenerator(wxCommandEvent& event)
         return;
 
     // Create a new generator and assign it
-    IFileGenerator* const pNewProvider = c_mGeneratorFactory.at((EFileGeneratorType)iSelected)();
-    m_rEdit.SetGenerator(pNewProvider);
+    {
+        CGeneratedTextFile::generator_ptr_t pNewProvider = c_mGeneratorFactory.at((EFileGeneratorType)iSelected)();
+        m_rEdit.SetGenerator( std::move(pNewProvider) );
+    }
 }
 
 void CGeneratedTextFileEditorUI::onInputFilePathChanged(wxCommandEvent& event)

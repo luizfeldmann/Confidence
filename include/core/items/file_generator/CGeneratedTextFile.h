@@ -14,15 +14,19 @@ class CGeneratedTextFile : public IProjTreeItem
     , public CStoredDescriptionItem
     , public CNoChildren
 {
+public:
+    using provider_ptr_t = std::unique_ptr<ITextProvider>;
+    using generator_ptr_t = std::unique_ptr<IFileGenerator>;
+
 protected:
     //! The destination of the generated file
     std::string m_strOutputPath;
 
     //! Provides the text either from memory or from a file
-    std::unique_ptr<ITextProvider> m_cProvider;
+    provider_ptr_t m_pProvider;
 
     //! Implements generating output files in the filesystem
-    std::unique_ptr<IFileGenerator> m_pGenerator;
+    generator_ptr_t m_pGenerator;
 
     SERIALIZATION_FRIEND(CGeneratedTextFile);
 
@@ -49,15 +53,13 @@ public:
     ITextProvider* GetProvider() const;
 
     //! @brief Sets the underlying text provider
-    //! @details The old provider is destroyed; assumes exclusive ownership of the new pointer
-    void SetProvider(ITextProvider* pNewProvider);
+    void SetProvider(provider_ptr_t pNewProvider);
 
     //! @brief Gets a pointer to the underlying file generator
     IFileGenerator* GetGenerator() const;
 
     //! @brief Sets the underlying file generator
-    //! @details The old generator is destroyed; assumes exclusive ownership of the new generator
-    void SetGenerator(IFileGenerator* pNewGenerator);
+    void SetGenerator(generator_ptr_t pNewGenerator);
 
     //! @copydoc ISerializationNotify::PostDeserialize
     bool PostDeserialize(CProject& rProject) override;

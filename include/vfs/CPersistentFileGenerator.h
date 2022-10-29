@@ -11,7 +11,7 @@ public:
     CPersistentFileGenerator() = default;
 
     //! @brief Returns a new instance of this generator
-    static IFileGenerator* Create();
+    static std::unique_ptr<IFileGenerator> Create();
 
     //! @copydoc IFileGenerator::NewFile
     sptr_t NewFile(const path_t& filePath) const override;

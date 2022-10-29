@@ -9,9 +9,9 @@ REGISTER_POLYMORPHIC_CLASS(CStoredTextProvider);
 
 static const char c_cDelimiter = '\n';
 
-ITextProvider* CStoredTextProvider::Create()
+std::unique_ptr<ITextProvider> CStoredTextProvider::Create()
 {
-    return new CStoredTextProvider;
+    return std::make_unique<CStoredTextProvider>();
 }
 
 ETextProviderType CStoredTextProvider::GetType() const

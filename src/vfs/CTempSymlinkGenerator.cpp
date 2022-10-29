@@ -100,9 +100,9 @@ public:
     }
 };
 
-/* static */ IFileGenerator* CTempSymlinkGenerator::Create()
+/* static */ std::unique_ptr<IFileGenerator> CTempSymlinkGenerator::Create()
 {
-    return new CTempSymlinkGenerator;
+    return std::make_unique<CTempSymlinkGenerator>();
 }
 
 CTempSymlinkGenerator::sptr_t CTempSymlinkGenerator::NewFile(const path_t& filePath) const

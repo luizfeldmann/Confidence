@@ -44,9 +44,9 @@ public:
     }
 };
 
-/* static */ IFileGenerator* CPersistentFileGenerator::Create()
+/* static */ std::unique_ptr<IFileGenerator> CPersistentFileGenerator::Create()
 {
-    return new CPersistentFileGenerator;
+    return std::make_unique<CPersistentFileGenerator>();
 }
 
 CPersistentFileGenerator::sptr_t CPersistentFileGenerator::NewFile(const path_t& filePath) const

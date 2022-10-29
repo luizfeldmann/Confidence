@@ -16,9 +16,9 @@ CFileTextProvider::CFileTextProvider(const std::string& strPath)
 
 }
 
-ITextProvider* CFileTextProvider::Create()
+std::unique_ptr<ITextProvider> CFileTextProvider::Create()
 {
-    return new CFileTextProvider;
+    return std::make_unique<CFileTextProvider>();
 }
 
 ETextProviderType CFileTextProvider::GetType() const

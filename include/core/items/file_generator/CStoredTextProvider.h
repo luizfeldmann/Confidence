@@ -20,7 +20,7 @@ public:
     CStoredTextProvider() = default;
 
     //! @brief Factory function
-    static ITextProvider* Create();
+    static std::unique_ptr<ITextProvider> Create();
 
     //! @copydoc ITextProvider::GetType
     ETextProviderType GetType() const;
