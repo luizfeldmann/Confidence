@@ -32,6 +32,9 @@ public:
     //! @brief Starts a heading and pushes to the stack
     virtual bool Heading() = 0;
 
+    //! @brief Starts a container and pushes to the stack
+    virtual bool Container() = 0;
+
     //! @brief Pops the last node from the stack
     virtual bool PopStack() = 0;
 

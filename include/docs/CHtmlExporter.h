@@ -25,6 +25,9 @@ public:
     //! @copydoc IDocExporter::DecrementHeading
     void DecrementHeading() override;
 
+    //! @copydoc IDocExporter::Container
+    bool Container() override;
+
     //! @copydoc IDocExporter::Start
     bool Start(std::ostream& rOutput) override;
 

@@ -187,7 +187,7 @@ bool CCommonMarkExporter::Collapsible()
 {
     bool bStatus = false;
 
-    CMarkCustomBlock cDetails("<details>", "</details>");
+    CMarkCustomBlock cDetails("<details open>", "</details>");
     cmark_node* pParent = TopNode();
 
     if (pParent && cDetails && cmark_node_append_child(pParent, cDetails))

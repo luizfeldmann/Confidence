@@ -12,11 +12,21 @@ REGISTER_POLYMORPHIC_CLASS(CHtmlExporter);
 /* HTML CONTENT OF GENERATED PAGES*/
 static const char* g_szCssStyles = 
 "<style type=\"text/css\">\r\n"
-"   .indent { margin-left: 5%; }\r\n"
+"   .indent { padding-left: 10px; }\r\n"
+"   .item { margin-bottom: 10px; padding-left: 10px; padding-right: 16px; border-radius: 5px; background-color: white; }\r\n"
+"   .item:nth-of-type(odd) {  border: 1px solid LightSkyBlue; border-left: 4px solid LightSkyBlue;  }\r\n"
+"   .item:nth-of-type(odd):hover { background-color: AliceBlue; }\r\n"
+"   .item:nth-of-type(even){  border: 1px solid MediumPurple; border-left: 4px solid MediumPurple;  }\r\n"
+"   .item:nth-of-type(even):hover { background-color: Lavender; }\r\n"
 "   strong { color: darkgrey; }\r\n"
 "   em { font-weight: bold; }\r\n"
 "   summary { font-weight: bold; }\r\n"
-"   code { background: darkgrey; display: inline-block; width: 100%; }\r\n"
+"   code { margin: 5px; padding: 5px; border-radius: 3px;  border: 1px solid black; background: lightgrey; display: inline-block; width: 98%; box-sizing: border-box; }\r\n"
+"   li { border-radius: 4px; padding-left: 10px; margin-bottom: 10px; margin-top: 10px; background-color: white; }\r\n"
+"   li:nth-child(odd)  { border: 1px solid PaleGoldenRod; border-left: 4px solid PaleGoldenRod; }\r\n"
+"   li:nth-child(odd):hover  { background-color: LightYellow; }\r\n"
+"   li:nth-child(even) { border: 1px solid SeaGreen;      border-left: 4px solid SeaGreen; }\r\n"
+"   li:nth-child(even):hover { background-color: HoneyDew;  }\r\n"
 "</style>\r\n";
 
 /* CHtmlExporter */
@@ -123,7 +133,7 @@ void CHtmlExporter::IncrementHeading()
 {
     CCommonMarkExporter::IncrementHeading();
 
-    CMarkCustomBlock cDiv("<div class=\"indent\">", "</div><hr/>");
+    CMarkCustomBlock cDiv("<div class=\"indent\">", "</div>");
     cmark_node* pParent = TopNode();
 
     if (pParent && cDiv && cmark_node_append_child(pParent, cDiv))
@@ -137,6 +147,24 @@ void CHtmlExporter::DecrementHeading()
 {
     CCommonMarkExporter::DecrementHeading();
     CCommonMarkExporter::PopStack();
+}
+
+bool CHtmlExporter::Container()
+{
+    bool bStatus = false;
+
+    CMarkCustomBlock cDiv("<div class=\"item\">", "</div>");
+    cmark_node* pParent = TopNode();
+
+    if (pParent && cDiv && cmark_node_append_child(pParent, cDiv))
+    {
+        PushNode(cDiv);
+        cDiv.disown();
+
+        bStatus = true;
+    }
+
+    return bStatus;
 }
 
 EDocExporter CHtmlExporter::GetType() const

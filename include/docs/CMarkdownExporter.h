@@ -11,6 +11,9 @@ class CMarkdownExporter : public CCommonMarkExporter
 public:
     CMarkdownExporter();
 
+    //! @copydoc IDocExporter::Container
+    bool Container() override;
+
     //! @copydoc IDocExporter::Finish
     bool Finish() override;
 

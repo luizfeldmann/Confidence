@@ -19,6 +19,13 @@ CMarkdownExporter::CMarkdownExporter()
 
 }
 
+bool CMarkdownExporter::Container()
+{
+    // In MD, just a fake block that does nothing
+    cmark_node* pBlock = NewNode(CMARK_NODE_CUSTOM_BLOCK, true);
+    return (nullptr != pBlock);
+}
+
 bool CMarkdownExporter::Finish()
 {
     bool bStatus = false;

@@ -10,7 +10,7 @@ class CCommonMarkExporterSession;
 //! @brief Base exporter implementation using CommonMark library as backend
 class CCommonMarkExporter : public IDocExporter
 {
-private:
+protected:
     //! Creates a new node of the requested type and (optionally) pushes it to the stack
     struct cmark_node* NewNode(int nNodeType, bool bPushStack);
 

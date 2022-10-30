@@ -104,10 +104,12 @@ bool IProjTreeItem::DocumentChildren(IDocExporter& rExporter) const
 
 bool IProjTreeItem::Document(IDocExporter& rExporter) const
 {
-    bool bStatus = DocumentName(rExporter);
+    bool bStatus = rExporter.Container();
+    bStatus = bStatus && DocumentName(rExporter);
     bStatus = bStatus && DocumentDescription(rExporter);
     bStatus = bStatus && DocumentCustom(rExporter);
     bStatus = bStatus && DocumentChildren(rExporter);
+    bStatus = bStatus && rExporter.PopStack();
 
     return bStatus;
 }
