@@ -43,9 +43,16 @@ SET(ICONS_SOURCE
     "TREEITEM_FILE_OPERATIONS"
 )
 
+# Special icons which must come first in list
+set(ICON_SPECIAL "\
+0 ICON \"${CMAKE_CURRENT_LIST_DIR}/APPLICATION.ico\"\n\
+1 ICON \"${CMAKE_CURRENT_LIST_DIR}/SETUP.ico\"\n\
+2 ICON \"${CMAKE_CURRENT_LIST_DIR}/TREEITEM_PROJECT.ico\" \
+")
+
 # Add build rule for each icon
 set(ICON_RESOURCE_PREFIX "RES_ID_ICON_")
-unset(ICON_RESOURCES_LIST)
+set(ICON_RESOURCES_LIST ${ICON_SPECIAL})
 unset(ICONS_LIST_EXPORTED)
 foreach (fileBaseName IN LISTS ICONS_SOURCE)
     SET(IconSrcFile "${CMAKE_CURRENT_LIST_DIR}/${fileBaseName}.svg")

@@ -1,0 +1,7 @@
+WriteRegStr HKCU \"Software\\Classes\\.${PROJ_FILE_EXT}\" \"\" \"${PROJ_FILE_CLASS}\"
+WriteRegStr HKCU \"Software\\Classes\\${PROJ_FILE_CLASS}\" \"\" \"${PROJ_FILE_DESCRIPTION}\"
+WriteRegStr HKCU \"Software\\Classes\\${PROJ_FILE_CLASS}\\DefaultIcon\" \"\" \"$INSTDIR\\bin\\${CMAKE_PROJECT_NAME}.exe,-2\"
+WriteRegStr HKCU \"Software\\Classes\\${PROJ_FILE_CLASS}\\shell\" \"\" \"open\"
+WriteRegStr HKCU \"Software\\Classes\\${PROJ_FILE_CLASS}\\shell\\open\" \"\" \"Open with ${CMAKE_PROJECT_NAME}\"
+WriteRegStr HKCU \"Software\\Classes\\${PROJ_FILE_CLASS}\\shell\\open\\command\" \"\" \"$\\\"$INSTDIR\\bin\\${CMAKE_PROJECT_NAME}.exe$\\\" $\\\"%1$\\\"\"
+System::Call \"shell32::SHChangeNotify(i,i,i,i) (0x08000000, 0x1000, 0, 0)\"
