@@ -23,6 +23,9 @@ include_directories(dependencies/CLI11/include)
 # Dependency: mINI
 include_directories(dependencies/mINI/src)
 
+# Dependency: pugiXML
+find_package(pugixml CONFIG REQUIRED)
+
 # Dependency: wxWidgets
 find_package(wxWidgets COMPONENTS core base aui stc)
 
@@ -109,6 +112,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "include/core/items/file_operation/CFileOperation.h"
     "src/core/items/file_operation/CFileOperation.cpp"
     "src/core/items/file_operation/CIniFileHandler.cpp"
+    "include/core/items/file_operation/CXmlFileHandler.h"
+    "src/core/items/file_operation/CXmlFileHandler.cpp"
     "include/core/INotifyItemOperation.h"
     "src/core/INotifyItemOperation.cpp"
 
@@ -246,6 +251,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
 
 target_link_libraries(${CMAKE_PROJECT_NAME} ${wxWidgets_LIBRARIES})
 target_link_libraries(${CMAKE_PROJECT_NAME} cmark::cmark)
+target_link_libraries(${CMAKE_PROJECT_NAME} pugixml)
 
 if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)

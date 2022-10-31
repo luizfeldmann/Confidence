@@ -3,6 +3,7 @@
 #include "core/items/file_operation/CFileOperations.h"
 #include "core/items/file_operation/IFileOperationHandler.h"
 #include "core/items/file_operation/CIniFileHandler.h"
+#include "core/items/file_operation/CXmlFileHandler.h"
 
 /* COperationEditorUI */
 
@@ -54,8 +55,8 @@ void COperationEditorUI::onHandlerChoice(wxCommandEvent& event)
     using fnNewHandler_t = std::function<IFileOperationHandler::handler_ptr_t()>;
     static const std::unordered_map<EFileOperationHandlerType, fnNewHandler_t> c_mHandlerFactory {
         {EFileOperationHandlerType::IniFile,    CIniFileHandler::Create },
+        {EFileOperationHandlerType::XmlFile,    CXmlFileHandler::Create },
         //{EFileOperationHandlerType::JsonFile,   nullptr },
-        //{EFileOperationHandlerType::XmlFile,    nullptr },
     };
 
     const int iSelected = m_choiceHandler->GetSelection();
@@ -77,6 +78,7 @@ void COperationEditorUI::onHandlerChoice(wxCommandEvent& event)
 
     // Remove all operation because the locators have different types now
     m_rEdit.GetItems().clear();
+    m_pModel->Cleared();
 }
 
 void COperationEditorUI::onToolNew(wxCommandEvent& event)
