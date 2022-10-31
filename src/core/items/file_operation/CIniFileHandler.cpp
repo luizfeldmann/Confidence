@@ -1,6 +1,10 @@
 #include "core/items/file_operation/CIniFileHandler.h"
 #include "core/items/file_operation/IFileDataLocator.h"
 #include "core/items/file_operation/IFileOperationContext.h"
+#include "util/Log.h"
+
+#define MINI_CASE_SENSITIVE
+#include <mini/ini.h>
 
 /* CIniFileLocator */
 
@@ -62,22 +66,65 @@ REGISTER_POLYMORPHIC_CLASS(CIniFileLocator);
 
 class CIniFileContext : public IFileOperatorContext
 {
+protected:
+    const std::filesystem::path m_path;
+    mINI::INIFile m_file;
+    mINI::INIStructure m_structure;
+
 public:
     CIniFileContext(const std::filesystem::path& filePath)
+        : m_path(filePath)
+        , m_file(filePath.string())
     {
+        bool bStatus = m_file.read(m_structure);
 
+        if (!bStatus)
+            CERROR("Failed opening INI file '%s': 0x%X", filePath.string().c_str());
+    }
+
+    ~CIniFileContext()
+    {
+        bool bStatus = m_file.write(m_structure);
+
+        if (!bStatus)
+            CERROR("Error saving INI file '%s'", m_path.string().c_str());
     }
 
     //! @copydoc IFileOperatorContext::Write
     bool Write(const IFileDataLocator& rLocator, const std::string& strValue) override
     {
-        return false;
+        bool bStatus = false;
+
+        const CIniFileLocator& rIniLocator = dynamic_cast<const CIniFileLocator&>(rLocator);
+
+        m_structure[rIniLocator.m_strSection][rIniLocator.m_strKey] = strValue;
+
+        return true;
     }
 
     //! @copydoc IFileOperatorContext::Read
     bool Read(const IFileDataLocator& rLocator, std::string& strValue) override
     {
-        return false;
+        bool bStatus = false;
+
+        const CIniFileLocator& rIniLocator = dynamic_cast<const CIniFileLocator&>(rLocator);
+
+        if (!m_structure.has(rIniLocator.m_strSection))
+            CERROR("Failed to read INI section '%s'", rIniLocator.m_strSection.c_str());
+        else
+        {
+            const auto& rSection = m_structure[rIniLocator.m_strSection];
+
+            if (!rSection.has(rIniLocator.m_strKey))
+                CERROR("Failed to read INI key '%s'", rIniLocator.m_strKey.c_str());
+            else
+            {
+                strValue = rSection.get(rIniLocator.m_strKey);
+                bStatus = true;
+            }
+        }
+
+        return bStatus;
     }
 
     //! @copydoc IFileOperatorContext::GetType

@@ -20,6 +20,9 @@ include(dependencies/JInterface/ConsumeMe.cmake)
 # Dependency: CLI11
 include_directories(dependencies/CLI11/include)
 
+# Dependency: mINI
+include_directories(dependencies/mINI/src)
+
 # Dependency: wxWidgets
 find_package(wxWidgets COMPONENTS core base aui stc)
 
