@@ -67,7 +67,12 @@ REGISTER_POLYMORPHIC_CLASS(CIniFileLocator);
 class CIniFileContext : public IFileOperatorContext
 {
 protected:
+    //! True if the file was modified by any operation and must be saved
+    bool m_bModified = false;
+
+    //! Stores the path to the INI file
     const std::filesystem::path m_path;
+
     mINI::INIFile m_file;
     mINI::INIStructure m_structure;
 
@@ -84,22 +89,26 @@ public:
 
     ~CIniFileContext()
     {
-        bool bStatus = m_file.write(m_structure);
+        if (m_bModified)
+        {
+            bool bStatus = m_file.write(m_structure);
 
-        if (!bStatus)
-            CERROR("Error saving INI file '%s'", m_path.string().c_str());
+            if (!bStatus)
+                CERROR("Error saving INI file '%s'", m_path.string().c_str());
+        }
     }
 
     //! @copydoc IFileOperatorContext::Write
     bool Write(const IFileDataLocator& rLocator, const std::string& strValue) override
     {
-        bool bStatus = false;
+        bool bStatus = true;
 
         const CIniFileLocator& rIniLocator = dynamic_cast<const CIniFileLocator&>(rLocator);
 
         m_structure[rIniLocator.m_strSection][rIniLocator.m_strKey] = strValue;
+        m_bModified = true;
 
-        return true;
+        return bStatus;
     }
 
     //! @copydoc IFileOperatorContext::Read
