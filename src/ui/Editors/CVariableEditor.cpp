@@ -18,7 +18,7 @@ CVariableEditorUI::CVariableEditorUI(wxWindow* pParent, std::shared_ptr<const CP
     m_cAccTbl = wxAcceleratorTable(arrAccEntry.size(), arrAccEntry.data());
     m_dataView->SetAcceleratorTable(m_cAccTbl);
 
-    m_toolBar->ToggleTool(m_toolExportEnv->GetId(), m_rVar.m_bExportToEnvironment);
+    m_toolBar->ToggleTool(m_toolExportEnv->GetId(), m_rVar.GetExportToEnv());
 }
 
 void CVariableEditorUI::OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent)
@@ -46,7 +46,7 @@ void CVariableEditorUI::onDeleteCell(wxCommandEvent& event)
 
 void CVariableEditorUI::onToolExportEnv(wxCommandEvent& event)
 {
-    m_rVar.m_bExportToEnvironment = m_toolExportEnv->IsToggled();
+    m_rVar.SetExportToEnv(m_toolExportEnv->IsToggled());
 }
 
 CVariableEditor::CVariableEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)

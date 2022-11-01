@@ -4,7 +4,7 @@
 DEFINE_SERIALIZATION_SCHEME(CConstant,
     SERIALIZATION_INHERIT(CStoredNameItem)
     SERIALIZATION_INHERIT(CStoredDescriptionItem)
-    SERIALIZATION_MEMBER(m_bExportToEnvironment)
+    SERIALIZATION_INHERIT(CAssignable)
     SERIALIZATION_INHERIT(CStoredExpression)
 )
 
@@ -13,7 +13,6 @@ REGISTER_POLYMORPHIC_CLASS(CConstant);
 CConstant::CConstant()
     : CStoredNameItem("<new constant>")
     , CStoredDescriptionItem("<no constant description>")
-    , m_bExportToEnvironment(false)
 {
 
 }
@@ -38,22 +37,9 @@ bool CConstant::Execute(CExecutionContext& rContext) const
     LogExecution();
 
     const std::string strName = GetName();
-
     std::string strValue = GetExpression();
-    bool bStatus = rContext.Evaluate(strValue);
 
-    if (bStatus)
-    {
-        rContext.SetVariableLiteral(strName, strValue);
-
-        std::shared_ptr<CEnvironmentVariable> pEnv =
-            std::make_shared<CEnvironmentVariable>(strName);
-
-        bStatus = pEnv && pEnv->Set(strValue.c_str());
-        if (bStatus)
-            rContext.Store(pEnv);
-    }
-
+    bool bStatus = Assign(rContext, strName, strValue);
     return bStatus;
 }
 

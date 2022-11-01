@@ -5,6 +5,7 @@
 #include "core/CStoredNameItem.h"
 #include "core/CStoredDescriptionItem.h"
 #include "core/CNoChildren.h"
+#include "core/CAssignable.h"
 #include "CVariableExpressionKey.h"
 
 //! @brief Stores a constant or an expression
@@ -12,6 +13,7 @@ class CVariable : public IProjTreeItem
                 , public CStoredNameItem
                 , public CStoredDescriptionItem
                 , public CNoChildren
+                , public CAssignable
 {
 protected:
     using vec_rules_t = std::vector<CVariableExpressionKey>;
@@ -33,9 +35,6 @@ protected:
 
 public:
     ~CVariable();
-
-    //! If true, the variable is exported to the system environment when evaluated
-    bool m_bExportToEnvironment;
 
     //! @brief Creates a new rule associated to a provided configuration and instance, and returns a reference to it
     IExpression& AddRule(std::weak_ptr<const CConfiguration> pKeyConfig, std::weak_ptr<const CInstance> pKeyInstance);

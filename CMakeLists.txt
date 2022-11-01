@@ -68,6 +68,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/core/items/variable/CVariableExpressionKey.cpp"
     "include/core/items/variable/EBuiltInVariables.h"
     "src/core/items/variable/EBuiltInVariables.cpp"
+    "include/core/CAssignable.h"
+    "src/core/items/CAssignable.cpp"
     "include/core/items/variable/CEnvironmentVariable.h"
     "src/core/items/variable/CEnvironmentVariable.cpp"
     "include/core/items/variable/CVariable.h"

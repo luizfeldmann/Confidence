@@ -7,7 +7,7 @@
 DEFINE_SERIALIZATION_SCHEME(CVariable,
     SERIALIZATION_INHERIT(CStoredNameItem)
     SERIALIZATION_INHERIT(CStoredDescriptionItem)
-    SERIALIZATION_MEMBER(m_bExportToEnvironment)
+    SERIALIZATION_INHERIT(CAssignable)
     SERIALIZATION_MEMBER(m_vRules)
 )
 
@@ -17,7 +17,6 @@ REGISTER_POLYMORPHIC_CLASS(CVariable);
 CVariable::CVariable()
     : CStoredNameItem("<new variable>")
     , CStoredDescriptionItem("<no variable description>")
-    , m_bExportToEnvironment(false)
 {
 
 }
@@ -170,24 +169,7 @@ bool CVariable::Execute(CExecutionContext& rContext) const
 
         // Evaluate expression to a literal
         std::string strValue = pExpression->GetExpression();
-        bStatus = rContext.Evaluate(strValue);
-
-        if (bStatus)
-        {
-            // Set the variable in the context
-            rContext.SetVariableLiteral(strVarName, strValue);
-
-            // If requested, export to environment
-            if (m_bExportToEnvironment)
-            {
-                std::shared_ptr<CEnvironmentVariable> pEnv = 
-                    std::make_shared<CEnvironmentVariable>(strVarName);
-                
-                bStatus = pEnv && pEnv->Set(strValue.c_str());
-                if (bStatus)
-                    rContext.Store(pEnv);
-            }
-        }
+        bStatus = Assign(rContext, strVarName, strValue);
     }
 
     return bStatus;

@@ -8,8 +8,10 @@ CConstantEditorUI::CConstantEditorUI(wxWindow* pParent, CConstant& rEdit)
     , m_rEdit(rEdit)
 {
     m_textCtrlExpression->ChangeValue(m_rEdit.GetExpression());
-    m_checkBoxExport->SetValue(m_rEdit.m_bExportToEnvironment);
-    m_bitmapExport->Show(m_rEdit.m_bExportToEnvironment);
+
+    bool bExport = m_rEdit.GetExportToEnv();
+    m_checkBoxExport->SetValue(bExport);
+    m_bitmapExport->Show(bExport);
 }
 
 void CConstantEditorUI::onExpressionChanged(wxCommandEvent& event)
@@ -22,8 +24,9 @@ void CConstantEditorUI::onExpressionChanged(wxCommandEvent& event)
 
 void CConstantEditorUI::onChkboxExport(wxCommandEvent& event)
 {
-    m_rEdit.m_bExportToEnvironment = m_checkBoxExport->GetValue();
-    m_bitmapExport->Show(m_rEdit.m_bExportToEnvironment);
+    bool bExport = m_checkBoxExport->GetValue();
+    m_rEdit.SetExportToEnv(bExport);
+    m_bitmapExport->Show(bExport);
 }
 
 /* CConstantEditor */

@@ -6,6 +6,7 @@
 #include "core/CStoredDescriptionItem.h"
 #include "core/CStoredExpression.h"
 #include "core/CNoChildren.h"
+#include "core/CAssignable.h"
 
 //! @brief Represents an assignable value that is not directly dependant on configuration or instance
 class CConstant : public IProjTreeItem
@@ -13,6 +14,7 @@ class CConstant : public IProjTreeItem
     , public CStoredDescriptionItem
     , public CStoredExpression
     , public CNoChildren
+    , public CAssignable
 {
 protected:
     //! @brief Creates a new, empty constant
@@ -28,9 +30,6 @@ protected:
 public:
 
     ~CConstant();
-
-    //! If true, the constant is exported to the system environment when evaluated
-    bool m_bExportToEnvironment;
 
     //! @brief Returns a new instance of this class
     static IProjTreeItem::ptr_t Create();
