@@ -1,7 +1,7 @@
 #ifndef _CDOCEXPORTERTABLEMODEL_H_
 #define _CDOCEXPORTERTABLEMODEL_H_
 
-#include "ui/Models/CBaseModel.h"
+#include "ui/Models/CBaseModelMapped.h"
 #include "docs/EDocExporter.h"
 #include <unordered_map>
 
@@ -9,14 +9,14 @@ class CProject;
 class IDocExporter;
 
 //! @brief Manages a table of documentation exporters for the project
-class CDocExporterTableModel : public CBaseModel
+class CDocExporterTableModel : public CBaseModelMapped
 {
 protected:
     //! @brief The underlying project being edited
     CProject& m_rEdit;
 
     //! @brief Defines the columns shown in the table
-    enum class EColumn
+    enum class EColumn : unsigned int
     {
         Type        = 0, //!< Display the type of exporter
         Destination,     //!< The path to export the document
@@ -24,15 +24,6 @@ protected:
         /* MUST BE LAST */
         Count
     };
-
-    //! Stores the callbacks to read/write each column
-    std::unordered_map<EColumn, std::unique_ptr<IModelColumnHandler>> m_mapColumns;
-
-    //! @copydoc CBaseModel::GetColumnInfo
-    IModelColumnHandler* GetColumnInfo(unsigned int nModelColumn) override;
-
-    //! @copydoc CBaseModel::GetColumnInfo
-    const IModelColumnHandler* GetColumnInfo(unsigned int nModelColumn) const override;
 
 public:
     CDocExporterTableModel(CProject& rEdit);

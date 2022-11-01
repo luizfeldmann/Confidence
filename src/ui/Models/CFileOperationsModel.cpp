@@ -164,37 +164,15 @@ public:
 CFileOperationsModel::CFileOperationsModel(CFileOperations& rEdit)
     : m_rEdit(rEdit)
 {
-    m_mapColumns[EColumn::Direction] = std::make_unique<COperationDirectionColumnHandler>();
-    m_mapColumns[EColumn::Location] = std::make_unique<COperationLocatorColumnHandler>();
-    m_mapColumns[EColumn::Expression] = std::make_unique<COperationExpressionColumnHandler>();
-    m_mapColumns[EColumn::Description] = std::make_unique<COperationDescriptionColumnHandler>();
+    m_mapColumns[(unsigned int)EColumn::Direction] = std::make_unique<COperationDirectionColumnHandler>();
+    m_mapColumns[(unsigned int)EColumn::Location] = std::make_unique<COperationLocatorColumnHandler>();
+    m_mapColumns[(unsigned int)EColumn::Expression] = std::make_unique<COperationExpressionColumnHandler>();
+    m_mapColumns[(unsigned int)EColumn::Description] = std::make_unique<COperationDescriptionColumnHandler>();
 }
 
 CFileOperationsModel::~CFileOperationsModel()
 {
 
-}
-
-IModelColumnHandler* CFileOperationsModel::GetColumnInfo(unsigned int nModelColumn)
-{
-    IModelColumnHandler* pInfo = nullptr;
-
-    const auto itFound = m_mapColumns.find((EColumn)nModelColumn);
-    if (m_mapColumns.end() != itFound)
-        pInfo = itFound->second.get();
-
-    return pInfo;
-}
-
-const IModelColumnHandler* CFileOperationsModel::GetColumnInfo(unsigned int nModelColumn) const
-{
-    const IModelColumnHandler* pInfo = nullptr;
-
-    const auto itFound = m_mapColumns.find((EColumn)nModelColumn);
-    if (m_mapColumns.cend() != itFound)
-        pInfo = itFound->second.get();
-
-    return pInfo;
 }
 
 const wxDataViewItem CFileOperationsModel::NewItem()

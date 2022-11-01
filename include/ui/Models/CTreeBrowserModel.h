@@ -1,7 +1,7 @@
 #ifndef _CTREEBROWSERMODEL_H_
 #define _CTREEBROWSERMODEL_H_
 
-#include "ui/Models/CBaseModel.h"
+#include "ui/Models/CBaseModelMapped.h"
 #include "ui/Models/CBaseTreeItemModel.h"
 #include <wx/event.h>
 
@@ -13,14 +13,14 @@ class IProjTreeItem;
 wxDECLARE_EVENT(EVT_TREE_ITEM_RENAME, wxCommandEvent);
 
 //! @brief Model to connect the GUI to the backend project structure
-class CTreeBrowserModel : public wxEvtHandler, public CBaseModel, public CBaseTreeItemModel
+class CTreeBrowserModel : public wxEvtHandler, public CBaseModelMapped, public CBaseTreeItemModel
 {
 protected:
     //! Pointer to the project whose tree is shown/edited
     std::weak_ptr<const IProjTreeItem> m_pRootItem;
 
     //! @brief Defines the columns shown in the tree browser
-    enum class ETreeBrowserColumn
+    enum class EColumn : unsigned int
     {
         IconAndName = 0,
         Description,
@@ -28,15 +28,6 @@ protected:
         /* MUST BE LAST */
         Count
     };
-
-    //! Stores the callbacks to read/write each column
-    std::unordered_map<ETreeBrowserColumn, std::unique_ptr<IModelColumnHandler>> m_mapColumns;
-
-    //! @copydoc CBaseModel::GetColumnInfo
-    IModelColumnHandler* GetColumnInfo(unsigned int nModelColumn) override;
-
-    //! @copydoc CBaseModel::GetColumnInfo
-    const IModelColumnHandler* GetColumnInfo(unsigned int nModelColumn) const override;
 
     //! @copydoc CBaseTreeItemModel::GetRootItem
     const IProjTreeItem& GetRootItem() const override;

@@ -194,6 +194,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/Editors/COperationEditor.cpp"
     "include/ui/Models/CBaseModel.h"
     "src/ui/Models/CBaseModel.cpp"
+    "include/ui/Models/CBaseModelMapped.h"
+    "src/ui/Models/CBaseModelMapped.cpp"
     "include/ui/Models/CBaseTreeItemModel.h"
     "src/ui/Models/CBaseTreeItemModel.cpp"
     "include/ui/Models/CTreeBrowserModel.h"

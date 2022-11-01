@@ -83,8 +83,8 @@ CDocExporterTableModel::CDocExporterTableModel(CProject& rEdit)
     : m_rEdit(rEdit)
 {
     // Create columns
-    m_mapColumns[EColumn::Type]        = std::make_unique<CExporterTypeModelColumnHandler>();
-    m_mapColumns[EColumn::Destination] = std::make_unique<CExporterDestinationModelColumnHandler>();
+    m_mapColumns[(unsigned int)EColumn::Type]        = std::make_unique<CExporterTypeModelColumnHandler>();
+    m_mapColumns[(unsigned int)EColumn::Destination] = std::make_unique<CExporterDestinationModelColumnHandler>();
 }
 
 CDocExporterTableModel::~CDocExporterTableModel()
@@ -129,28 +129,6 @@ bool CDocExporterTableModel::DeleteItem(const wxDataViewItem& cDeleteItem)
     }
 
     return bSuccess;
-}
-
-IModelColumnHandler* CDocExporterTableModel::GetColumnInfo(unsigned int nModelColumn)
-{
-    IModelColumnHandler* pInfo = nullptr;
-
-    const auto itFound = m_mapColumns.find((EColumn)nModelColumn);
-    if (m_mapColumns.end() != itFound)
-        pInfo = itFound->second.get();
-
-    return pInfo;
-}
-
-const IModelColumnHandler* CDocExporterTableModel::GetColumnInfo(unsigned int nModelColumn) const
-{
-    const IModelColumnHandler* pInfo = nullptr;
-
-    const auto itFound = m_mapColumns.find((EColumn)nModelColumn);
-    if (m_mapColumns.cend() != itFound)
-        pInfo = itFound->second.get();
-
-    return pInfo;
 }
 
 unsigned int CDocExporterTableModel::GetColumnCount() const

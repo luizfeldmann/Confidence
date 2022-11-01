@@ -1,21 +1,21 @@
 #ifndef _CPROCESSARGSMODEL_H_
 #define _CPROCESSARGSMODEL_H_
 
-#include "ui/Models/CBaseModel.h"
+#include "ui/Models/CBaseModelMapped.h"
 #include <unordered_map>
 
 class CRunProcess;
 class CProcessArgument;
 
 //! @brief Model to connect the GUI to the backend project structure
-class CProcessArgsModel : public CBaseModel
+class CProcessArgsModel : public CBaseModelMapped
 {
 protected:
     //! @brief The underlying process being edited
     CRunProcess& m_rEdit;
 
     //! @brief Defines the columns shown in the arguments list
-    enum class EProcessArgsColumn
+    enum class EColumn : unsigned int
     {
         Description = 0,
         Expression,
@@ -23,15 +23,6 @@ protected:
         /* MUST BE LAST */
         Count
     };
-
-    //! Stores the callbacks to read/write each column
-    std::unordered_map<EProcessArgsColumn, std::unique_ptr<IModelColumnHandler>> m_mapColumns;
-
-    //! @copydoc CBaseModel::GetColumnInfo
-    IModelColumnHandler* GetColumnInfo(unsigned int nModelColumn) override;
-
-    //! @copydoc CBaseModel::GetColumnInfo
-    const IModelColumnHandler* GetColumnInfo(unsigned int nModelColumn) const override;
 
 public:
     CProcessArgsModel(CRunProcess& rEdit);

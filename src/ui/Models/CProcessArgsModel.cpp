@@ -86,8 +86,8 @@ CProcessArgsModel::CProcessArgsModel(CRunProcess& rEdit)
     : m_rEdit(rEdit)
 {
     // Create columns
-    m_mapColumns[EProcessArgsColumn::Description] = std::make_unique<CArgumentDescriptionModelColumnHandler>();
-    m_mapColumns[EProcessArgsColumn::Expression]  = std::make_unique<CArgumentExpressionModelColumnHandler>();
+    m_mapColumns[(unsigned int)EColumn::Description] = std::make_unique<CArgumentDescriptionModelColumnHandler>();
+    m_mapColumns[(unsigned int)EColumn::Expression]  = std::make_unique<CArgumentExpressionModelColumnHandler>();
 }
 
 CProcessArgsModel::~CProcessArgsModel()
@@ -185,31 +185,9 @@ const wxDataViewItem CProcessArgsModel::MoveItem(const wxDataViewItem& rMoveItem
     return cSwapItem;
 }
 
-IModelColumnHandler* CProcessArgsModel::GetColumnInfo(unsigned int nModelColumn)
-{
-    IModelColumnHandler* pInfo = nullptr;
-
-    const auto itFound = m_mapColumns.find((EProcessArgsColumn)nModelColumn);
-    if (m_mapColumns.end() != itFound)
-        pInfo = itFound->second.get();
-
-    return pInfo;
-}
-
-const IModelColumnHandler* CProcessArgsModel::GetColumnInfo(unsigned int nModelColumn) const
-{
-    const IModelColumnHandler* pInfo = nullptr;
-
-    const auto itFound = m_mapColumns.find((EProcessArgsColumn)nModelColumn);
-    if (m_mapColumns.cend() != itFound)
-        pInfo = itFound->second.get();
-
-    return pInfo;
-}
-
 unsigned int CProcessArgsModel::GetColumnCount() const
 {
-    return (unsigned int)EProcessArgsColumn::Count;
+    return (unsigned int)EColumn::Count;
 }
 
 wxDataViewItem CProcessArgsModel::GetParent(const wxDataViewItem& item) const

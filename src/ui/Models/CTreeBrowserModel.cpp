@@ -118,35 +118,13 @@ public:
 CTreeBrowserModel::CTreeBrowserModel(std::weak_ptr<const IProjTreeItem> pNewRoot)
     : m_pRootItem(pNewRoot)
 {
-    m_mapColumns[ETreeBrowserColumn::IconAndName] = std::make_unique<CNameModelColumnHandler>(*this);
-    m_mapColumns[ETreeBrowserColumn::Description] = std::make_unique<CDescriptionModelColumnHandler>(*this);
+    m_mapColumns[(unsigned int)EColumn::IconAndName] = std::make_unique<CNameModelColumnHandler>(*this);
+    m_mapColumns[(unsigned int)EColumn::Description] = std::make_unique<CDescriptionModelColumnHandler>(*this);
 }
 
 CTreeBrowserModel::~CTreeBrowserModel()
 {
 
-}
-
-IModelColumnHandler* CTreeBrowserModel::GetColumnInfo(unsigned int nModelColumn)
-{
-    IModelColumnHandler* pInfo = nullptr;
-
-    const auto itFound = m_mapColumns.find((ETreeBrowserColumn)nModelColumn);
-    if (m_mapColumns.end() != itFound)
-        pInfo = itFound->second.get();
-
-    return pInfo;
-}
-
-const IModelColumnHandler* CTreeBrowserModel::GetColumnInfo(unsigned int nModelColumn) const
-{
-    const IModelColumnHandler* pInfo = nullptr;
-
-    const auto itFound = m_mapColumns.find((ETreeBrowserColumn)nModelColumn);
-    if (m_mapColumns.cend() != itFound)
-        pInfo = itFound->second.get();
-
-    return pInfo;
 }
 
 void CTreeBrowserModel::SetRoot(std::weak_ptr<const IProjTreeItem> pNewRoot)
@@ -169,7 +147,7 @@ const IProjTreeItem& CTreeBrowserModel::GetRootItem() const
 
 unsigned int CTreeBrowserModel::GetColumnCount() const
 {
-    return (unsigned int)ETreeBrowserColumn::Count;
+    return (unsigned int)EColumn::Count;
 }
 
 bool CTreeBrowserModel::IsContainer(const wxDataViewItem& item) const

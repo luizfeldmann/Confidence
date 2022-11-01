@@ -1,21 +1,21 @@
 #ifndef _CFILEOPERATIONSMODEL_H_
 #define _CFILEOPERATIONSMODEL_H_
 
-#include "ui/Models/CBaseModel.h"
+#include "ui/Models/CBaseModelMapped.h"
 #include <unordered_map>
 
 class CFileOperations;
 class CFileOperation;
 
 //! @brief Model to connect the GUI to the backend project structure
-class CFileOperationsModel : public CBaseModel
+class CFileOperationsModel : public CBaseModelMapped
 {
 protected:
     //! @brief The underlying operations being edited
     CFileOperations& m_rEdit;
 
     //! @brief Defines the columns shown in the operations list
-    enum class EColumn
+    enum class EColumn : unsigned int
     {
         Direction = 0,  //!< If the operation is R or W
         Location,       //!< String representation of the data locator
@@ -25,15 +25,6 @@ protected:
         /* MUST BE LAST */
         Count
     };
-
-    //! Stores the callbacks to read/write each column
-    std::unordered_map<EColumn, std::unique_ptr<IModelColumnHandler>> m_mapColumns;
-
-    //! @copydoc CBaseModel::GetColumnInfo
-    IModelColumnHandler* GetColumnInfo(unsigned int nModelColumn) override;
-
-    //! @copydoc CBaseModel::GetColumnInfo
-    const IModelColumnHandler* GetColumnInfo(unsigned int nModelColumn) const override;
 
 public:
     CFileOperationsModel(CFileOperations& rEdit);
