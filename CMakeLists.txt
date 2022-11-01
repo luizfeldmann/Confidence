@@ -72,6 +72,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/core/items/variable/CEnvironmentVariable.cpp"
     "include/core/items/variable/CVariable.h"
     "src/core/items/variable/CVariable.cpp"
+    "include/core/items/CConstant.h"
+    "src/core/items/CConstant.cpp"
     "include/core/items/file_generator/ITextProvider.h"
     "include/core/items/file_generator/CStoredTextProvider.h"
     "src/core/items/file_generator/CStoredTextProvider.cpp"
@@ -152,6 +154,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "ui/wxExport/IRunProcessEditor.cpp"
     "ui/wxExport/IOperationEditor.h"
     "ui/wxExport/IOperationEditor.cpp"
+    "ui/wxExport/IConstantEditor.h"
+    "ui/wxExport/IConstantEditor.cpp"
 
     # GUI
     "include/ui/CMainApp.h"
@@ -176,6 +180,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/Editors/CGroupEditor.cpp"
     "include/ui/Editors/CVariableEditor.h"
     "src/ui/Editors/CVariableEditor.cpp"
+    "include/ui/Editors/CConstantEditor.h"
+    "src/ui/Editors/CConstantEditor.cpp"
     "include/ui/CTextStyler.h" 
     "src/ui/CTextStyler.cpp"
     "include/ui/Editors/CGeneratedTextFileEditor.h"

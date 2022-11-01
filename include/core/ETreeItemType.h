@@ -20,6 +20,7 @@ enum ETreeItemType
     ERunProcess = 0x100,//! Creates a new process and (optionally) waits for return code and output
     EImportEnv  = 0x200,//! Imports a variable from the environment
     EOperations = 0x400,//! Allows reading/writing structured data to supported file formats
+    EConstant   = 0x800,//! Assigns a value which independs on configuration/instance
 };
 
 #endif
