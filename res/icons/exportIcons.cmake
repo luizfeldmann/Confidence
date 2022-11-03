@@ -42,6 +42,10 @@ SET(ICONS_SOURCE
     "TREEITEM_VARENV"
     "TREEITEM_CONSTANT"
     "TREEITEM_FILE_OPERATIONS"
+    "TREEITEM_CONDITIONAL"
+    "GATE_OR"
+    "GATE_AND"
+    "GATE_NOT"
 )
 
 # Special icons which must come first in list

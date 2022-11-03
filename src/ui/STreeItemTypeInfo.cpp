@@ -6,11 +6,13 @@
 #include "ui/Editors/CProcessEditor.h"
 #include "ui/Editors/COperationEditor.h"
 #include "ui/Editors/CConstantEditor.h"
+#include "ui/Editors/CConditionalEditor.h"
 #include "core/items/CInstance.h"
 #include "core/items/CConfiguration.h"
 #include "core/items/CEnvironmentImport.h"
 #include "core/items/file_operation/CFileOperations.h"
 #include "core/items/CConstant.h"
+#include "core/items/condition/CConditional.h"
 #include <map>
 
 const std::vector<ETreeItemType>& STreeItemTypeInfo::GetTypesList()
@@ -28,6 +30,7 @@ const std::vector<ETreeItemType>& STreeItemTypeInfo::GetTypesList()
         EImportEnv,
         EOperations,
         EConstant,
+        EConditional
     };
 
     return theList;
@@ -155,6 +158,14 @@ const STreeItemTypeInfo& STreeItemTypeInfo::GetInfo(ETreeItemType eType)
                 &CConstantEditor::Create
             }
         },
+        { EConditional,
+            STreeItemTypeInfo {
+                "Conditional",
+                REGICON(L"RES_ID_ICON_TREEITEM_CONDITIONAL"),
+                &CConditional::Create,
+                &CConditionalEditor::Create
+            },
+        }
     };
 
     const auto it = mapIcons.find(eType);

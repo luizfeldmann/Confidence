@@ -118,6 +118,13 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/core/items/file_operation/CIniFileHandler.cpp"
     "include/core/items/file_operation/CXmlFileHandler.h"
     "src/core/items/file_operation/CXmlFileHandler.cpp"
+    "include/core/items/condition/ICondition.h"
+    "include/core/items/condition/CLogicalComparator.h"
+    "src/core/items/condition/CLogicalComparator.cpp"
+    "include/core/items/condition/CLogicalOperator.h"
+    "src/core/items/condition/CLogicalOperator.cpp"
+    "include/core/items/condition/CConditional.h"
+    "src/core/items/condition/CConditional.cpp"
     "include/core/INotifyItemOperation.h"
     "src/core/INotifyItemOperation.cpp"
 
@@ -158,6 +165,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "ui/wxExport/IOperationEditor.cpp"
     "ui/wxExport/IConstantEditor.h"
     "ui/wxExport/IConstantEditor.cpp"
+    "ui/wxExport/IConditionalEditor.h"
+    "ui/wxExport/IConditionalEditor.cpp"
 
     # GUI
     "include/ui/CMainApp.h"
@@ -192,6 +201,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/Editors/CProcessEditor.cpp"
     "include/ui/Editors/COperationEditor.h"
     "src/ui/Editors/COperationEditor.cpp"
+    "include/ui/Editors/CConditionalEditor.h" 
+    "src/ui/Editors/CConditionalEditor.cpp"
     "include/ui/Models/CBaseModel.h"
     "src/ui/Models/CBaseModel.cpp"
     "include/ui/Models/CBaseModelMapped.h"
