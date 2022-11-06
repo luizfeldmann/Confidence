@@ -1,6 +1,7 @@
 #ifndef _CCONDITIONALEDITOR_
 #define _CCONDITIONALEDITOR_
 
+#include "ui/CAcceleratorEntry.h"
 #include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/IConditionalEditor.h"
 
@@ -11,8 +12,14 @@ class CConditionalTreeModel;
 class CConditionalEditorUI : public IConditionalEditor
 {
 protected:
+    //! The underlying conditional item being edited
     CConditional& m_rEdit;
+
+    //! The model used to manage the table of conditions
     CConditionalTreeModel* const m_pModel;
+
+    //! Manages keyboard shortcuts
+    wxAcceleratorTable m_cAccTbl;
 
     void onBtnNewSelected(wxCommandEvent& event);
 

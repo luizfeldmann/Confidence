@@ -5,6 +5,7 @@
 #include "core/items/condition/CConditional.h"
 #include <wx/menu.h>
 #include <functional>
+#include <array>
 
 /* CConditionalEditorUI */
 
@@ -13,8 +14,21 @@ CConditionalEditorUI::CConditionalEditorUI(wxWindow* pParent, CConditional& rEdi
     , m_rEdit(rEdit)
     , m_pModel(new CConditionalTreeModel(m_rEdit))
 {
+    // Associate the model
     m_dataViewCtrl->AssociateModel(m_pModel);
     m_pModel->DecRef();
+
+    // Configure accelerator
+    using acc_entry_t = CAcceleratorEntry;
+    const std::array<acc_entry_t, 4> arrAccEntry{
+        acc_entry_t(wxACCEL_CTRL,    (int)'N',   m_toolNew),
+        acc_entry_t(wxACCEL_NORMAL,  WXK_DELETE, m_toolDelete),
+        acc_entry_t(wxACCEL_CTRL,    WXK_UP,     m_toolUp),
+        acc_entry_t(wxACCEL_CTRL,    WXK_DOWN,   m_toolDown),
+    };
+
+    m_cAccTbl = wxAcceleratorTable(arrAccEntry.size(), arrAccEntry.data());
+    m_dataViewCtrl->SetAcceleratorTable(m_cAccTbl);
 }
 
 struct SConditionalCreationInfo
