@@ -19,6 +19,7 @@ CVariableEditorUI::CVariableEditorUI(wxWindow* pParent, std::shared_ptr<const CP
     m_dataView->SetAcceleratorTable(m_cAccTbl);
 
     m_toolBar->ToggleTool(m_toolExportEnv->GetId(), m_rVar.GetExportToEnv());
+    m_toolBar->ToggleTool(m_toolPerInstance->GetId(), m_rVar.GetPerInstance());
 }
 
 void CVariableEditorUI::OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent)
@@ -42,6 +43,12 @@ void CVariableEditorUI::onDeleteCell(wxCommandEvent& event)
     wxDataViewColumn* selectColumn = m_dataView->GetCurrentColumn();
 
     m_pModel->DeleteCell(selectRow, selectColumn);
+}
+
+void CVariableEditorUI::onToolPerInstance(wxCommandEvent& event)
+{
+    m_rVar.SetPerInstance(m_toolPerInstance->IsToggled());
+    m_pModel->ReloadColumns();
 }
 
 void CVariableEditorUI::onToolExportEnv(wxCommandEvent& event)

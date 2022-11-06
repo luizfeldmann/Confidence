@@ -17,9 +17,11 @@ protected:
     std::weak_ptr<const CInstance> m_pInstance;
 
     //! @brief Returns the icon of the column
-    inline static const wxIcon& GetIcon()
+    inline static const wxIcon& GetIcon(bool bHasInstances)
     {
-        return STreeItemTypeInfo::GetIcon(ETreeItemType::EInstance);
+        static const wxIcon iconDefault("RES_ID_ICON_TREEITEM_INSTANCEFAV");
+
+        return bHasInstances ? STreeItemTypeInfo::GetIcon(ETreeItemType::EInstance) : iconDefault;
     }
 
 public:
@@ -27,12 +29,21 @@ public:
     //! @param[in] pInst The instance associated to this column
     //! @param[in] nModelColumn Index used to track this column in the model
     CInstanceColumn(std::shared_ptr<const CInstance> pInst, unsigned int nModelColumn)
-        : wxDataViewColumn(GetIcon(), new wxDataViewIconTextRenderer(wxDataViewIconTextRenderer::GetDefaultType(), wxDATAVIEW_CELL_EDITABLE), nModelColumn)
+        : wxDataViewColumn(GetIcon(true), new wxDataViewIconTextRenderer(wxDataViewIconTextRenderer::GetDefaultType(), wxDATAVIEW_CELL_EDITABLE), nModelColumn)
         , m_pInstance(pInst)
     {
         assert(pInst && "Column created from null instance");
         const std::string strInstanceName = pInst->GetName();
         SetTitle(strInstanceName);
+    }
+
+    //! @brief Creates a default column related to no specific instance
+    //! @param[in] nModelColumn Index used to track this column in the model
+    CInstanceColumn(unsigned int nModelColumn)
+        : wxDataViewColumn(GetIcon(false), new wxDataViewIconTextRenderer(wxDataViewIconTextRenderer::GetDefaultType(), wxDATAVIEW_CELL_EDITABLE), nModelColumn)
+        , m_pInstance()
+    {
+        SetTitle("Expression");
     }
 
     //! @brief Gets a pointer to the associated instance, if any
@@ -180,17 +191,26 @@ void CVariableTableModel::ReloadColumns()
     pColConfig->SetTitle(rHeaderInfo.m_strTypeName);
 
     // Create one column for each instance
-    std::shared_ptr<const CProject> pProj = m_pProj.lock();
-    assert(pProj);
-
-    const ITreeItemCollection::vec_cptr_t vSubItems = pProj->GetInstances()->SubItems();
-
     unsigned int nModelColumn = (unsigned int)EVariableColumns::InstanceFirst;
-    for (const ITreeItemCollection::cptr_t& pItem : vSubItems)
-    {
-        assert(pItem && ETreeItemType::EInstance == pItem->GetType());
 
-        m_pCtrl->AppendColumn( new CInstanceColumn( std::dynamic_pointer_cast<const CInstance>(pItem) , nModelColumn++) );
+    if (m_rVar.GetPerInstance())
+    {
+        std::shared_ptr<const CProject> pProj = m_pProj.lock();
+        assert(pProj);
+
+        const ITreeItemCollection::vec_cptr_t vSubItems = pProj->GetInstances()->SubItems();
+
+        for (const ITreeItemCollection::cptr_t& pItem : vSubItems)
+        {
+            assert(pItem && ETreeItemType::EInstance == pItem->GetType());
+
+            m_pCtrl->AppendColumn(new CInstanceColumn(std::dynamic_pointer_cast<const CInstance>(pItem), nModelColumn++));
+        }
+    }
+    else
+    {
+        // Create a single column for default expression
+        m_pCtrl->AppendColumn(new CInstanceColumn(nModelColumn++));
     }
 }
 
@@ -247,9 +267,9 @@ void CVariableTableModel::GetValue(wxVariant& variant, const wxDataViewItem& ite
                 pInstance = pColumn->GetInstance();
         }
 
-        if (!pInstance)
+        if (!pInstance && m_rVar.GetPerInstance())
         {
-            // Instance/Column does not exitst
+            // *Required* Instance/Column does not exitst
             SetCellStatus(ECellStatus::Error, value);
         }
         else
@@ -294,7 +314,7 @@ bool CVariableTableModel::SetValue(const wxVariant& variant, const wxDataViewIte
         std::shared_ptr<const CInstance> const pInstance = pColumn->GetInstance();
         std::shared_ptr<const CConfiguration> const pConfig = std::dynamic_pointer_cast<const CConfiguration>( GetPointer(item)->shared_from_this() );
 
-        if (pConfig && pInstance)
+        if (pConfig && (pInstance || !m_rVar.GetPerInstance()))
         {
             IExpression* pExpression = m_rVar.GetRule(pConfig.get(), pInstance.get());
             

@@ -11,9 +11,20 @@ DEFINE_SERIALIZATION_SCHEME(CVariableExpressionKey,
     SERIALIZATION_INHERIT(CStoredExpression)
 )
 
+static const std::string c_strAnyInstance = "<ANY>";
+
 CVariableExpressionKey::CVariableExpressionKey()
     : m_pConfiguration()
     , m_pInstance()
+    , m_bPerInstance(false)
+{
+
+}
+
+CVariableExpressionKey::CVariableExpressionKey(const std::weak_ptr<const CConfiguration>& pConfig)
+    : m_pConfiguration(pConfig)
+    , m_pInstance()
+    , m_bPerInstance(false)
 {
 
 }
@@ -21,6 +32,7 @@ CVariableExpressionKey::CVariableExpressionKey()
 CVariableExpressionKey::CVariableExpressionKey(const std::weak_ptr<const CConfiguration>& pConfig, const std::weak_ptr<const CInstance>& pInst)
     : m_pConfiguration(pConfig)
     , m_pInstance(pInst)
+    , m_bPerInstance(true)
 {
 
 }
@@ -41,10 +53,17 @@ bool CVariableExpressionKey::Compare(const CConfiguration* pConfig, const CInsta
         && (pInst == GetInstance().get());
 }
 
+bool CVariableExpressionKey::CompareConfig(const CConfiguration* pConfig) const
+{
+    return (pConfig == GetConfiguration().get());
+}
+
 bool CVariableExpressionKey::IsValid() const
 {
-    bool bStatus = GetConfiguration()
-        && GetInstance();
+    bool bStatus = (nullptr != GetConfiguration());
+
+    if (m_bPerInstance)
+        bStatus = bStatus && (nullptr != GetInstance());
 
     return bStatus;
 }
@@ -64,13 +83,20 @@ bool CVariableExpressionKey::PreSerialize()
     }
 
     // Update instance name before serialization
-    std::shared_ptr<const CInstance> const pInst = GetInstance();
-    if (pInst)
-        m_strInstance = pInst->GetName();
+    if (m_bPerInstance)
+    {
+        std::shared_ptr<const CInstance> const pInst = GetInstance();
+        if (pInst)
+            m_strInstance = pInst->GetName();
+        else
+        {
+            bValid = false;
+            m_strInstance.clear();
+        }
+    }
     else
     {
-        bValid = false;
-        m_strInstance.clear();
+        m_strInstance = c_strAnyInstance;
     }
 
     return bValid;
@@ -92,15 +118,25 @@ bool CVariableExpressionKey::PostDeserialize(CProject& rProject)
         m_pConfiguration = pConfig;
     }
 
-    std::shared_ptr<const CInstance> const pInst = rProject.GetInstance(m_strInstance);
-    if (!pInst)
+    if (c_strAnyInstance == m_strInstance)
     {
-        bResult = false;
-        CERROR("Cannot find instance named '%s'", m_strInstance.c_str());
+        m_bPerInstance = false;
+        m_pInstance.reset();
     }
     else
     {
-        m_pInstance = pInst;
+        m_bPerInstance = true;
+
+        std::shared_ptr<const CInstance> const pInst = rProject.GetInstance(m_strInstance);
+        if (!pInst)
+        {
+            bResult = false;
+            CERROR("Cannot find instance named '%s'", m_strInstance.c_str());
+        }
+        else
+        {
+            m_pInstance = pInst;
+        }
     }
 
     return bResult;
@@ -113,13 +149,16 @@ bool CVariableExpressionKey::Document(IDocExporter& rExporter) const
 
     bool bStatus = false;
     
-    if (pConfig && pInst)
+    if (pConfig && (pInst || !m_bPerInstance))
     {
-        bStatus = rExporter.FormField("Configuration:", pConfig->GetName())
-            && rExporter.FormField("Instance:", pInst->GetName())
-            && rExporter.Paragraph()
-            && rExporter.Code(GetExpression())
-            && rExporter.PopStack();
+        bStatus = rExporter.FormField("Configuration:", pConfig->GetName());
+
+        if (m_bPerInstance)
+            bStatus = bStatus && rExporter.FormField("Instance:", pInst->GetName());
+
+        bStatus = bStatus && rExporter.Paragraph();
+        bStatus = bStatus && rExporter.Code(GetExpression());
+        bStatus = bStatus && rExporter.PopStack();
     }
 
     return bStatus;

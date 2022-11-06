@@ -18,6 +18,9 @@ class CVariable : public IProjTreeItem
 protected:
     using vec_rules_t = std::vector<CVariableExpressionKey>;
 
+    //! When true, rules dependes on configurations & instances; otherwise only on configurations
+    bool m_bPerInstance;
+
     //! @brief Collection of expressions keyed by configurations and instances
     vec_rules_t m_vRules;
 
@@ -35,6 +38,12 @@ protected:
 
 public:
     ~CVariable();
+
+    //! @brief Gets the "per instance" property: if true, rules are also dependant on instances
+    bool GetPerInstance() const;
+
+    //! @brief Sets the "per instance" property
+    void SetPerInstance(bool bPerInstance);
 
     //! @brief Creates a new rule associated to a provided configuration and instance, and returns a reference to it
     IExpression& AddRule(std::weak_ptr<const CConfiguration> pKeyConfig, std::weak_ptr<const CInstance> pKeyInstance);

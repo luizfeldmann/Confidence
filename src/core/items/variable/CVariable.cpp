@@ -8,6 +8,7 @@ DEFINE_SERIALIZATION_SCHEME(CVariable,
     SERIALIZATION_INHERIT(CStoredNameItem)
     SERIALIZATION_INHERIT(CStoredDescriptionItem)
     SERIALIZATION_INHERIT(CAssignable)
+    SERIALIZATION_MEMBER(m_bPerInstance)
     SERIALIZATION_MEMBER(m_vRules)
 )
 
@@ -17,6 +18,7 @@ REGISTER_POLYMORPHIC_CLASS(CVariable);
 CVariable::CVariable()
     : CStoredNameItem("<new variable>")
     , CStoredDescriptionItem("<no variable description>")
+    , m_bPerInstance(true)
 {
 
 }
@@ -58,9 +60,26 @@ bool CVariable::PreSerialize()
     return true;
 }
 
+bool CVariable::GetPerInstance() const
+{
+    return m_bPerInstance;
+}
+
+void CVariable::SetPerInstance(bool bPerInstance)
+{
+    if (m_bPerInstance != bPerInstance)
+        m_vRules.clear();
+
+    m_bPerInstance = bPerInstance;
+}
+
 IExpression& CVariable::AddRule(std::weak_ptr<const CConfiguration> pKeyConfig, std::weak_ptr<const CInstance> pKeyInstance)
 {
-    m_vRules.emplace_back(pKeyConfig, pKeyInstance);
+    if (m_bPerInstance)
+        m_vRules.emplace_back(pKeyConfig, pKeyInstance);
+    else
+        m_vRules.emplace_back(pKeyConfig);
+
     return m_vRules.back();
 }
 
@@ -87,8 +106,18 @@ IExpression* CVariable::GetRule(const CConfiguration* pKeyConfig, const CInstanc
 {
     IExpression* pFoundRule = nullptr;
 
-    vec_rules_t::iterator itFind = std::find_if(m_vRules.begin(), m_vRules.end(), 
-        std::bind(&CVariableExpressionKey::Compare, std::placeholders::_1, pKeyConfig, pKeyInstance));
+    vec_rules_t::iterator itFind;
+    
+    if (m_bPerInstance)
+    {
+        itFind = std::find_if(m_vRules.begin(), m_vRules.end(),
+            std::bind(&CVariableExpressionKey::Compare, std::placeholders::_1, pKeyConfig, pKeyInstance));
+    }
+    else
+    {
+        itFind = std::find_if(m_vRules.begin(), m_vRules.end(),
+            std::bind(&CVariableExpressionKey::CompareConfig, std::placeholders::_1, pKeyConfig));
+    }
 
     if (m_vRules.end() != itFind)
         pFoundRule = &*itFind;
@@ -100,8 +129,18 @@ const IExpression* CVariable::GetRule(const CConfiguration* pKeyConfig, const CI
 {
     const IExpression* pFoundRule = nullptr;
 
-    vec_rules_t::const_iterator itFind = std::find_if(m_vRules.cbegin(), m_vRules.cend(),
-        std::bind(&CVariableExpressionKey::Compare, std::placeholders::_1, pKeyConfig, pKeyInstance));
+    vec_rules_t::const_iterator itFind;
+    
+    if (m_bPerInstance)
+    {
+        itFind = std::find_if(m_vRules.cbegin(), m_vRules.cend(),
+            std::bind(&CVariableExpressionKey::Compare, std::placeholders::_1, pKeyConfig, pKeyInstance));
+    }
+    else
+    {
+        itFind = std::find_if(m_vRules.cbegin(), m_vRules.cend(),
+            std::bind(&CVariableExpressionKey::CompareConfig, std::placeholders::_1, pKeyConfig));
+    }
 
     if (m_vRules.cend() != itFind)
         pFoundRule = &*itFind;
@@ -125,9 +164,9 @@ bool CVariable::DocumentCustom(IDocExporter& rExporter) const
         if (!it->IsValid())
             continue;
 
-        bStatus = rExporter.Item()
-            && it->Document(rExporter)
-            && rExporter.PopStack();
+        bStatus = rExporter.Item();
+        bStatus = bStatus && it->Document(rExporter);
+        bStatus = bStatus && rExporter.PopStack();
     }
 
     bStatus = bStatus && rExporter.PopStack();

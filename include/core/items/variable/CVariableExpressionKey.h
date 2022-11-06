@@ -24,6 +24,9 @@ protected:
     //! This value is updated on #PreSerialize
     std::string m_strInstance;
 
+    //! When true, the instance key is required
+    bool m_bPerInstance;
+
     SERIALIZATION_FRIEND(CVariableExpressionKey);
 
     //! The pointer to the associated configuration
@@ -43,12 +46,17 @@ protected:
 public:
     CVariableExpressionKey();
 
+    CVariableExpressionKey(const std::weak_ptr<const CConfiguration>& pConfig);
     CVariableExpressionKey(const std::weak_ptr<const CConfiguration>& pConfig, const std::weak_ptr<const CInstance>& pInst);
 
     //! @brief Checks if the provided pair of instance and configuration match this key's
     //! @param[in] pConfig The configuration to compare to this'
     //! @param[in] pInst The instance to compare to this'
     bool Compare(const CConfiguration* pConfig, const CInstance* pInst) const;
+
+    //! @brief Checks if the provided configuration match this key's
+    //! @param[in] pConfig The configuration to compare to this'
+    bool CompareConfig(const CConfiguration* pConfig) const;
 
     //! @brief Checks if this key is associated to instances and configurations that are still valid
     bool IsValid() const;

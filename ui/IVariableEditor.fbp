@@ -121,6 +121,18 @@
                         <property name="window_name"></property>
                         <property name="window_style">wxBORDER_NONE</property>
                         <object class="tool" expanded="1">
+                            <property name="bitmap">Load From Icon Resource; RES_ID_ICON_TREEITEM_INSTANCE; [-1; -1]</property>
+                            <property name="context_menu">0</property>
+                            <property name="id">wxID_ANY</property>
+                            <property name="kind">wxITEM_CHECK</property>
+                            <property name="label">Per Instance</property>
+                            <property name="name">m_toolPerInstance</property>
+                            <property name="permission">protected</property>
+                            <property name="statusbar"></property>
+                            <property name="tooltip"></property>
+                            <event name="OnToolClicked">onToolPerInstance</event>
+                        </object>
+                        <object class="tool" expanded="1">
                             <property name="bitmap">Load From Icon Resource; RES_ID_ICON_EXPORT; [-1; -1]</property>
                             <property name="context_menu">0</property>
                             <property name="id">wxID_ANY</property>

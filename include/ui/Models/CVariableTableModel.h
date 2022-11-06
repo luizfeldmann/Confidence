@@ -21,15 +21,15 @@ protected:
     //! The data view control using this model
     wxDataViewCtrl* const m_pCtrl;
 
-    //! Clears the columns and recreates based on the project's instances
-    void ReloadColumns();
-
     //! @copydoc CBaseTreeItemModel::GetRootItem
     const IProjTreeItem& GetRootItem() const override;
 
 public:
     CVariableTableModel(CVariable& rVar, std::shared_ptr<const CProject> pProj, wxDataViewCtrl* pCtrl);
     ~CVariableTableModel();
+
+    //! Clears the columns and recreates based on the project's instances
+    void ReloadColumns();
 
     //! @brief Deletes the expression in the provided cell
     //! @return True if success

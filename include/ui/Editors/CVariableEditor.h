@@ -33,6 +33,7 @@ public:
     void OnAnyItemRenamed(const IProjTreeItem& pItem) override;
 
     /* OVERRIDES FROM IVariableEditor */
+    void onToolPerInstance(wxCommandEvent& event) override;
     void onToolExportEnv(wxCommandEvent& event) override;
     void onDeleteCell(wxCommandEvent& event) override;
 };
