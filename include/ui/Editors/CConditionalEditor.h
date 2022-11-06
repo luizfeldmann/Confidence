@@ -5,12 +5,16 @@
 #include "wxExport/IConditionalEditor.h"
 
 class CConditional;
+class CConditionalTreeModel;
 
 //! @brief Item editor for conditionals
 class CConditionalEditorUI : public IConditionalEditor
 {
 protected:
     CConditional& m_rEdit;
+    CConditionalTreeModel* const m_pModel;
+
+    void onBtnNewSelected(wxCommandEvent& event);
 
     /* OVERRIDES FROM IConditionalEditor */
     void onBtnNew(wxCommandEvent& event) override;

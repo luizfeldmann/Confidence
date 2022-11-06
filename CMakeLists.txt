@@ -201,6 +201,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/Models/CVariableTableModel.cpp"
     "include/ui/Models/CFileOperationsModel.h"
     "src/ui/Models/CFileOperationsModel.cpp"
+    "src/ui/Models/CConditionalTreeModel.cpp"
+    "include/ui/Models/CConditionalTreeModel.h"
     "include/ui/Models/CDocExporterTableModel.h"
     "src/ui/Models/CDocExporterTableModel.cpp"
 

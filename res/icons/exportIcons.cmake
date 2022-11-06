@@ -46,6 +46,12 @@ SET(ICONS_SOURCE
     "GATE_OR"
     "GATE_AND"
     "GATE_NOT"
+    "COMP_EQUAL"
+    "COMP_NOTEQUAL"
+    "COMP_LESS"
+    "COMP_LESSEQUAL"
+    "COMP_GREATER"
+    "COMP_GREATEREQUAL"
 )
 
 # Special icons which must come first in list

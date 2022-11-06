@@ -5,6 +5,7 @@
 DEFINE_SERIALIZATION_SCHEME(CConditional,
     SERIALIZATION_INHERIT(CStoredNameItem)
     SERIALIZATION_INHERIT(CStoredDescriptionItem)
+    SERIALIZATION_MEMBER(m_pCondition)
     SERIALIZATION_INHERIT(CStoredItemCollection)
 )
 
@@ -31,6 +32,21 @@ CConditional::~CConditional()
 ETreeItemType CConditional::GetType() const
 {
     return EConditional;
+}
+
+std::shared_ptr<ICondition> CConditional::GetCondition()
+{
+    return m_pCondition;
+}
+
+std::shared_ptr<const ICondition> CConditional::GetCondition() const
+{
+    return m_pCondition;
+}
+
+void CConditional::SetCondition(std::shared_ptr<ICondition> pCondition)
+{
+    m_pCondition.swap(pCondition);
 }
 
 bool CConditional::Execute(CExecutionContext& rContext) const

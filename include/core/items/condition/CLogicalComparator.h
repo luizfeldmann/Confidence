@@ -48,6 +48,9 @@ public:
     //! @brief Reflects the comparator type
     virtual ELogicalComparator GetType() const = 0;
 
+    //! @brief ICondition::GetCategory
+    ECategory GetCategory() const override;
+
     //! @brief Instantiates a new comparator of the given type
     static std::shared_ptr<CLogicalComparator> Create(ELogicalComparator eType);
 
@@ -62,8 +65,6 @@ protected:
 
     //! Performs the boolean evaluation of the string-evaluated expressions
     virtual bool Evaluate(const std::string& lhs, const std::string& rhs, bool& bResult) const = 0;
-
-    virtual std::string GetInfix() const = 0;
 
     //! Constructs an empty comparator
     CLogicalComparator();

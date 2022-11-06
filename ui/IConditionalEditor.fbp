@@ -79,29 +79,29 @@
                         <property name="permission">protected</property>
                         <property name="pos"></property>
                         <property name="size"></property>
-                        <property name="style"></property>
+                        <property name="style">wxDV_ROW_LINES|wxDV_VERT_RULES</property>
                         <property name="subclass">; ; forward_declare</property>
                         <property name="tooltip"></property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
                         <object class="dataViewColumn" expanded="1">
-                            <property name="align">wxALIGN_LEFT</property>
+                            <property name="align">wxALIGN_CENTER</property>
                             <property name="ellipsize"></property>
-                            <property name="flags">wxDATAVIEW_COL_RESIZABLE</property>
-                            <property name="label">Icon</property>
+                            <property name="flags"></property>
+                            <property name="label">Symbol</property>
                             <property name="mode">wxDATAVIEW_CELL_INERT</property>
                             <property name="model_column">0</property>
                             <property name="name">m_dataViewColumnIcon</property>
                             <property name="permission">protected</property>
                             <property name="type">Bitmap</property>
-                            <property name="width">-1</property>
+                            <property name="width">100</property>
                         </object>
                         <object class="dataViewColumn" expanded="1">
                             <property name="align">wxALIGN_LEFT</property>
                             <property name="ellipsize"></property>
                             <property name="flags">wxDATAVIEW_COL_RESIZABLE</property>
-                            <property name="label">LHS</property>
+                            <property name="label">Expression</property>
                             <property name="mode">wxDATAVIEW_CELL_EDITABLE</property>
                             <property name="model_column">1</property>
                             <property name="name">m_dataViewColumnLHS</property>
@@ -110,22 +110,22 @@
                             <property name="width">-1</property>
                         </object>
                         <object class="dataViewColumn" expanded="1">
-                            <property name="align">wxALIGN_LEFT</property>
-                            <property name="ellipsize"></property>
-                            <property name="flags">wxDATAVIEW_COL_RESIZABLE</property>
-                            <property name="label">Operation</property>
+                            <property name="align">wxALIGN_CENTER</property>
+                            <property name="ellipsize">wxELLIPSIZE_NONE</property>
+                            <property name="flags"></property>
+                            <property name="label">Infix</property>
                             <property name="mode">wxDATAVIEW_CELL_INERT</property>
                             <property name="model_column">2</property>
                             <property name="name">m_dataViewColumnOperation</property>
                             <property name="permission">protected</property>
                             <property name="type">Text</property>
-                            <property name="width">-1</property>
+                            <property name="width">100</property>
                         </object>
                         <object class="dataViewColumn" expanded="1">
-                            <property name="align">wxALIGN_LEFT</property>
+                            <property name="align">wxALIGN_RIGHT</property>
                             <property name="ellipsize"></property>
                             <property name="flags">wxDATAVIEW_COL_RESIZABLE</property>
-                            <property name="label">RHS</property>
+                            <property name="label">Expression</property>
                             <property name="mode">wxDATAVIEW_CELL_EDITABLE</property>
                             <property name="model_column">3</property>
                             <property name="name">m_dataViewColumnRHS</property>

@@ -49,6 +49,9 @@ public:
     //! @return True if success
     virtual bool SwapItems(const_condition_ptr_t pA, const_condition_ptr_t pB) = 0;
 
+    //! @brief ICondition::GetCategory
+    ECategory GetCategory() const override;
+
     //! @brief Instantiates a new operator of the given type
     static std::shared_ptr<CLogicalOperator> Create(ELogicalOperator eType);
 

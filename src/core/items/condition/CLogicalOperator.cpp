@@ -75,7 +75,7 @@ class CNot : public CLogicalOperator
 {
 protected:
     //! Stores the input condition
-    condition_ptr_t m_vInput;
+    condition_ptr_t m_pInput;
 
     SERIALIZATION_FRIEND(CNot);
 
@@ -85,27 +85,44 @@ public:
 
     vec_cond_t SubItems() override
     {
-        return vec_cond_t{ m_vInput };
+        vec_cond_t vSub;
+
+        if (m_pInput)
+            vSub.push_back(m_pInput);
+
+        return vSub;
     }
 
     vec_ccond_t SubItems() const override
     {
-        return vec_ccond_t{ m_vInput };
+        vec_ccond_t vSub;
+
+        if (m_pInput)
+            vSub.push_back(m_pInput);
+
+        return vSub;
     }
 
     bool AddItem(condition_ptr_t pNewItem) override
     {
-        m_vInput.swap(pNewItem);
-        return true;
+        bool bStatus = false;
+
+        if (!m_pInput)
+        {
+            m_pInput = pNewItem;
+            bStatus = true;
+        }
+
+        return bStatus;
     }
 
     bool EraseItem(const_condition_ptr_t pItem) override
     {
         bool bStatus = false;
 
-        if (pItem == m_vInput)
+        if (pItem == m_pInput)
         {
-            m_vInput.reset();
+            m_pInput.reset();
             bStatus = true;
         }
 
@@ -122,9 +139,14 @@ public:
         return ELogicalOperator::Not;
     }
 
+    std::string GetInfix() const override
+    {
+        return "NOT";
+    }
+
     bool Document(IDocExporter& rExporter) const override
     {
-        bool bStatus = rExporter.FormField("NOT:", "The following condition must evaluate to FALSE");
+        bool bStatus = rExporter.FormField(GetInfix(), "The following condition must evaluate to FALSE");
         bStatus = bStatus && CLogicalOperator::Document(rExporter);
 
         return bStatus;
@@ -134,9 +156,9 @@ public:
     {
         bool bStatus = false;
 
-        if (m_vInput)
+        if (m_pInput)
         {
-            bStatus = m_vInput->Evaluate(rContext, bResult);
+            bStatus = m_pInput->Evaluate(rContext, bResult);
 
             if (bStatus)
                 bResult = !bResult;
@@ -149,7 +171,7 @@ public:
 DECLARE_SERIALIZATION_SCHEME(CNot);
 
 DEFINE_SERIALIZATION_SCHEME(CNot,
-    SERIALIZATION_MEMBER(m_vInput)
+    SERIALIZATION_MEMBER(m_pInput)
 );
 
 REGISTER_POLYMORPHIC_CLASS(CNot);
@@ -166,9 +188,14 @@ public:
         return ELogicalOperator::And;
     }
 
+    std::string GetInfix() const override
+    {
+        return "AND";
+    }
+
     bool Document(IDocExporter& rExporter) const override
     {
-        bool bStatus = rExporter.FormField("AND:", "ALL of the below conditions must be true simultaneously");
+        bool bStatus = rExporter.FormField(GetInfix(), "ALL of the below conditions must be true simultaneously");
         bStatus = bStatus && CLogicalOperator::Document(rExporter);
 
         return bStatus;
@@ -209,9 +236,14 @@ public:
         return ELogicalOperator::Or;
     }
 
+    std::string GetInfix() const override
+    {
+        return "OR";
+    }
+
     bool Document(IDocExporter& rExporter) const override
     {
-        bool bStatus = rExporter.FormField("OR:", "ANY of the below conditions must be true");
+        bool bStatus = rExporter.FormField(GetInfix(), "ANY of the below conditions must be true");
         bStatus = bStatus && CLogicalOperator::Document(rExporter);
 
         return bStatus;
@@ -250,6 +282,11 @@ CLogicalOperator::CLogicalOperator()
 CLogicalOperator::~CLogicalOperator()
 {
 
+}
+
+CLogicalOperator::ECategory CLogicalOperator::GetCategory() const
+{
+    return ECategory::Operator;
 }
 
 bool CLogicalOperator::Document(IDocExporter& rExporter) const

@@ -47,6 +47,11 @@ bool CLogicalComparator::SetRHS(const std::string& strExpr)
     return true;
 }
 
+CLogicalComparator::ECategory CLogicalComparator::GetCategory() const
+{
+    return ECategory::Comparator;
+}
+
 bool CLogicalComparator::Evaluate(CEvaluationContext& rContext, bool& bResult) const
 {
     std::string lhs = GetLHS();
@@ -63,9 +68,11 @@ bool CLogicalComparator::Document(IDocExporter& rExporter) const
 {
     bool bStatus = rExporter.Paragraph();
     bStatus = bStatus && rExporter.Text(GetLHS());
+    bStatus = bStatus && rExporter.Text(" ");
     bStatus = bStatus && rExporter.Strong();
     bStatus = bStatus && rExporter.Text(GetInfix());
     bStatus = bStatus && rExporter.PopStack();
+    bStatus = bStatus && rExporter.Text(" ");
     bStatus = bStatus && rExporter.Text(GetRHS());
     bStatus = bStatus && rExporter.PopStack();
 
@@ -203,12 +210,14 @@ class CEqual : public CStringCapableComparator
 protected:
     bool EvaluateString(const std::string& lhs, const std::string& rhs, bool& bResult) const override
     {
-        return lhs == rhs;
+        bResult = (lhs == rhs);
+        return true;
     }
 
     bool EvaluateNumeric(numeric_t lhs, numeric_t rhs, bool& bResult) const override
     {
-        return lhs == rhs;
+        bResult = (lhs == rhs);
+        return true;
     }
 
 public:
@@ -219,7 +228,7 @@ public:
 
     std::string GetInfix() const override
     {
-        return " is EQUAL to ";
+        return "is EQUAL to";
     }
 };
 
@@ -231,12 +240,14 @@ class CNotEqual : public CStringCapableComparator
 protected:
     bool EvaluateString(const std::string& lhs, const std::string& rhs, bool& bResult) const override
     {
-        return lhs != rhs;
+        bResult = (lhs != rhs);
+        return true;
     }
 
     bool EvaluateNumeric(numeric_t lhs, numeric_t rhs, bool& bResult) const override
     {
-        return lhs != rhs;
+        bResult = (lhs != rhs);
+        return true;
     }
 
 public:
@@ -247,7 +258,7 @@ public:
 
     std::string GetInfix() const override
     {
-        return " is NOT EQUAL to ";
+        return "is NOT EQUAL to";
     }
 };
 
@@ -259,7 +270,8 @@ class CLess : public CNumericOnlyComparator
 protected:
     bool EvaluateNumeric(numeric_t lhs, numeric_t rhs, bool& bResult) const override
     {
-        return lhs < rhs;
+        bResult = (lhs < rhs);
+        return true;
     }
 
 public:
@@ -270,7 +282,7 @@ public:
 
     std::string GetInfix() const override
     {
-        return " is LESS than ";
+        return "is LESS than";
     }
 };
 
@@ -282,7 +294,8 @@ class CLessOrEqual : public CNumericOnlyComparator
 protected:
     bool EvaluateNumeric(numeric_t lhs, numeric_t rhs, bool& bResult) const override
     {
-        return lhs <= rhs;
+        bResult = (lhs <= rhs);
+        return true;
     }
 
 public:
@@ -293,7 +306,7 @@ public:
 
     std::string GetInfix() const override
     {
-        return " is LESS than or EQUAL to ";
+        return "is LESS than or EQUAL to";
     }
 };
 
@@ -305,7 +318,8 @@ class CGreater : public CNumericOnlyComparator
 protected:
     bool EvaluateNumeric(numeric_t lhs, numeric_t rhs, bool& bResult) const override
     {
-        return lhs > rhs;
+        bResult = (lhs > rhs);
+        return true;
     }
 
 public:
@@ -316,7 +330,7 @@ public:
 
     std::string GetInfix() const override
     {
-        return " is GREATER than ";
+        return "is GREATER than";
     }
 };
 
@@ -328,7 +342,8 @@ class CGreaterOrEqual : public CNumericOnlyComparator
 protected:
     bool EvaluateNumeric(numeric_t lhs, numeric_t rhs, bool& bResult) const override
     {
-        return lhs >= rhs;
+        bResult = (lhs >= rhs);
+        return true;
     }
 
 public:
@@ -339,7 +354,7 @@ public:
 
     std::string GetInfix() const override
     {
-        return " is GREATER than or EQUAL to ";
+        return "is GREATER than or EQUAL to";
     }
 };
 

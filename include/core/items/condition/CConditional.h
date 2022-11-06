@@ -20,6 +20,8 @@ protected:
     //! Stores the underlying condition
     std::shared_ptr<ICondition> m_pCondition;
 
+    SERIALIZATION_FRIEND(CConditional);
+
     //! @brief Creates a new, empty condition
     CConditional();
     FACTORY_FRIEND();
@@ -33,6 +35,15 @@ protected:
 public:
 
     ~CConditional();
+
+    //! @brief Gets a pointer to the underlying condition
+    std::shared_ptr<ICondition> GetCondition();
+
+    //! @copydoc GetCondition
+    std::shared_ptr<const ICondition> GetCondition() const;
+
+    //! @brief Replaces the underlying condition
+    void SetCondition(std::shared_ptr<ICondition> pCondition);
 
     //! @brief Returns a new instance of this class
     static IProjTreeItem::ptr_t Create();
