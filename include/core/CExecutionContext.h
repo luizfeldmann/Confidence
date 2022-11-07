@@ -5,13 +5,13 @@
 #include <memory>
 #include "core/CExecutionContextBase.h"
 #include "core/IContextStorage.h"
+#include "core/CParentalMap.h"
 
 class CInstance;
 class CConfiguration;
-class IProjTreeItem;
 
 //! @brief Stores the execution state of the project
-class CExecutionContext : public CExecutionContextBase
+class CExecutionContext : public CExecutionContextBase, public CParentalMap
 {
 private:
     CExecutionContext(const CExecutionContext&) = delete;
@@ -23,14 +23,6 @@ protected:
 
     //! Pointer to the configuration being executed
     std::weak_ptr<const CConfiguration> m_pConfiguration;
-
-    //! Maps each item (key) to it's parent (value)
-    using parent_map_t = std::map<const IProjTreeItem*, std::weak_ptr<const IProjTreeItem>>;
-    parent_map_t m_mParents;
-
-    //! @brief Recursively fills the paternity map for the provided item
-    //! @param[in] pParent The parent item whose subitems will be mapped
-    void MapParents(const std::shared_ptr<const IProjTreeItem>& pParent);
 
     using storage_list_t = std::list<std::shared_ptr<IContextStorage>>;
 
@@ -50,11 +42,6 @@ public:
 
     //! @brief Gets the associated configuration of this context
     std::shared_ptr<const CConfiguration> GetConfiguration() const;
-
-    //! @brief Gets the parent of the requested child item
-    //! @param[in] pItem Reference to the item whose parent must be found
-    //! @return The parent of the item or nullptr if not found (the project root has no parent)
-    std::shared_ptr<const IProjTreeItem> GetParent(const IProjTreeItem* pItem) const;
 
     //! @brief Stores an object in this context for the duration of the execution
     void Store(std::shared_ptr<IContextStorage> pStore);

@@ -45,6 +45,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/core/CEvaluationContext.cpp"
     "include/core/CExecutionContextBase.h"
     "src/core/CExecutionContextBase.cpp"
+    "include/core/CParentalMap.h"
+    "src/core/CParentalMap.cpp"
     "include/core/CExecutionContext.h"
     "include/core/IContextStorage.h"
     "src/core/CExecutionContext.cpp" 

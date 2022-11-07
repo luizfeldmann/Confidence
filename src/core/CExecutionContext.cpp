@@ -10,7 +10,7 @@ CExecutionContext::CExecutionContext(const std::shared_ptr<const CProject>& pPro
     , m_pInstance(pInstance)
     , m_pConfiguration(pConfiguration)
 {
-    MapParents(pProject);
+    Remap(pProject);
 
     // Set the built-in variables
     assert(pConfiguration && "Creating execution context from null configuration");
@@ -18,18 +18,6 @@ CExecutionContext::CExecutionContext(const std::shared_ptr<const CProject>& pPro
 
     assert(pInstance && "Creating execution context from null instance");
     m_mVariables[GetBuiltinName(EBuiltInVariable::InstanceName)] = pInstance->GetName();
-}
-
-void CExecutionContext::MapParents(const IProjTreeItem::cptr_t& pParent)
-{
-    assert(pParent && "Mapping children of null parent");
-
-    IProjTreeItem::vec_cptr_t vSubitems = pParent->SubItems();
-    for (const IProjTreeItem::cptr_t& pItem : vSubitems)
-    {
-        m_mParents[pItem.get()] = pParent;
-        MapParents(pItem);
-    }
 }
 
 std::shared_ptr<const CInstance> CExecutionContext::GetInstance() const
@@ -46,19 +34,6 @@ std::shared_ptr<const CConfiguration> CExecutionContext::GetConfiguration() cons
     assert(pConfiguration && "Execution context configuration is null");
 
     return pConfiguration;
-}
-
-IProjTreeItem::cptr_t CExecutionContext::GetParent(const IProjTreeItem* pItem) const
-{
-    assert(pItem && "Getting parent of a null item");
-
-    IProjTreeItem::cptr_t pFind;
-
-    parent_map_t::const_iterator itFind = m_mParents.find(pItem);
-    if (m_mParents.cend() != itFind)
-        pFind = itFind->second.lock();
-
-    return pFind;
 }
 
 void CExecutionContext::Store(std::shared_ptr<IContextStorage> pStore)
