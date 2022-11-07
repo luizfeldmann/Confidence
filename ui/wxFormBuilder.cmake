@@ -16,6 +16,7 @@ SET(WXFB_PROJECTS
     "IOperationEditor"
     "IConstantEditor"
     "IConditionalEditor"
+    "IConfigurationEditor"
 )
 
 unset(WXFB_GENERATED)

@@ -177,6 +177,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/Editors/CVariableEditor.cpp"
     "include/ui/Editors/CConstantEditor.h"
     "src/ui/Editors/CConstantEditor.cpp"
+    "include/ui/Editors/CConfigurationEditor.h"
+    "src/ui/Editors/CConfigurationEditor.cpp"
     "include/ui/CTextStyler.h" 
     "src/ui/CTextStyler.cpp"
     "include/ui/Editors/CGeneratedTextFileEditor.h"
@@ -203,6 +205,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/ui/Models/CFileOperationsModel.cpp"
     "src/ui/Models/CConditionalTreeModel.cpp"
     "include/ui/Models/CConditionalTreeModel.h"
+    "include/ui/Models/CConfigurationSummaryModel.h"
+    "src/ui/Models/CConfigurationSummaryModel.cpp"
     "include/ui/Models/CDocExporterTableModel.h"
     "src/ui/Models/CDocExporterTableModel.cpp"
 

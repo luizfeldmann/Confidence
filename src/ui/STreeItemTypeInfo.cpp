@@ -7,6 +7,7 @@
 #include "ui/Editors/COperationEditor.h"
 #include "ui/Editors/CConstantEditor.h"
 #include "ui/Editors/CConditionalEditor.h"
+#include "ui/Editors/CConfigurationEditor.h"
 #include "core/items/CInstance.h"
 #include "core/items/CConfiguration.h"
 #include "core/items/CEnvironmentImport.h"
@@ -115,7 +116,7 @@ const STreeItemTypeInfo& STreeItemTypeInfo::GetInfo(ETreeItemType eType)
                 "Configuration",
                 REGICON(L"RES_ID_ICON_TREEITEM_CONFIG"),
                 &CConfiguration::Create,
-                &CNameDescEditor::Create // TODO: implement dedicated editor for configurations
+                &CConfigurationEditor::Create
             }
         },
         { EConfGroup,
@@ -123,7 +124,7 @@ const STreeItemTypeInfo& STreeItemTypeInfo::GetInfo(ETreeItemType eType)
                 "Configurations",
                 REGICON(L"RES_ID_ICON_TREEITEM_CONFIGS"),
                 nullptr,    // Special item type, cannot be created
-                &CNameDescEditor::Create // TODO: implement dedicated editor for configurations
+                &CConfigurationEditor::Create
             }
         },
         { ERunProcess,
