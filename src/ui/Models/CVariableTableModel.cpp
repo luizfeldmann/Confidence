@@ -6,73 +6,8 @@
 #include "core/items/CConfiguration.h"
 #include "core/items/variable/CVariable.h"
 #include "ui/Models/CBaseTreeItemModel.h"
-
-/* CInstanceColumn */
-
-//! @brief Implementation of wxDataViewColumn where the column is associated to a CInstance
-class CInstanceColumn : public wxDataViewColumn
-{
-protected:
-    //! @brief Pointer to the instance associated to this column
-    std::weak_ptr<const CInstance> m_pInstance;
-
-    //! @brief Returns the icon of the column
-    inline static const wxIcon& GetIcon(bool bHasInstances)
-    {
-        static const wxIcon iconDefault("RES_ID_ICON_TREEITEM_INSTANCEFAV");
-
-        return bHasInstances ? STreeItemTypeInfo::GetIcon(ETreeItemType::EInstance) : iconDefault;
-    }
-
-public:
-    //! @brief Creates a column related to a given instance
-    //! @param[in] pInst The instance associated to this column
-    //! @param[in] nModelColumn Index used to track this column in the model
-    CInstanceColumn(std::shared_ptr<const CInstance> pInst, unsigned int nModelColumn)
-        : wxDataViewColumn(GetIcon(true), new wxDataViewIconTextRenderer(wxDataViewIconTextRenderer::GetDefaultType(), wxDATAVIEW_CELL_EDITABLE), nModelColumn)
-        , m_pInstance(pInst)
-    {
-        assert(pInst && "Column created from null instance");
-        const std::string strInstanceName = pInst->GetName();
-        SetTitle(strInstanceName);
-    }
-
-    //! @brief Creates a default column related to no specific instance
-    //! @param[in] nModelColumn Index used to track this column in the model
-    CInstanceColumn(unsigned int nModelColumn)
-        : wxDataViewColumn(GetIcon(false), new wxDataViewIconTextRenderer(wxDataViewIconTextRenderer::GetDefaultType(), wxDATAVIEW_CELL_EDITABLE), nModelColumn)
-        , m_pInstance()
-    {
-        SetTitle("Expression");
-    }
-
-    //! @brief Gets a pointer to the associated instance, if any
-    std::shared_ptr<const CInstance> GetInstance() const
-    {
-        return m_pInstance.lock();
-    }
-
-    //! @brief Searches the wxDataViewCtrl for the column with the given model index
-    //! @param[in] nModelColumn Index in the model of the column being searched
-    //! @param[in] pCtrl Pointer to the control containing the searched column
-    static CInstanceColumn* GetColumnByModelIndex(unsigned nModelColumn, const wxDataViewCtrl* const pCtrl)
-    {
-        CInstanceColumn* pFound = nullptr;
-
-        unsigned int uColCount = pCtrl->GetColumnCount();
-        for (unsigned int i = 0; i < uColCount; i++)
-        {
-            CInstanceColumn* const pSearch = dynamic_cast<CInstanceColumn*>(pCtrl->GetColumnAt(i));
-            if (pSearch && pSearch->GetModelColumn() == nModelColumn)
-            {
-                pFound = pSearch;
-                break;
-            }
-        }
-
-        return pFound;
-    }
-};
+#include "ui/Models/CInstanceColumn.h"
+#include "ui/Models/CVariableCell.h"
 
 /* CVariableTableModel */
 
@@ -82,38 +17,6 @@ enum class EVariableColumns : int
     Configuration   = 0,    //!< The 0-th column lists the configurations
     InstanceFirst   = 1     //!< The 1-st to last columns are instances 
 };
-
-//! @brief Possible status for the expression cells of the variable
-enum class ECellStatus {
-    Assign,     //!< An expression is set for the cell
-    Inherit,    //!< The cell inherits the expression from the parent configuration
-    Undefined,  //!< The expression is undefined
-    Error,      //!< The expression rule is invalid
-};
-
-//! @brief Updates a table view cell text and icon
-static void SetCellStatus(ECellStatus eStatus, wxDataViewIconText& rCell, const wxString strLabel = wxEmptyString)
-{
-    struct SCellStyle
-    {
-        const wxString strText;
-        const wxIcon cIcon;
-    };
-    
-    #define CELL_ICON(NAME) wxIcon(NAME, wxBITMAP_TYPE_ICO_RESOURCE, 16, 16)
-
-    static const std::map<ECellStatus, SCellStyle> c_mIcons {
-        {ECellStatus::Assign,    SCellStyle{"<set empty>",     CELL_ICON("RES_ID_ICON_EXPR_ASSIGN")} },
-        {ECellStatus::Inherit,   SCellStyle{"<inherit empty>", CELL_ICON("RES_ID_ICON_EXPR_INHERIT")} },
-        {ECellStatus::Undefined, SCellStyle{"<undefined>",     CELL_ICON("RES_ID_ICON_EXPR_UNDEFINED")} },
-        {ECellStatus::Error,     SCellStyle{"<error>",         CELL_ICON("RES_ID_ICON_EXPR_ERROR")} },
-    };
-
-    const SCellStyle& rStyle = c_mIcons.at(eStatus);
-
-    rCell.SetText(strLabel.empty() ? rStyle.strText : strLabel);
-    rCell.SetIcon(rStyle.cIcon);
-}
 
 CVariableTableModel::CVariableTableModel(CVariable& rVar, std::shared_ptr<const CProject> pProj, wxDataViewCtrl* pCtrl)
     : m_rVar(rVar)
@@ -270,7 +173,7 @@ void CVariableTableModel::GetValue(wxVariant& variant, const wxDataViewItem& ite
         if (!pInstance && m_rVar.GetPerInstance())
         {
             // *Required* Instance/Column does not exitst
-            SetCellStatus(ECellStatus::Error, value);
+            CVariableCell::SetCellStatus(CVariableCell::ECellStatus::Error, value);
         }
         else
         {
@@ -294,9 +197,9 @@ void CVariableTableModel::GetValue(wxVariant& variant, const wxDataViewItem& ite
             } while (!pExpression);
 
             if (!pExpression)
-                SetCellStatus(ECellStatus::Undefined, value);
+                CVariableCell::SetCellStatus(CVariableCell::ECellStatus::Undefined, value);
             else
-                SetCellStatus(currentItem == item ? ECellStatus::Assign : ECellStatus::Inherit, value, pExpression->GetExpression());
+                CVariableCell::SetCellStatus(currentItem == item ? CVariableCell::ECellStatus::Assign : CVariableCell::ECellStatus::Inherit, value, pExpression->GetExpression());
         }
     }
 
