@@ -20,11 +20,13 @@ public:
     //! @brief Creates a column related to a given instance
     //! @param[in] pInst The instance associated to this column
     //! @param[in] nModelColumn Index used to track this column in the model
-    CInstanceColumn(std::shared_ptr<const CInstance> pInst, unsigned int nModelColumn);
+    //! @param[in] eMode Defines if the cells are inert, activatable or editable
+    CInstanceColumn(std::shared_ptr<const CInstance> pInst, unsigned int nModelColumn, wxDataViewCellMode eMode);
 
     //! @brief Creates a default column related to no specific instance
     //! @param[in] nModelColumn Index used to track this column in the model
-    CInstanceColumn(unsigned int nModelColumn);
+    //! @param[in] eMode Defines if the cells are inert, activatable or editable
+    CInstanceColumn(unsigned int nModelColumn, wxDataViewCellMode eMode);
 
     //! @brief Gets a pointer to the associated instance, if any
     std::shared_ptr<const CInstance> GetInstance() const;

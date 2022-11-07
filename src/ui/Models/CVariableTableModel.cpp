@@ -107,13 +107,13 @@ void CVariableTableModel::ReloadColumns()
         {
             assert(pItem && ETreeItemType::EInstance == pItem->GetType());
 
-            m_pCtrl->AppendColumn(new CInstanceColumn(std::dynamic_pointer_cast<const CInstance>(pItem), nModelColumn++));
+            m_pCtrl->AppendColumn(new CInstanceColumn(std::dynamic_pointer_cast<const CInstance>(pItem), nModelColumn++, wxDATAVIEW_CELL_EDITABLE));
         }
     }
     else
     {
         // Create a single column for default expression
-        m_pCtrl->AppendColumn(new CInstanceColumn(nModelColumn++));
+        m_pCtrl->AppendColumn(new CInstanceColumn(nModelColumn++, wxDATAVIEW_CELL_EDITABLE));
     }
 }
 
@@ -199,7 +199,13 @@ void CVariableTableModel::GetValue(wxVariant& variant, const wxDataViewItem& ite
             if (!pExpression)
                 CVariableCell::SetCellStatus(CVariableCell::ECellStatus::Undefined, value);
             else
-                CVariableCell::SetCellStatus(currentItem == item ? CVariableCell::ECellStatus::Assign : CVariableCell::ECellStatus::Inherit, value, pExpression->GetExpression());
+            {
+                CVariableCell::ECellStatus eStatus = (currentItem == item)
+                    ? CVariableCell::ECellStatus::Assign
+                    : CVariableCell::ECellStatus::Inherit;
+
+                CVariableCell::SetCellStatus(eStatus, value, pExpression->GetExpression());
+            }
         }
     }
 

@@ -238,7 +238,12 @@ void CMainWindow::onTreeItemActivate(wxDataViewEvent& event)
     IProjTreeItem* pSelected = CTreeBrowserModel::GetPointer(m_dataViewCtrlBrowser->GetSelection());
 
     if (nullptr != pSelected)
-        m_editorManager.ActivateItem(*pSelected);
+        ActivateItem(*pSelected);
+}
+
+void CMainWindow::ActivateItem(IProjTreeItem& rEditItem)
+{
+    m_editorManager.ActivateItem(rEditItem);
 }
 
 void CMainWindow::onBtnNewItemMenu(wxCommandEvent& evt)

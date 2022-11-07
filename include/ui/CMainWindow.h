@@ -21,6 +21,9 @@ public:
 	//! @brief Gets a pointer to the project being edited
 	std::shared_ptr<const CProject> GetProject() const;
 
+	//! @brief Creates a tab for the item, or focuses it if already exists
+	void ActivateItem(IProjTreeItem& rEditItem);
+
 protected:
 	//! Holds the project being edited
 	std::shared_ptr<CProject> m_pProject;

@@ -2,8 +2,8 @@
 #include "ui/STreeItemTypeInfo.h"
 #include "core/items/CInstance.h"
 
-CInstanceColumn::CInstanceColumn(std::shared_ptr<const CInstance> pInst, unsigned int nModelColumn)
-    : wxDataViewColumn(GetIcon(true), new wxDataViewIconTextRenderer(wxDataViewIconTextRenderer::GetDefaultType(), wxDATAVIEW_CELL_EDITABLE), nModelColumn)
+CInstanceColumn::CInstanceColumn(std::shared_ptr<const CInstance> pInst, unsigned int nModelColumn, wxDataViewCellMode eMode)
+    : wxDataViewColumn(GetIcon(true), new wxDataViewIconTextRenderer(wxDataViewIconTextRenderer::GetDefaultType(), eMode), nModelColumn)
     , m_pInstance(pInst)
 {
     assert(pInst && "Column created from null instance");
@@ -11,8 +11,8 @@ CInstanceColumn::CInstanceColumn(std::shared_ptr<const CInstance> pInst, unsigne
     SetTitle(strInstanceName);
 }
 
-CInstanceColumn::CInstanceColumn(unsigned int nModelColumn)
-    : wxDataViewColumn(GetIcon(false), new wxDataViewIconTextRenderer(wxDataViewIconTextRenderer::GetDefaultType(), wxDATAVIEW_CELL_EDITABLE), nModelColumn)
+CInstanceColumn::CInstanceColumn(unsigned int nModelColumn, wxDataViewCellMode eMode)
+    : wxDataViewColumn(GetIcon(false), new wxDataViewIconTextRenderer(wxDataViewIconTextRenderer::GetDefaultType(), eMode), nModelColumn)
     , m_pInstance()
 {
     SetTitle("Expression");
