@@ -7,6 +7,9 @@
 #include "core/items/CProject.h"
 #include "core/items/CConfiguration.h"
 #include <array>
+#include <cmrc/cmrc.hpp>
+
+CMRC_DECLARE(resources);
 
 const static wxString g_szProjectFileFilter = "Confidence projects (*.cfx)|*.cfx";
 
@@ -53,6 +56,13 @@ CMainWindow::CMainWindow(std::shared_ptr<CProject> pProject)
 
     m_cAccTbl = wxAcceleratorTable(arrAccEntry.size(), arrAccEntry.data());
     SetAcceleratorTable(m_cAccTbl);
+
+    // Set the welcome page HTML
+    {
+        auto fs = cmrc::resources::get_filesystem();
+        auto readme = fs.open("README.html");
+        m_htmlWinWelcome->SetPage(wxString::FromUTF8(readme.begin(), readme.size()));
+    }
 
     // Load the current project
     ReloadProject();

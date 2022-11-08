@@ -6,6 +6,13 @@ SET(PROJ_DESCRIPTION "Confidence is a tool to centralize and manage configuratio
 SET(COMPANY_NAME "Luiz Feldmann")
 SET(COPYRIGHT_OWNER ${COMPANY_NAME})
 
+# Dependency: cmrc
+include(dependencies/cmrc/CMakeRC.cmake)
+cmrc_add_resource_library(${CMAKE_PROJECT_NAME}-resources ALIAS ${CMAKE_PROJECT_NAME}::resources NAMESPACE resources)
+
+# Embed the Readme into the application
+include(res/README.cmake)
+
 # Prebuild resources
 include(res/icons/exportIcons.cmake)
 SET(RESOURCESFILE "resources.rc")
@@ -30,7 +37,7 @@ include_directories(dependencies/mINI/src)
 find_package(pugixml CONFIG REQUIRED)
 
 # Dependency: wxWidgets
-find_package(wxWidgets COMPONENTS core base aui stc)
+find_package(wxWidgets COMPONENTS core base aui stc html)
 
 # Dependency: CMark
 find_package(cmark CONFIG REQUIRED)
@@ -233,6 +240,7 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/util/StartProcess.cpp"
 
     # Resources
+    ${README_HTML}
     ${RESOURCESFILE}
     ${ICONS_LIST_EXPORTED}
 
@@ -269,6 +277,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
 target_link_libraries(${CMAKE_PROJECT_NAME} ${wxWidgets_LIBRARIES})
 target_link_libraries(${CMAKE_PROJECT_NAME} cmark::cmark)
 target_link_libraries(${CMAKE_PROJECT_NAME} pugixml)
+target_link_libraries(${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}::resources)
 
 if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
