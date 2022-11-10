@@ -11,6 +11,7 @@
 #include "core/items/CInstance.h"
 #include "core/items/CConfiguration.h"
 #include "core/items/CEnvironmentImport.h"
+#include "core/items/group/CGroup.h"
 #include "core/items/file_operation/CFileOperations.h"
 #include "core/items/CConstant.h"
 #include "core/items/condition/CConditional.h"

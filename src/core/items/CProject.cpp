@@ -4,7 +4,6 @@
 #include <cassert>
 #include "util/version.h"
 #include "core/items/variable/CVariable.h"
-#include "core/items/CGroup.h"
 #include "core/items/CInstance.h"
 #include "core/items/CInstanceGroup.h"
 #include "core/items/CConfigurationGroup.h"

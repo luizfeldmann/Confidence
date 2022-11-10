@@ -3,7 +3,6 @@
 
 #include "ui/Editors/CNameDescEditor.h"
 #include "wxExport/IOperationEditor.h"
-#include "core/items/CGroup.h"
 
 class CFileOperations;
 class CFileOperationsModel;
