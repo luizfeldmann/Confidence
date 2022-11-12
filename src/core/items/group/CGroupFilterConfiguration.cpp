@@ -6,13 +6,12 @@
 #include <algorithm>
 
 DEFINE_SERIALIZATION_SCHEME(CGroupFilterConfiguration,
-    SERIALIZATION_MEMBER(m_vConfigurationNames)
+    SERIALIZATION_INHERIT(CGroupFilterBase)
 )
 
 REGISTER_POLYMORPHIC_CLASS(CGroupFilterConfiguration);
 
 CGroupFilterConfiguration::CGroupFilterConfiguration()
-    : m_vConfigurationNames(m_vItemNames)
 {
 
 }
@@ -27,6 +26,16 @@ CGroupFilterConfiguration::~CGroupFilterConfiguration()
     return std::make_unique<CGroupFilterConfiguration>();
 }
 
+ETreeItemType CGroupFilterConfiguration::GetOwnType()
+{
+    return ETreeItemType(EConfig | EConfGroup);
+}
+
+ETreeItemType CGroupFilterConfiguration::GetType() const
+{
+    return GetOwnType();
+}
+
 bool CGroupFilterConfiguration::Filter(const CGroup& rGroup, const CExecutionContext& rContext) const
 {
     return CGroupFilterBase::Filter(rContext.GetConfiguration());
@@ -34,7 +43,9 @@ bool CGroupFilterConfiguration::Filter(const CGroup& rGroup, const CExecutionCon
 
 bool CGroupFilterConfiguration::Document(IDocExporter& rExporter) const
 {
-    bool bStatus = CGroupFilterBase::Document(rExporter);
+    bool bStatus = rExporter.FormField("Filter by Configuration:", "This group will be executed only for the listed configurations");
+    bStatus = bStatus && CGroupFilterBase::Document(rExporter);
+
     return bStatus;
 }
 

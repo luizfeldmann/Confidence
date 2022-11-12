@@ -5,7 +5,7 @@
 #include <JInterface/JsonSerialization.h>
 
 //! @brief The group only runs for the selected instances
-class CGroupFilterInstance : public virtual CGroupFilterBase
+class CGroupFilterInstance : public CGroupFilterBase
 {
 public:
     CGroupFilterInstance();
@@ -13,6 +13,11 @@ public:
 
     //! @brief Instantiates a new filter of this type
     static std::unique_ptr<IGroupFilter> Create();
+
+    static ETreeItemType GetOwnType();
+
+    //! @copydoc IGroupFilter::GetType
+    ETreeItemType GetType() const override;
 
     //! @copydoc IGroupFilter::Filter
     bool Filter(const CGroup& rGroup, const CExecutionContext& rContext) const override;
@@ -22,11 +27,6 @@ public:
     
     //! @copydoc ISerializationNotify::PostDeserialize
     bool PostDeserialize(CProject& rProject) override;
-
-protected:
-    strvec_t& m_vInstanceNames;
-
-    SERIALIZATION_FRIEND(CGroupFilterInstance);
 
 private:
     CGroupFilterInstance(const CGroupFilterInstance&) = delete;

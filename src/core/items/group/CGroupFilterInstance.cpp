@@ -6,13 +6,12 @@
 #include <algorithm>
 
 DEFINE_SERIALIZATION_SCHEME(CGroupFilterInstance,
-    SERIALIZATION_MEMBER(m_vInstanceNames)
+    SERIALIZATION_INHERIT(CGroupFilterBase)
 )
 
 REGISTER_POLYMORPHIC_CLASS(CGroupFilterInstance);
 
 CGroupFilterInstance::CGroupFilterInstance()
-    : m_vInstanceNames(m_vItemNames)
 {
 
 }
@@ -27,6 +26,16 @@ CGroupFilterInstance::~CGroupFilterInstance()
     return std::make_unique<CGroupFilterInstance>();
 }
 
+/* static */ ETreeItemType CGroupFilterInstance::GetOwnType()
+{
+    return EInstance;
+}
+
+ETreeItemType CGroupFilterInstance::GetType() const
+{
+    return GetOwnType();
+}
+
 bool CGroupFilterInstance::Filter(const CGroup& rGroup, const CExecutionContext& rContext) const
 {
     return CGroupFilterBase::Filter(rContext.GetInstance());
@@ -34,7 +43,9 @@ bool CGroupFilterInstance::Filter(const CGroup& rGroup, const CExecutionContext&
 
 bool CGroupFilterInstance::Document(IDocExporter& rExporter) const
 {
-    bool bStatus = CGroupFilterBase::Document(rExporter);
+    bool bStatus = rExporter.FormField("Filter by Instance:", "This group will be executed only for the listed instances");
+    bStatus = bStatus && CGroupFilterBase::Document(rExporter);
+
     return bStatus;
 }
 

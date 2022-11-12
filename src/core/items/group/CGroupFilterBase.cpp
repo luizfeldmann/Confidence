@@ -4,6 +4,10 @@
 #include "util/Log.h"
 #include <algorithm>
 
+DEFINE_SERIALIZATION_SCHEME(CGroupFilterBase,
+    SERIALIZATION_MEMBER(m_vItemNames)
+)
+
 CGroupFilterBase::CGroupFilterBase()
 {
 
@@ -56,7 +60,11 @@ bool CGroupFilterBase::Document(IDocExporter& rExporter) const
             continue; // Instance no longer exists on the project, but still existes on the filter
 
         bStatus = rExporter.Item();
-        bStatus = bStatus && rExporter.Text(sPtr->GetName());
+        {
+            bStatus = bStatus && rExporter.Paragraph();
+            bStatus = bStatus && rExporter.Text(sPtr->GetName());
+            bStatus = bStatus && rExporter.PopStack();
+        }
         bStatus = bStatus && rExporter.PopStack();
     }
 

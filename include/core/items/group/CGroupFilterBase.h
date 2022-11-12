@@ -2,32 +2,27 @@
 #define _CGROUPFILTERBASE_H_
 
 #include "IGroupFilter.h"
-#include <vector>
+#include <JInterface/JsonSerialization.h>
 
-class IProjTreeItem;
-
-class CGroupFilterBase : public virtual IGroupFilter
+class CGroupFilterBase : public IGroupFilter
 {
 public:
     CGroupFilterBase();
     virtual ~CGroupFilterBase();
 
-    using sptr_t = std::shared_ptr<const IProjTreeItem>;
-    using wptr_t = sptr_t::weak_type;
-    using ptrvec_t = std::vector<wptr_t>;
     using strvec_t = std::vector<std::string>;
 
-    //! @brief Inserts an item in the filter
-    void push_back(wptr_t pInstance);
+    //! @copydoc IGroupFilter::push_back
+    void push_back(wptr_t pItem) override;
 
-    //! @brief Erases an item from the filter
-    void erase(sptr_t pInstance);
+    //! @copydoc IGroupFilter::erase
+    void erase(sptr_t pItem) override;
 
-    //! @brief Gets a copy of the list of instances from this filter
-    ptrvec_t GetItems() const;
+    //! @copydoc IGroupFilter::GetItems
+    ptrvec_t GetItems() const override;
 
-    //! @brief Checks if the item is listed in the filter
-    bool Filter(sptr_t pItem) const;
+    //! @copydoc IGroupFilter::Filter
+    bool Filter(sptr_t pItem) const override;
 
     //! @copydoc IDocumentable::Document
     virtual bool Document(IDocExporter& rExporter) const override;
@@ -39,8 +34,12 @@ protected:
     //! Holds the names of the filtered instances for (de)-serialization
     strvec_t m_vItemNames;
 
+    SERIALIZATION_FRIEND(CGroupFilterBase);
+
     //! Holds the pointers to the filtered instances for runtime 
     ptrvec_t m_vItemPtrs;
 };
+
+DECLARE_SERIALIZATION_SCHEME(CGroupFilterBase);
 
 #endif
