@@ -1,5 +1,6 @@
 #include "core/items/condition/CConditional.h"
 #include "core/items/condition/ICondition.h"
+#include "core/CExecutionContext.h"
 #include "util/Log.h"
 
 DEFINE_SERIALIZATION_SCHEME(CConditional,

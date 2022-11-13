@@ -1,5 +1,6 @@
 #include "core/items/file_generator/CGeneratedTextFile.h"
 #include "vfs/CTempSymlinkGenerator.h"
+#include "core/CExecutionContext.h"
 #include "docs/IDocExporter.h"
 #include "util/Log.h"
 

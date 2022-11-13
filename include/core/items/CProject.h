@@ -7,7 +7,9 @@
 #include "core/CStoredDescriptionItem.h"
 #include "core/CStoredItemCollection.h"
 
+class CInstance;
 class CInstanceGroup;
+class CConfiguration;
 class CConfigurationGroup;
 class CProjectExecutionContext;
 

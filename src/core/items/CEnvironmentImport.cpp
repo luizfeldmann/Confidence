@@ -1,5 +1,6 @@
 #include "core/items/CEnvironmentImport.h"
 #include "core/items/variable/CEnvironmentVariable.h"
+#include "core/CExecutionContext.h"
 #include "util/Log.h"
 
 DEFINE_SERIALIZATION_SCHEME(CEnvironmentImport,

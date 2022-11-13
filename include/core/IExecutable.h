@@ -1,7 +1,7 @@
 #ifndef _IEXECUTABLE_H_
 #define _IEXECUTABLE_H_
 
-#include "CExecutionContext.h"
+class CExecutionContext;
 
 //! Interface for classes that can be executed when the project runs
 class IExecutable

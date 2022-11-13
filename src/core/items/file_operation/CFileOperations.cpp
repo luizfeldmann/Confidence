@@ -1,5 +1,6 @@
 #include "core/items/file_operation/CFileOperations.h"
 #include "core/items/file_operation/IFileOperationHandler.h"
+#include "core/CExecutionContext.h"
 #include "docs/IDocExporter.h"
 #include "util/Log.h"
 
