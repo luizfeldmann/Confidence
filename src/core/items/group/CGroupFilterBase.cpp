@@ -1,6 +1,7 @@
 #include "core/items/group/CGroupFilterBase.h"
 #include "core/items/CProject.h"
 #include "core/CExecutionContext.h"
+#include "docs/IDocExporter.h"
 #include "util/Log.h"
 #include <algorithm>
 

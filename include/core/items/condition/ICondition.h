@@ -3,6 +3,7 @@
 
 #include "docs/IDocumentable.h"
 #include <memory>
+#include <string>
 
 class CEvaluationContext;
 

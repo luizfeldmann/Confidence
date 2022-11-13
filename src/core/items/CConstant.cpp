@@ -1,5 +1,6 @@
 #include "core/items/CConstant.h"
 #include "core/items/variable/CEnvironmentVariable.h"
+#include "docs/IDocExporter.h"
 
 DEFINE_SERIALIZATION_SCHEME(CConstant,
     SERIALIZATION_INHERIT(CStoredNameItem)

@@ -1,4 +1,5 @@
 #include "core/items/process/CProcessWaitCompletion.h"
+#include "docs/IDocExporter.h"
 #include "util/StartProcess.h"
 #include "util/Log.h"
 

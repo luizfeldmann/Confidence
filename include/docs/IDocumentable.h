@@ -1,7 +1,7 @@
 #ifndef _IDOCUMENTABLE_H_
 #define _IDOCUMENTABLE_H_
 
-#include "IDocExporter.h"
+class IDocExporter;
 
 //! @brief Interface for classes who can self-document using an exporter
 class IDocumentable

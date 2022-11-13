@@ -1,4 +1,5 @@
 #include "core/items/condition/CLogicalOperator.h"
+#include "docs/IDocExporter.h"
 #include <JInterface/JsonSerialization.h>
 
 /* CBaseOperator */

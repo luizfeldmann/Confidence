@@ -2,6 +2,7 @@
 #include "core/items/CConfiguration.h"
 #include "core/items/CInstance.h"
 #include "core/items/CProject.h"
+#include "docs/IDocExporter.h"
 #include "util/Log.h"
 #include <cassert>
 

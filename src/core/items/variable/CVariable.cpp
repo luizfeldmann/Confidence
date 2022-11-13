@@ -1,6 +1,7 @@
 #include "core/items/variable/CVariable.h"
 #include "core/items/CConfiguration.h"
 #include "core/items/variable/CEnvironmentVariable.h"
+#include "docs/IDocExporter.h"
 #include "util/Log.h"
 #include <cstdlib>
 

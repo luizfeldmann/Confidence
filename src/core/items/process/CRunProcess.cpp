@@ -1,4 +1,5 @@
 #include "core/items/process/CRunProcess.h"
+#include "docs/IDocExporter.h"
 #include "util/Log.h"
 
 DEFINE_SERIALIZATION_SCHEME(CRunProcess,

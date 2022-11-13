@@ -1,6 +1,7 @@
 #include <fstream>
 #include <sstream>
 #include "core/items/file_generator/CFileTextProvider.h"
+#include "docs/IDocExporter.h"
 
 DEFINE_SERIALIZATION_SCHEME(CFileTextProvider,
     SERIALIZATION_MEMBER(m_strFilePath)

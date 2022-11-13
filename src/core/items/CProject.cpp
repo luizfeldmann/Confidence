@@ -8,6 +8,7 @@
 #include "core/items/CInstanceGroup.h"
 #include "core/items/CConfigurationGroup.h"
 #include "core/CExecutionContext.h"
+#include "docs/IDocExporter.h"
 
 DEFINE_SERIALIZATION_SCHEME(CProject,
     SERIALIZATION_INHERIT(CStoredNameItem)

@@ -3,6 +3,7 @@
 #include "core/items/CProject.h"
 #include "core/CExecutionContext.h"
 #include "util/Log.h"
+#include "docs/IDocExporter.h"
 #include <algorithm>
 
 DEFINE_SERIALIZATION_SCHEME(CGroupFilterConfiguration,

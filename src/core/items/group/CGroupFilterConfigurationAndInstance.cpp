@@ -1,5 +1,6 @@
 #include "core/items/group/CGroupFilterConfigurationAndInstance.h"
 #include "core/IProjTreeItem.h"
+#include "docs/IDocExporter.h"
 
 DEFINE_SERIALIZATION_SCHEME(CGroupFilterConfigurationAndInstance,
     SERIALIZATION_MEMBER(m_byConfig)

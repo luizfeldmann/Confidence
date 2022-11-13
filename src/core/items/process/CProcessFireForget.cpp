@@ -1,4 +1,5 @@
 #include "core/items/process/CProcessFireForget.h"
+#include "docs/IDocExporter.h"
 #include "util/StartProcess.h"
 
 DEFINE_SERIALIZATION_SCHEME(CProcessFireAndForget,

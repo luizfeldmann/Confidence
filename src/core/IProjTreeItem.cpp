@@ -1,5 +1,6 @@
 #include "core/IProjTreeItem.h"
 #include "util/Log.h"
+#include "docs/IDocExporter.h"
 #include <cassert>
 
 bool IProjTreeItem::PostDeserialize(CProject& rProject)

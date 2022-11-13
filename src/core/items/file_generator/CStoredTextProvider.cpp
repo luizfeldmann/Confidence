@@ -1,4 +1,5 @@
 #include "core/items/file_generator/CStoredTextProvider.h"
+#include "docs/IDocExporter.h"
 #include <sstream>
 
 DEFINE_SERIALIZATION_SCHEME(CStoredTextProvider,

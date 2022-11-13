@@ -1,6 +1,7 @@
 #include "core/items/file_operation/CXmlFileHandler.h"
 #include "core/items/file_operation/IFileDataLocator.h"
 #include "core/items/file_operation/IFileOperationContext.h"
+#include "docs/IDocExporter.h"
 #include "util/Log.h"
 #include <pugixml.hpp>
 

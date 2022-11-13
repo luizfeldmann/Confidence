@@ -1,6 +1,7 @@
 #include "core/items/condition/CLogicalComparator.h"
 #include "core/CEvaluationContext.h"
 #include "util/Log.h"
+#include "docs/IDocExporter.h"
 #include <cassert>
 
 /* CLogicalComparator */

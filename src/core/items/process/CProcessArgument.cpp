@@ -1,4 +1,5 @@
 #include "core/items/process/CProcessArgument.h"
+#include "docs/IDocExporter.h"
 
 DEFINE_SERIALIZATION_SCHEME(CProcessArgument,
     SERIALIZATION_INHERIT(CStoredDescriptionItem)
