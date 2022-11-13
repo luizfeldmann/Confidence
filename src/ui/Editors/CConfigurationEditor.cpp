@@ -55,9 +55,9 @@ CConfigurationEditor::CConfigurationEditor(CMainWindow& rMainWindow, IProjTreeIt
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CConfigurationEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+/* static */ std::unique_ptr<ITreeItemEditor> CConfigurationEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CConfigurationEditor(rMainWindow, rItem);
+    return std::make_unique<CConfigurationEditor>(rMainWindow, rItem);
 }
 
 void CConfigurationEditor::OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent)

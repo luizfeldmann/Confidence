@@ -128,7 +128,7 @@ COperationEditor::COperationEditor(CMainWindow& rMainWindow, IProjTreeItem& rIte
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* COperationEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+/* static */ std::unique_ptr<ITreeItemEditor> COperationEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new COperationEditor(rMainWindow, rItem);
+    return std::make_unique<COperationEditor>(rMainWindow, rItem);
 }

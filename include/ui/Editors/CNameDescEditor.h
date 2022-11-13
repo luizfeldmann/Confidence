@@ -42,7 +42,7 @@ public:
     CNameDescEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @brief Returns a new instance of this class
-    static ITreeItemEditor* Create(CMainWindow& rMainWindow, IProjTreeItem& rItem);
+    static std::unique_ptr<ITreeItemEditor> Create(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @copydoc INotifyItemOperation::ItemChanged
     void OnAnyItemRenamed(const IProjTreeItem& rChanged) override;

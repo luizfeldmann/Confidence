@@ -296,7 +296,7 @@ CGeneratedTextFileEditor::CGeneratedTextFileEditor(CMainWindow& rMainWindow, IPr
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CGeneratedTextFileEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+/* static */ std::unique_ptr<ITreeItemEditor> CGeneratedTextFileEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CGeneratedTextFileEditor(rMainWindow, rItem);
+    return std::make_unique<CGeneratedTextFileEditor>(rMainWindow, rItem);
 }

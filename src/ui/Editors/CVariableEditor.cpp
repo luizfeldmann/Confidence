@@ -64,9 +64,9 @@ CVariableEditor::CVariableEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CVariableEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+/* static */ std::unique_ptr<ITreeItemEditor> CVariableEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CVariableEditor(rMainWindow, rItem);
+    return std::make_unique<CVariableEditor>(rMainWindow, rItem);
 }
 
 void CVariableEditor::OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent)

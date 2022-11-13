@@ -39,7 +39,7 @@ CConstantEditor::CConstantEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CConstantEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+/* static */ std::unique_ptr<ITreeItemEditor> CConstantEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CConstantEditor(rMainWindow, rItem);
+    return std::make_unique<CConstantEditor>(rMainWindow, rItem);
 }

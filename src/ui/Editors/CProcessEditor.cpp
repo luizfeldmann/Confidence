@@ -201,7 +201,7 @@ CRunProcessEditor::CRunProcessEditor(CMainWindow& rMainWindow, IProjTreeItem& rI
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CRunProcessEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+/* static */ std::unique_ptr<ITreeItemEditor> CRunProcessEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CRunProcessEditor(rMainWindow, rItem);
+    return std::make_unique<CRunProcessEditor>(rMainWindow, rItem);
 }

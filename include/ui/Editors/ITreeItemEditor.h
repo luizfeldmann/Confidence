@@ -37,7 +37,7 @@ public:
     ITreeItemEditor& operator=(ITreeItemEditor&&) = default;
 
     //! Prototype callback used to create a new editor for the provided item
-    using fnFactory_t = std::function<ITreeItemEditor* (CMainWindow&, IProjTreeItem&)>;
+    using fnFactory_t = std::function<std::unique_ptr<ITreeItemEditor>(CMainWindow&, IProjTreeItem&)>;
 
     //! @brief Gets the item being edited
     IProjTreeItem& GetItem();

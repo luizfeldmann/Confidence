@@ -163,7 +163,7 @@ CConditionalEditor::CConditionalEditor(CMainWindow& rMainWindow, IProjTreeItem& 
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CConditionalEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+/* static */ std::unique_ptr<ITreeItemEditor> CConditionalEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CConditionalEditor(rMainWindow, rItem);
+    return std::make_unique<CConditionalEditor>(rMainWindow, rItem);
 }

@@ -252,9 +252,9 @@ CGroupEditor::CGroupEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CGroupEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+/* static */ std::unique_ptr<ITreeItemEditor> CGroupEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CGroupEditor(rMainWindow, rItem);
+    return std::make_unique<CGroupEditor>(rMainWindow, rItem);
 }
 
 void CGroupEditor::OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent)

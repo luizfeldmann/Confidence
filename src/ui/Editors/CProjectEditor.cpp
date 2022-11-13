@@ -73,7 +73,7 @@ CProjectEditor::CProjectEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CProjectEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+/* static */ std::unique_ptr<ITreeItemEditor> CProjectEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CProjectEditor(rMainWindow, rItem);
+    return std::make_unique<CProjectEditor>(rMainWindow, rItem);
 }

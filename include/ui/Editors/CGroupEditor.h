@@ -65,7 +65,7 @@ public:
     CGroupEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @brief Returns a new instance of this class
-    static ITreeItemEditor* Create(CMainWindow& rMainWindow, IProjTreeItem& rItem);
+    static std::unique_ptr<ITreeItemEditor> Create(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @copydoc INotifyItemOperation::OnItemCreated
     void OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent) override;

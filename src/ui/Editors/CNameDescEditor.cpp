@@ -74,9 +74,9 @@ CNameDescEditor::CNameDescEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
     m_pPanel->Layout();
 }
 
-ITreeItemEditor* CNameDescEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
+/* static */ std::unique_ptr<ITreeItemEditor> CNameDescEditor::Create(CMainWindow& rMainWindow, IProjTreeItem& rItem)
 {
-    return new CNameDescEditor(rMainWindow, rItem);
+    return std::make_unique<CNameDescEditor>(rMainWindow, rItem);
 }
 
 void CNameDescEditor::OnAnyItemRenamed(const IProjTreeItem& rChanged)
