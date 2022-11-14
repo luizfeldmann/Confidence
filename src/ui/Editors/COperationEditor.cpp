@@ -1,11 +1,34 @@
 #include "ui/Editors/COperationEditor.h"
 #include "ui/Models/CFileOperationsModel.h"
+#include "wxExport/IOperationEditor.h"
 #include "core/items/file_operation/CFileOperations.h"
 #include "core/items/file_operation/IFileOperationHandler.h"
 #include "core/items/file_operation/CIniFileHandler.h"
 #include "core/items/file_operation/CXmlFileHandler.h"
 
 /* COperationEditorUI */
+
+//! @brief Item editor for file operations
+class COperationEditorUI : public IOperationEditor
+{
+protected:
+    //! The underlying item being editted
+    CFileOperations& m_rEdit;
+
+    //! Pointer to the model managing the data view of operations
+    CFileOperationsModel* m_pModel;
+
+    /* OVERRIDES FROM IOperationEditor */
+    void onFilePath(wxCommandEvent& event) override;
+    void onHandlerChoice(wxCommandEvent& event) override;
+    void onToolNew(wxCommandEvent& event) override;
+    void onToolDelete(wxCommandEvent& event) override;
+    void onToolUp(wxCommandEvent& event) override;
+    void onToolDown(wxCommandEvent& event) override;
+
+public:
+    COperationEditorUI(wxWindow* pParent, CFileOperations& rEdit);
+};
 
 COperationEditorUI::COperationEditorUI(wxWindow* pParent, CFileOperations& rEdit)
     : IOperationEditor(pParent)

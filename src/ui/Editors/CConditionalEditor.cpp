@@ -1,13 +1,41 @@
 #include "ui/Editors/CConditionalEditor.h"
 #include "ui/Models/CConditionalTreeModel.h"
+#include "ui/CAcceleratorEntry.h"
 #include "core/items/condition/CLogicalOperator.h"
 #include "core/items/condition/CLogicalComparator.h"
 #include "core/items/condition/CConditional.h"
+#include "wxExport/IConditionalEditor.h"
 #include <wx/menu.h>
 #include <functional>
 #include <array>
 
 /* CConditionalEditorUI */
+
+//! @brief Item editor for conditionals
+class CConditionalEditorUI : public IConditionalEditor
+{
+protected:
+    //! The underlying conditional item being edited
+    CConditional& m_rEdit;
+
+    //! The model used to manage the table of conditions
+    CConditionalTreeModel* const m_pModel;
+
+    //! Manages keyboard shortcuts
+    wxAcceleratorTable m_cAccTbl;
+
+    void onBtnNewSelected(wxCommandEvent& event);
+
+    /* OVERRIDES FROM IConditionalEditor */
+    void onBtnNew(wxCommandEvent& event) override;
+    void onBtnDelete(wxCommandEvent& event) override;
+    void onBtnUp(wxCommandEvent& event) override;
+    void onBtnDown(wxCommandEvent& event) override;
+
+public:
+    CConditionalEditorUI(wxWindow* pParent, CConditional& rEdit);
+
+};
 
 CConditionalEditorUI::CConditionalEditorUI(wxWindow* pParent, CConditional& rEdit)
     : IConditionalEditor(pParent)

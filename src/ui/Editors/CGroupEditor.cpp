@@ -5,6 +5,7 @@
 #include "core/items/CConfigurationGroup.h"
 #include "core/items/CInstanceGroup.h"
 #include "core/items/group/CGroupFilterConfigurationAndInstance.h"
+#include "wxExport/IGroupEditor.h"
 
 //! @brief Utility to create filters by provided type
 class CFilterFactory
@@ -70,6 +71,54 @@ protected:
 };
 
 /* CGroupEditorUI */
+//! @brief Item editor for groups
+class CGroupEditorUI : public IGroupEditor, public INotifyItemOperation
+{
+public:
+    CGroupEditorUI(wxWindow* pParent, CGroup& rEdit, std::shared_ptr<const CProject> pProject);
+
+    //! @copydoc INotifyItemOperation::OnItemCreated
+    void OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent) override;
+
+    //! @copydoc INotifyItemOperation::OnAnyItemErased
+    void OnAnyItemErased(const IProjTreeItem& rItem) override;
+
+    //! @copydoc INotifyItemOperation::OnAnyItemRenamed
+    void OnAnyItemRenamed(const IProjTreeItem& rChanged) override;
+
+protected:
+    //! Reference to the edit group
+    CGroup& m_rEdit;
+
+    //! Reference to the current project
+    std::shared_ptr<const CProject> const m_pProject;
+
+    //! @brief Convergence of all INotifyItemOperation events
+    void OnItemOperation(const IProjTreeItem& rItem);
+
+    //! @brief Updates UI to reflect changes in the current filter type
+    void ReloadFilterType();
+
+    //! @brief Reloads specific info of each filter type
+    void ReloadFilterDetails(std::shared_ptr<const IGroupFilter> pFilter);
+
+    //! @brief Updates the list of filtered instances
+    void PopulateInstancesList(std::shared_ptr<const IGroupFilter> pFilter);
+
+    //! @brief Updates the list of filtered configurations 
+    void PopulateConfigurationsList(std::shared_ptr<const IGroupFilter> pFilter);
+
+    //! @brief Appends an item to the provided filter list, and (un)-checks it according to the filter
+    void AppendFilterListItem(std::shared_ptr<const IGroupFilter> pFilter, IProjTreeItem::cptr_t pItem, wxCheckListBox* pListBox);
+
+    void OnListToggle(wxCommandEvent& event, wxCheckListBox* pListBox);
+
+    /*OVERRIDES FROM IGroupEditor */
+    void onChangeFilter(wxCommandEvent& event) override;
+    void onConfigListToggle(wxCommandEvent& event) override;
+    void onInstanceListToggle(wxCommandEvent& event) override;
+};
+
 CGroupEditorUI::CGroupEditorUI(wxWindow* pParent, CGroup& rEdit, std::shared_ptr<const CProject> pProject)
     : IGroupEditor(pParent)
     , m_rEdit(rEdit)

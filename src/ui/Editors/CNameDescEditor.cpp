@@ -1,7 +1,29 @@
 #include "ui/Editors/CNameDescEditor.h"
+#include "wxExport/INameDescEditor.h"
+#include "core/IProjTreeItem.h"
 
 wxDEFINE_EVENT(EVT_EDITOR_ITEM_CHANGED_NAME, wxCommandEvent);
 wxDEFINE_EVENT(EVT_EDITOR_ITEM_CHANGED_DESC, wxCommandEvent);
+
+/* CNameDescEditorUI */
+
+//! @brief Item editor containing text boxes to edit the name and the description 
+class CNameDescEditorUI : public INameDescEditor, public INotifyItemOperation
+{
+protected:
+    //! Reference to the item being edited
+    CNameDescEditor& m_rEditor;
+
+    /* Overrides from INameDescEditor */
+    void onChangedName(wxCommandEvent& event) override;
+    void onChangedDesc(wxCommandEvent& event) override;
+
+public:
+    CNameDescEditorUI(wxWindow* pParent, CNameDescEditor& rEditor);
+
+    //! @copydoc INotifyItemOperation::OnAnyItemRenamed
+    void OnAnyItemRenamed(const IProjTreeItem& rChanged) override;
+};
 
 CNameDescEditorUI::CNameDescEditorUI(wxWindow* pParent, CNameDescEditor& rEditor)
     : INameDescEditor(pParent)
@@ -65,6 +87,8 @@ void CNameDescEditorUI::onChangedDesc(wxCommandEvent& event)
         m_textCtrlDesc->ChangeValue(rItem.GetDescription());
     }
 }
+
+/* CNameDescEditor */
 
 CNameDescEditor::CNameDescEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem)
     : ITreeItemEditor(rMainWindow, rItem)

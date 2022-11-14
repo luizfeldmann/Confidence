@@ -3,9 +3,9 @@
 
 #include <wx/panel.h>
 #include <wx/aui/auibook.h>
-#include "core/IProjTreeItem.h"
 #include "core/INotifyItemOperation.h"
 
+class IProjTreeItem;
 class CMainWindow;
 class CProject;
 

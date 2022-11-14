@@ -1,7 +1,22 @@
 #include "core/items/CConstant.h"
 #include "ui/Editors/CConstantEditor.h"
+#include "wxExport/IConstantEditor.h"
 
 /* CConstantEditorUI */
+
+//! @brief Item editor for constant
+class CConstantEditorUI : public IConstantEditor
+{
+protected:
+    CConstant& m_rEdit;
+
+    void onExpressionChanged(wxCommandEvent& event) override;
+    void onChkboxExport(wxCommandEvent& event) override;
+
+public:
+    CConstantEditorUI(wxWindow* pParent, CConstant& rEdit);
+
+};
 
 CConstantEditorUI::CConstantEditorUI(wxWindow* pParent, CConstant& rEdit)
     : IConstantEditor(pParent)

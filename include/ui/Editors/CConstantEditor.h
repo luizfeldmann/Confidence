@@ -2,23 +2,8 @@
 #define _CCONSTANTEDITOR_
 
 #include "ui/Editors/CNameDescEditor.h"
-#include "wxExport/IConstantEditor.h"
 
-class CConstant;
-
-//! @brief Item editor for constant
-class CConstantEditorUI : public IConstantEditor
-{
-protected:
-    CConstant& m_rEdit;
-
-    void onExpressionChanged(wxCommandEvent& event) override;
-    void onChkboxExport(wxCommandEvent& event) override;
-
-public:
-    CConstantEditorUI(wxWindow* pParent, CConstant& rEdit);
-
-};
+class CConstantEditorUI;
 
 //! @copydoc CConstantEditorUI
 class CConstantEditor : public CNameDescEditor

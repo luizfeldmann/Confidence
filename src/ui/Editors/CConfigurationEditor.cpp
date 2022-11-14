@@ -3,8 +3,36 @@
 #include "ui/Models/CConfigurationSummaryModel.h"
 #include "ui/CMainWindow.h"
 #include "core/items/variable/CVariable.h"
+#include "wxExport/IConfigurationEditor.h"
 
 /* CConfigurationEditorUI */
+
+//! @brief Item editor for configurations
+class CConfigurationEditorUI : public IConfigurationEditor, public INotifyItemOperation
+{
+protected:
+    //! Reference to the application's main window
+    CMainWindow& m_rMainWindow;
+
+    //! Pointer to the model managing the data view table for the configuration
+    CConfigurationSummaryModel* m_pModel;
+
+    /* OVERRIDES FROM IConfigurationEditor */
+    void onItemActivated(wxDataViewEvent& event) override;
+
+public:
+    CConfigurationEditorUI(CMainWindow& rMainWindow, wxWindow* pParent, std::shared_ptr<const CProject> pProject, CConfiguration& rConfig);
+
+    //! @copydoc INotifyItemOperation::OnItemCreated
+    void OnItemCreated(const IProjTreeItem& rItem, const IProjTreeItem& rParent) override;
+
+    //! @copydoc INotifyItemOperation::OnAnyItemErased
+    void OnAnyItemErased(const IProjTreeItem& rItem) override;
+
+    //! @copydoc INotifyItemOperation::OnAnyItemChanged
+    void OnAnyItemRenamed(const IProjTreeItem& pItem) override;
+};
+
 
 CConfigurationEditorUI::CConfigurationEditorUI(CMainWindow& rMainWindow, wxWindow* pParent, std::shared_ptr<const CProject> pProject, CConfiguration& rConfig)
     : IConfigurationEditor(pParent)

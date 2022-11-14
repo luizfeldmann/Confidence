@@ -2,6 +2,9 @@
 #include "ui/Models/CProcessArgsModel.h"
 #include "core/items/process/CProcessFireForget.h"
 #include "core/items/process/CProcessWaitCompletion.h"
+#include "core/items/process/CRunProcess.h"
+#include "wxExport/IRunProcessEditor.h"
+#include "ui/CAcceleratorEntry.h"
 #include <array>
 
 /* Utils */
@@ -20,6 +23,41 @@ static int ChoiceIndexFromWindowMode(EProcessStartWindowMode eMode)
 }
 
 /* CRunProcessEditorUI */
+
+//! @brief Item editor for "run process"
+class CRunProcessEditorUI : public IRunProcessEditor
+{
+protected:
+    //! The underlying process item being edited
+    CRunProcess& m_cEdit;
+
+    //! The model used to manage the list of arguments
+    CProcessArgsModel* const m_pModel;
+
+    //! Manages keyboard shortcuts
+    wxAcceleratorTable m_cAccTbl;
+
+    //! Loads the combo box of "policy" type
+    EProcessPolicy GetCurrentPolicy() const;
+
+    //! Loads the "wait completion" exclusive UI elements
+    void LoadWaitCompletion();
+
+    /* OVERRIDES FROM IRunProcessEditor */
+    void onToolNewArg(wxCommandEvent& event) override;
+    void onToolDelArg(wxCommandEvent& event) override;
+    void onToolMoveUp(wxCommandEvent& event) override;
+    void onToolMoveDown(wxCommandEvent& event) override;
+    void onPolicyChanged(wxCommandEvent& event) override;
+    void onWindowChanged(wxCommandEvent& event) override;
+    void onAdminChanged(wxCommandEvent& event) override;
+    void onReturnCodeCombo(wxCommandEvent& event) override;
+    void onReturnCodeText(wxCommandEvent& event) override;
+
+public:
+    CRunProcessEditorUI(wxWindow* pParent, CRunProcess& cEdit);
+};
+
 CRunProcessEditorUI::CRunProcessEditorUI(wxWindow* pParent, CRunProcess& cEdit)
     : IRunProcessEditor(pParent)
     , m_cEdit(cEdit)

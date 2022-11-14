@@ -5,6 +5,7 @@
 #include "wxExport/IMainWindow.h"
 #include "ui/CTreeItemEditorManager.h"
 #include "ui/Editors/CNameDescEditor.h"
+#include "core/ITreeItemCollection.h"
 
 class CProject;
 class CTreeBrowserModel;
