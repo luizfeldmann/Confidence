@@ -15,3 +15,6 @@ cmrc_add_resources(${CMAKE_PROJECT_NAME}-resources
 	WHENCE "${CMAKE_BINARY_DIR}"
 	"${README_HTML}"
 )
+
+# Make it part of the installer
+install(FILES ${README_HTML} "${PROJECT_SOURCE_DIR}/LICENSE.txt" DESTINATION ".")
