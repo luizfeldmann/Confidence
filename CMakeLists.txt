@@ -42,6 +42,9 @@ find_package(wxWidgets COMPONENTS core base aui stc html)
 # Dependency: CMark
 find_package(cmark CONFIG REQUIRED)
 
+# Dependency: Graphviz
+include("dependencies/FindGraphviz.cmake")
+
 # Project sources
 SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/main.cpp"
@@ -260,7 +263,7 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "include/vfs/CTempSymlinkGenerator.h"
     "src/vfs/CTempSymlinkGenerator.cpp"
     "include/vfs/IProjectedFileSystemProvider.h"
-    "src/vfs/IProjectedFileSystemProvider.cpp"  )
+    "src/vfs/IProjectedFileSystemProvider.cpp"   "src/docs/CDiagram.cpp" "include/docs/CDiagram.h")
 
 SET(${CMAKE_PROJECT_NAME}_INCLUDES
     "${CMAKE_CURRENT_LIST_DIR}/include"
@@ -287,6 +290,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} ${wxWidgets_LIBRARIES})
 target_link_libraries(${CMAKE_PROJECT_NAME} cmark::cmark)
 target_link_libraries(${CMAKE_PROJECT_NAME} pugixml)
 target_link_libraries(${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}::resources)
+target_link_libraries(${CMAKE_PROJECT_NAME} graphviz)
 
 if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -300,6 +304,14 @@ set_target_properties(${CMAKE_PROJECT_NAME}
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib
 )
+
+# Copy Graphviz plugins
+add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "$<TARGET_FILE:graphviz::plugin::core>"
+    "$<TARGET_FILE:graphviz::plugin::dot>"
+    "$<TARGET_FILE:graphviz::config>"
+    "$<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>")
 
 # Create installer
 install(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION "bin")

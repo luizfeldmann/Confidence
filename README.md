@@ -85,6 +85,7 @@ Please follow the "fork-and-pull" Git workflow. Be sure to merge the latest from
 - **JSON file I/O and serialization:** [rapidjson](https://github.com/Tencent/rapidjson) and [JInterface](https://github.com/luizfeldmann/JInterface)
 - **Documentation in MD and HTML:** [cmark](https://github.com/commonmark/cmark)
 - **Resources packaging:** [cmrc](https://github.com/vector-of-bool/cmrc)
+- **Graph visualization:** [Graphviz](https://graphviz.org/)
 
 ### Dev & Build tools:
 
