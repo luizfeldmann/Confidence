@@ -69,9 +69,9 @@ bool CGroup::Execute(CExecutionContext& rContext) const
 
 bool CGroup::PostDeserialize(CProject& rProject)
 {
-    bool bStatus = true;
+    bool bStatus = IProjTreeItem::PostDeserialize(rProject);
 
-    if (m_pFilter)
+    if (bStatus && m_pFilter)
         bStatus = m_pFilter->PostDeserialize(rProject);
 
     return bStatus;
@@ -79,9 +79,9 @@ bool CGroup::PostDeserialize(CProject& rProject)
 
 bool CGroup::PreSerialize()
 {
-    bool bStatus = true;
+    bool bStatus = IProjTreeItem::PreSerialize();
 
-    if (m_pFilter)
+    if (bStatus && m_pFilter)
         bStatus = m_pFilter->PreSerialize();
 
     return bStatus;
