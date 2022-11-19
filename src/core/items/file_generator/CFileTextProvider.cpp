@@ -1,6 +1,7 @@
 #include <fstream>
 #include <sstream>
 #include "core/items/file_generator/CFileTextProvider.h"
+#include "core/CEvaluationContext.h"
 #include "docs/IDocExporter.h"
 
 DEFINE_SERIALIZATION_SCHEME(CFileTextProvider,
@@ -76,6 +77,12 @@ bool CFileTextProvider::SetFilePath(const std::string& strPath)
 {
     m_strFilePath = strPath;
     return true;
+}
+
+std::vector<std::string> CFileTextProvider::GetDependencies() const
+{
+    // TODO: list variables from the read text file
+    return CEvaluationContext::ListVariables(m_strFilePath);
 }
 
 bool CFileTextProvider::Document(IDocExporter& rExporter) const

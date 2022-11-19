@@ -2,13 +2,13 @@
 #define _ICONDITION_H_
 
 #include "docs/IDocumentable.h"
+#include "core/IDependsOnVariables.h"
 #include <memory>
-#include <string>
 
 class CEvaluationContext;
 
 //! @brief An object that can be evaluated to a boolean
-class ICondition : public IDocumentable, public std::enable_shared_from_this<ICondition>
+class ICondition : public IDocumentable, public IDependsOnVariables, public std::enable_shared_from_this<ICondition>
 {
 public:
     virtual ~ICondition() = default;

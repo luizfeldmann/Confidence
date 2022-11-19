@@ -55,6 +55,9 @@ public:
     //! @brief Instantiates a new operator of the given type
     static std::shared_ptr<CLogicalOperator> Create(ELogicalOperator eType);
 
+    //! @copydoc IDependsOnVariables::GetDependencies
+    std::vector<std::string> GetDependencies() const override;
+
     //! @copydoc IDocumentable::Document
     bool Document(IDocExporter& rExporter) const override;
         

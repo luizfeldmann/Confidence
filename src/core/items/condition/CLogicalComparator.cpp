@@ -65,6 +65,16 @@ bool CLogicalComparator::Evaluate(CEvaluationContext& rContext, bool& bResult) c
     return bStatus;
 }
 
+std::vector<std::string> CLogicalComparator::GetDependencies() const
+{
+    auto vDeps = CEvaluationContext::ListVariables(GetLHS());
+    const auto vDepsR = CEvaluationContext::ListVariables(GetRHS());
+
+    vDeps.insert(vDeps.cend(), vDepsR.cbegin(), vDepsR.cend());
+
+    return vDeps;
+}
+
 bool CLogicalComparator::Document(IDocExporter& rExporter) const
 {
     bool bStatus = rExporter.Paragraph();

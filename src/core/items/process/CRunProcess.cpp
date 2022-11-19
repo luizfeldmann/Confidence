@@ -94,6 +94,8 @@ bool CRunProcess::DocumentCustom(IDocExporter& rExporter) const
     // Write the arguments
     if (bStatus && !m_vArgs.empty())
     {
+        const std::string strName = GetName();
+
         bStatus = rExporter.List();
 
         for (vec_args_t::const_iterator it = m_vArgs.cbegin(); bStatus && (it != m_vArgs.cend()); ++it)
@@ -101,6 +103,10 @@ bool CRunProcess::DocumentCustom(IDocExporter& rExporter) const
             bStatus = rExporter.Item()
                 && it->Document(rExporter)
                 && rExporter.PopStack();
+
+            const auto vVariables = it->GetDependencies();
+            for (const std::string& strDepVar : vVariables)
+                rExporter.Dependency(strDepVar, strName);
         }
 
         bStatus = bStatus && rExporter.PopStack();

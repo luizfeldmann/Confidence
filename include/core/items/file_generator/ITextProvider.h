@@ -4,6 +4,7 @@
 #include <string>
 #include "docs/IDocumentable.h"
 #include "core/ISerializationNotify.h"
+#include "core/IDependsOnVariables.h"
 
 //! @brief Reflection types of ITextProvider implementations
 enum  class ETextProviderType
@@ -13,7 +14,7 @@ enum  class ETextProviderType
 };
 
 //! @brief Generic interface for access of text
-class ITextProvider : public IDocumentable, public ISerializationNotify
+class ITextProvider : public IDocumentable, public IDependsOnVariables, public ISerializationNotify
 {
 public:
     ITextProvider() = default;

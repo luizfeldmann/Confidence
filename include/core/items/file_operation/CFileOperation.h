@@ -54,6 +54,9 @@ public:
     //! @brief Executes the requested operation on the file context provided
     bool Execute(CExecutionContext& rContext, IFileOperatorContext& rFile) const;
 
+    //! @copydoc IDependsOnVariables::GetDependencies
+    std::vector<std::string> GetDependencies() const override;
+
     //! @copydoc IDocumentable::Document
     bool Document(IDocExporter& rExporter) const override;
 };

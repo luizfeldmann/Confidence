@@ -54,6 +54,9 @@ public:
     //! @brief Instantiates a new comparator of the given type
     static std::shared_ptr<CLogicalComparator> Create(ELogicalComparator eType);
 
+    //! @copydoc IDependsOnVariables::GetDependencies
+    std::vector<std::string> GetDependencies() const override;
+
     //! @copydoc IDocumentable::Document
     bool Document(IDocExporter& rExporter) const override;
 

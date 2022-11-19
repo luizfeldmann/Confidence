@@ -1,4 +1,5 @@
 #include "core/items/file_generator/CStoredTextProvider.h"
+#include "core/CEvaluationContext.h"
 #include "docs/IDocExporter.h"
 #include <sstream>
 
@@ -59,6 +60,11 @@ bool CStoredTextProvider::PreSerialize()
         m_vText.emplace_back( std::move(strLine) );
 
     return true;
+}
+
+std::vector<std::string> CStoredTextProvider::GetDependencies() const
+{
+    return CEvaluationContext::ListVariables(m_strText);
 }
 
 bool CStoredTextProvider::Document(IDocExporter& rExporter) const

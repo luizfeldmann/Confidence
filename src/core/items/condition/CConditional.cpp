@@ -1,6 +1,7 @@
 #include "core/items/condition/CConditional.h"
 #include "core/items/condition/ICondition.h"
 #include "core/CExecutionContext.h"
+#include "docs/IDocExporter.h"
 #include "util/Log.h"
 
 DEFINE_SERIALIZATION_SCHEME(CConditional,
@@ -78,7 +79,18 @@ bool CConditional::DocumentCustom(IDocExporter& rExporter) const
     bool bStatus = true;
 
     if (m_pCondition)
+    {
         bStatus = m_pCondition->Document(rExporter);
+
+        if (bStatus)
+        {
+            const std::string strName = GetName();
+            const auto vDependVariables = m_pCondition->GetDependencies();
+
+            for (const std::string strVarDep : vDependVariables)
+                rExporter.Dependency(strVarDep, strName);
+        }
+    }
 
     return bStatus;
 }

@@ -106,7 +106,10 @@ bool CFileOperations::DocumentName(IDocExporter& rExporter) const
 
 bool CFileOperations::DocumentCustom(IDocExporter& rExporter) const
 {
-    bool bStatus = rExporter.FormField("Destination Path:", GetFilePath(), true);
+    const std::string strFilePath = GetFilePath();
+    auto vDependVariables = CEvaluationContext::ListVariables(strFilePath);
+
+    bool bStatus = rExporter.FormField("Destination Path:", strFilePath, true);
 
     if (bStatus && m_pHandler)
         bStatus = m_pHandler->Document(rExporter);
@@ -120,10 +123,22 @@ bool CFileOperations::DocumentCustom(IDocExporter& rExporter) const
             bStatus = rExporter.Item()
                 && it->Document(rExporter)
                 && rExporter.PopStack();
+
+            // Dependencies on operation values
+            const auto vOperDepends = it->GetDependencies();
+            vDependVariables.insert(vDependVariables.end(), vOperDepends.cbegin(), vOperDepends.cend());
         }
 
         bStatus = bStatus && rExporter.PopStack();
     }
+
+    if (bStatus)
+    {
+        const std::string strName = GetName();
+        for (const std::string strVarDep : vDependVariables)
+            rExporter.Dependency(strVarDep, strName);
+    }
+
 
     return bStatus;
 }

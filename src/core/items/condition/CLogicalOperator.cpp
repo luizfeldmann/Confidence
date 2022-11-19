@@ -290,6 +290,20 @@ CLogicalOperator::ECategory CLogicalOperator::GetCategory() const
     return ECategory::Operator;
 }
 
+std::vector<std::string> CLogicalOperator::GetDependencies() const
+{
+    std::vector<std::string> vDeps;
+
+    const vec_ccond_t vConds = SubItems();
+    for (vec_ccond_t::const_iterator it = vConds.cbegin(); it != vConds.cend(); ++it)
+    {
+        const auto vItemDeps = it->get()->GetDependencies();
+        vDeps.insert(vDeps.end(), vItemDeps.cbegin(), vItemDeps.cend());
+    }
+
+    return vDeps;
+}
+
 bool CLogicalOperator::Document(IDocExporter& rExporter) const
 {
     bool bStatus = rExporter.List();

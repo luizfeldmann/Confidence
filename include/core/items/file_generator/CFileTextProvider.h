@@ -45,6 +45,9 @@ public:
     //! @return True if success
     bool SetFilePath(const std::string& strPath);
 
+    //! @copydoc IDependsOnVariables::GetDependencies
+    std::vector<std::string> GetDependencies() const override;
+
     //! @copydoc IDocumentable:Document
     bool Document(IDocExporter& rExporter) const override;
 };

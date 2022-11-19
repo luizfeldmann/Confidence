@@ -158,6 +158,7 @@ bool CVariable::DocumentName(IDocExporter& rExporter) const
 bool CVariable::DocumentCustom(IDocExporter& rExporter) const
 {
     bool bStatus = rExporter.List();
+    const std::string strName = GetName();
 
     for (vec_rules_t::const_iterator it = m_vRules.cbegin(); bStatus && (it != m_vRules.cend()); ++it)
     {
@@ -169,6 +170,10 @@ bool CVariable::DocumentCustom(IDocExporter& rExporter) const
         bStatus = rExporter.Item();
         bStatus = bStatus && it->Document(rExporter);
         bStatus = bStatus && rExporter.PopStack();
+
+        const auto vVariables = it->GetDependencies();
+        for (const std::string& strDepVar : vVariables)
+            rExporter.Dependency(strDepVar, strName);
     }
 
     bStatus = bStatus && rExporter.PopStack();

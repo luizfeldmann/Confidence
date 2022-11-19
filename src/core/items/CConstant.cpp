@@ -1,5 +1,6 @@
 #include "core/items/CConstant.h"
 #include "core/items/variable/CEnvironmentVariable.h"
+#include "core/CEvaluationContext.h"
 #include "docs/IDocExporter.h"
 
 DEFINE_SERIALIZATION_SCHEME(CConstant,
@@ -52,6 +53,15 @@ bool CConstant::DocumentName(IDocExporter& rExporter) const
 bool CConstant::DocumentCustom(IDocExporter& rExporter) const
 {
     bool bStatus = rExporter.FormField("Expression:", GetExpression(), true);
+
+    if (bStatus)
+    {
+        const std::string strName = GetName();
+        const auto vDependVariables = GetDependencies();
+
+        for (const std::string& strDepVar : vDependVariables)
+            rExporter.Dependency(strDepVar, strName);
+    }
 
     return bStatus;
 }

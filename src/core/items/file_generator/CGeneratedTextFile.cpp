@@ -93,10 +93,26 @@ bool CGeneratedTextFile::DocumentName(IDocExporter& rExporter) const
 
 bool CGeneratedTextFile::DocumentCustom(IDocExporter& rExporter) const
 {
-    bool bStatus = rExporter.FormField("Destination Path:", GetOutputPath(), true);
+    const std::string strOutputPath = GetOutputPath();
+    bool bStatus = rExporter.FormField("Destination Path:", strOutputPath, true);
 
     if (bStatus && m_pProvider)
         bStatus = m_pProvider->Document(rExporter);
+
+    if (bStatus)
+    {
+        auto vDependVariables = CEvaluationContext::ListVariables(strOutputPath);
+
+        if (m_pProvider)
+        {
+            const auto vVariablesProvider = m_pProvider->GetDependencies();
+            vDependVariables.insert(vDependVariables.end(), vVariablesProvider.cbegin(), vVariablesProvider.cend());
+        }
+
+        const std::string strName = GetName();
+        for (const std::string strVarDep : vDependVariables)
+            rExporter.Dependency(strVarDep, strName);
+    }
 
     return bStatus;
 }

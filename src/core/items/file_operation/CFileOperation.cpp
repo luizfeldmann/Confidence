@@ -76,6 +76,21 @@ bool CFileOperation::Execute(CExecutionContext& rContext, IFileOperatorContext& 
     return bStatus;
 }
 
+std::vector<std::string> CFileOperation::GetDependencies() const
+{
+    std::vector<std::string> vDepends;
+
+    // Get dependencies on read variable or write expression
+    if (GetType() == EFileOperationType::Read)
+        vDepends.assign({ GetExpression() }); // In read mode, the expression itself is the name of an output variable
+    else
+        vDepends = CStoredExpression::GetDependencies(); // In write mode, the expression is evaluated
+
+    // TODO: get dependencies in the locator
+
+    return vDepends;
+}
+
 bool CFileOperation::Document(IDocExporter& rExporter) const
 {
     bool bStatus = rExporter.Paragraph()
