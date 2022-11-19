@@ -8,6 +8,8 @@ DEFINE_SERIALIZATION_SCHEME(CMarkdownExporter,
 
 REGISTER_POLYMORPHIC_CLASS(CMarkdownExporter);
 
+/* CMarkdownExporter */
+
 /* static */ IDocExporter* CMarkdownExporter::Create()
 {
     return new CMarkdownExporter;
@@ -15,6 +17,11 @@ REGISTER_POLYMORPHIC_CLASS(CMarkdownExporter);
 
 CMarkdownExporter::CMarkdownExporter()
     : CStoredOutputFileName(GetDefaultPath() + ".md")
+{
+
+}
+
+void CMarkdownExporter::Dependency(const std::string& strSrc, const std::string& strDst)
 {
 
 }

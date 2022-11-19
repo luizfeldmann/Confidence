@@ -4,11 +4,12 @@
 #pragma warning (disable: 4250) // inheritance via dominance
 
 #include "EDocExporter.h"
+#include "IDocumentationContext.h"
 #include "IOutputFileName.h"
 #include <ostream>
 
 //! @brief Common interface for all document exporters
-class IDocExporter : public virtual IOutputFileName
+class IDocExporter : public IDocumentationContext, public virtual IOutputFileName
 {
 private:
     IDocExporter(const IDocExporter&) = delete;
@@ -65,6 +66,9 @@ public:
 
     //! @brief Appends a code block to the document tree and pushes it to the stack
     virtual bool Code(const std::string& strText) = 0;
+
+    //! @brief Appends a block of raw HTML code
+    virtual bool Html(const std::string& strHtml) = 0;
 
     //! @brief Appends a collapsible section and pushes it to the stack
     virtual bool Collapsible() = 0;

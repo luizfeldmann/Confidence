@@ -32,30 +32,39 @@ set_target_properties(graphviz::gvc PROPERTIES
 )
 
 # Import plugins: Core
-add_library(graphviz::plugin::core MODULE IMPORTED)
+add_library(graphviz::plugin::core SHARED IMPORTED)
 
 set_property(TARGET graphviz::plugin::core APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG RELEASE)
 
 set_target_properties(graphviz::plugin::core PROPERTIES
+	IMPORTED_IMPLIB_DEBUG "${GV_LIB_DBG}/gvplugin_core.lib"
 	IMPORTED_LOCATION_DEBUG "${GV_BIN_DBG}/gvplugin_core.dll"
+	IMPORTED_IMPLIB_RELEASE "${GV_LIB_REL}/gvplugin_core.lib"
 	IMPORTED_LOCATION_RELEASE "${GV_BIN_REL}/gvplugin_core.dll"
 )
 
 # Import plugins: Dot
-add_library(graphviz::plugin::dot MODULE IMPORTED)
+add_library(graphviz::plugin::dot SHARED IMPORTED)
 
 set_property(TARGET graphviz::plugin::dot APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG RELEASE)
 
 set_target_properties(graphviz::plugin::dot PROPERTIES
+	IMPORTED_IMPLIB_DEBUG "${GV_LIB_DBG}/gvplugin_dot_layout.lib"
 	IMPORTED_LOCATION_DEBUG "${GV_BIN_DBG}/gvplugin_dot_layout.dll"
+	IMPORTED_IMPLIB_RELEASE "${GV_LIB_REL}/gvplugin_dot_layout.lib"
 	IMPORTED_LOCATION_RELEASE "${GV_BIN_REL}/gvplugin_dot_layout.dll"
 )
 
-# Configuration
-add_library(graphviz::config MODULE IMPORTED)
+# Import plugins: GDI+
+add_library(graphviz::plugin::gdip SHARED IMPORTED)
 
-set_target_properties(graphviz::config PROPERTIES
-	IMPORTED_LOCATION "${GV_BIN_REL}/config6"
+set_property(TARGET graphviz::plugin::gdip APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG RELEASE)
+
+set_target_properties(graphviz::plugin::gdip PROPERTIES
+	IMPORTED_IMPLIB_DEBUG "${GV_LIB_DBG}/gvplugin_gdiplus.lib"
+	IMPORTED_LOCATION_DEBUG "${GV_BIN_DBG}/gvplugin_gdiplus.dll"
+	IMPORTED_IMPLIB_RELEASE "${GV_LIB_REL}/gvplugin_gdiplus.lib"
+	IMPORTED_LOCATION_RELEASE "${GV_BIN_REL}/gvplugin_gdiplus.dll"
 )
 
 # Interface for the whole Graphviz
@@ -63,19 +72,12 @@ add_library(graphviz INTERFACE IMPORTED)
 
 set_property(TARGET graphviz PROPERTY INTERFACE_LINK_LIBRARIES 
 graphviz::cgraph
-graphviz::gvc)
+graphviz::gvc
+graphviz::plugin::core
+graphviz::plugin::dot
+graphviz::plugin::gdip
+)
 
 set_property(TARGET graphviz PROPERTY
   INTERFACE_INCLUDE_DIRECTORIES "${GV_IMPORT_PREFIX}/include"
 )
-
-set(GV_DEPENDS
-	graphviz::plugin::core 
-	graphviz::plugin::dot
-	graphviz::config
-)
-
-add_dependencies(graphviz ${GV_DEPENDS})
-
-# the top-level INSTALL cannot receive targets from sub-directories
-install(IMPORTED_RUNTIME_ARTIFACTS ${GV_DEPENDS} DESTINATION "bin")

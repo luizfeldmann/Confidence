@@ -1,7 +1,9 @@
 #include "docs/CHtmlExporter.h"
 #include "docs/CMarkCustomBlock.h"
+#include "docs/CDiagram.h"
 #include "util/Log.h"
 #include <cmark.h>
+#include <assert.h>
 
 DEFINE_SERIALIZATION_SCHEME(CHtmlExporter,
     SERIALIZATION_INHERIT(CStoredOutputFileName)
@@ -18,6 +20,7 @@ static const char* g_szCssStyles =
 "   .item:nth-of-type(odd):hover { background-color: AliceBlue; }\r\n"
 "   .item:nth-of-type(even){  border: 1px solid MediumPurple; border-left: 4px solid MediumPurple;  }\r\n"
 "   .item:nth-of-type(even):hover { background-color: Lavender; }\r\n"
+"   .depends { margin: auto; text-align: center; }\r\n"
 "   strong { color: darkgrey; }\r\n"
 "   em { font-weight: bold; }\r\n"
 "   summary { font-weight: bold; }\r\n"
@@ -29,6 +32,56 @@ static const char* g_szCssStyles =
 "   li:nth-child(even):hover { background-color: HoneyDew;  }\r\n"
 "</style>\r\n";
 
+/* CHtmlExporterPrivate */
+
+class CHtmlExporterPrivate : public IDocumentationContext
+{
+private:
+    static std::string c_depdiagTitle;
+
+    //! Stores the dependency diagram
+    CDiagram m_diagDeps;
+
+public:
+    CHtmlExporterPrivate()
+        : m_diagDeps(c_depdiagTitle)
+    {
+    }
+
+    void Dependency(const std::string& strSrc, const std::string& strDst) override
+    {
+        auto nodeSrc = m_diagDeps.Node(strSrc);
+        auto nodeDst = m_diagDeps.Node(strDst);
+
+        std::size_t hEdge = std::hash<std::string>{}(strSrc) ^ (std::hash<std::string>{}(strDst) << 1);
+        m_diagDeps.Edge(std::to_string(hEdge), nodeSrc, nodeDst);
+    }
+
+    bool GenerateDependencyDiagram(IDocExporter& rExporter)
+    {
+        bool bStatus = rExporter.Container();
+        bStatus = bStatus && rExporter.Heading();
+        bStatus = bStatus && rExporter.Text(c_depdiagTitle);
+        bStatus = bStatus && rExporter.PopStack();
+        
+        if (bStatus)
+        {
+            std::string strSVGdata;
+            bStatus = m_diagDeps.ExportSVG(strSVGdata);
+            bStatus = rExporter.Html(
+                "<div class=\"depends\">" 
+                + strSVGdata 
+                + "</div>");
+        }
+
+        bStatus = bStatus && rExporter.PopStack();
+
+        return bStatus;
+    }
+};
+
+std::string CHtmlExporterPrivate::c_depdiagTitle = "Dependency Diagram";
+
 /* CHtmlExporter */
 
 /* static */ IDocExporter* CHtmlExporter::Create()
@@ -39,6 +92,11 @@ static const char* g_szCssStyles =
 CHtmlExporter::CHtmlExporter()
     : CStoredOutputFileName(GetDefaultPath() + ".html")
 {
+}
+
+void CHtmlExporter::Dependency(const std::string& strSrc, const std::string& strDst)
+{
+    m_pPrivate->Dependency(strSrc, strDst);
 }
 
 bool CHtmlExporter::CreateHtml()
@@ -103,6 +161,8 @@ bool CHtmlExporter::CreateBody(CMarkCustomBlock& rHtml)
 
 bool CHtmlExporter::Start(std::ostream& rOutput)
 {
+    m_pPrivate = std::make_unique<CHtmlExporterPrivate>();
+
     bool bStatus = CCommonMarkExporter::Start(rOutput);
     bStatus = bStatus && CreateHtml();
 
@@ -111,20 +171,24 @@ bool CHtmlExporter::Start(std::ostream& rOutput)
 
 bool CHtmlExporter::Finish()
 {
-    bool bStatus = false;
+    bool bStatus = m_pPrivate->GenerateDependencyDiagram(*this);
 
-    static const int c_RenderWidth = 80;
-    char* const pBuffer = cmark_render_html(GetRootNode(), CMARK_OPT_UNSAFE);
-
-    if (!pBuffer)
-        CERROR("Failed to 'cmark_render_html' to a buffer");
-    else
+    if (bStatus)
     {
-        GetStream() << pBuffer;
-        free(pBuffer);
+        char* const pBuffer = cmark_render_html(GetRootNode(), CMARK_OPT_UNSAFE);
 
-        bStatus = true;
+        if (!pBuffer)
+            CERROR("Failed to 'cmark_render_html' to a buffer");
+        else
+        {
+            GetStream() << pBuffer;
+            free(pBuffer);
+
+            bStatus = true;
+        }
     }
+
+    m_pPrivate.reset();
 
     return bStatus;
 }

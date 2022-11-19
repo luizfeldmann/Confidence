@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <optional>
+#include <vector>
 
 //! @brief Stores variables and uses them to evaluate expressions
 class CEvaluationContext
@@ -37,6 +38,9 @@ public:
     //! @param[in,out] strExpression Expression to evaluate (in place)
     //! @return True if success
     bool Evaluate(std::string& strExpression) const;
+
+    //! @brief Returns a collection of names of variables contained in the expression
+    static std::vector<std::string> ListVariables(const std::string& strExpression);
 };
 
 #endif

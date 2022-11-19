@@ -183,6 +183,12 @@ bool CCommonMarkExporter::Code(const std::string& strText)
     return (pCode && cmark_node_set_literal(pCode, strText.c_str()));
 }
 
+bool CCommonMarkExporter::Html(const std::string& strHtml)
+{
+    cmark_node* pHtml = NewNode(CMARK_NODE_HTML_BLOCK, false);
+    return (pHtml && cmark_node_set_literal(pHtml, strHtml.c_str()));
+}
+
 bool CCommonMarkExporter::Collapsible()
 {
     bool bStatus = false;

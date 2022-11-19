@@ -36,18 +36,18 @@ std::optional<std::string> CEvaluationContext::GetVariable(const std::string& st
     return optValue;
 }
 
+//! Indexes the match groups of the Regex
+enum class EGroupIndex : int
+{
+    WholeMatch,     //!< Matches the whole expression $(VariableName)
+    VariableName,   //!< Matches only the name inside the $()
+    Count,          //!< Expected size of the match
+};
+
 bool CEvaluationContext::Evaluate(std::string& strExpression) const
 {
     //! Regex to find expressions in format $(VariableName)
     const std::regex& rVarRegex = GetVariableRegex();
-
-    //! Indexes the match groups of the Regex
-    enum class EGroupIndex : int
-    {
-        WholeMatch,     //!< Matches the whole expression $(VariableName)
-        VariableName,   //!< Matches only the name inside the $()
-        Count,          //!< Expected size of the match
-    };
 
     bool bStatus = true;
 
@@ -71,4 +71,18 @@ bool CEvaluationContext::Evaluate(std::string& strExpression) const
     }
 
     return bStatus;
+}
+
+std::vector<std::string> CEvaluationContext::ListVariables(const std::string& strExpression)
+{
+    std::vector<std::string> vNames;
+
+    for (auto it =  std::sregex_iterator(strExpression.cbegin(), strExpression.cend(), GetVariableRegex());
+        it != std::sregex_iterator(); ++it)
+    {
+        const std::ssub_match matchName = (*it)[(int)EGroupIndex::VariableName];
+        vNames.emplace_back( matchName );
+    }
+
+    return vNames;
 }

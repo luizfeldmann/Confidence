@@ -79,6 +79,9 @@ public:
     //! @copydoc IDocExporter::Code
     bool Code(const std::string& strText) override;
 
+    //! @copydoc IDocExporter::Html
+    bool Html(const std::string& strHtml) override;
+
     //! @copydoc IDocExporter::Collapsible
     bool Collapsible() override;
 
