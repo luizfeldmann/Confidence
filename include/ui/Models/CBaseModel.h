@@ -19,6 +19,9 @@ public:
     //! @brief Checks if a given cell is enabled
     virtual bool IsEnabled(const wxDataViewItem&) const = 0;
 
+    //! @brief Checks if a given cell has a value
+    virtual bool HasValue(const wxDataViewItem&) const;
+
     //! @brief Mutator write the data on a cell of this column
     virtual bool SetValue(const wxVariant&, const wxDataViewItem&) = 0;
 };

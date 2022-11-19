@@ -1,9 +1,24 @@
 #include "ui/Models/CBaseModel.h"
 
+bool IModelColumnHandler::HasValue(const wxDataViewItem&) const
+{
+    return true;
+}
+
 /* wxDataViewModel overrides */
 bool CBaseModel::HasValue(const wxDataViewItem& item, unsigned col) const
 {
-    return col < GetColumnCount();
+    bool bHasValue = (col < GetColumnCount());
+
+    if (bHasValue)
+    {
+        const IModelColumnHandler* pInfo = GetColumnInfo(col);
+        assert(nullptr != pInfo);
+
+        bHasValue = pInfo->HasValue(item);
+    }
+
+    return bHasValue;
 }
 
 wxString CBaseModel::GetColumnType(unsigned int col) const
