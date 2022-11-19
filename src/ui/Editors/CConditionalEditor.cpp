@@ -42,6 +42,15 @@ CConditionalEditorUI::CConditionalEditorUI(wxWindow* pParent, CConditional& rEdi
     , m_rEdit(rEdit)
     , m_pModel(new CConditionalTreeModel(m_rEdit))
 {
+    // Manually create the string/numeric column
+    wxArrayString arrDataMode;
+    arrDataMode.Add("Number");  // Option 0: GetStringMode() == false
+    arrDataMode.Add("Text");    // Option 1: GetStringMode() == true
+
+    m_dataViewCtrl->InsertColumn(m_dataViewCtrl->GetColumnCount(), // Make last
+        new wxDataViewColumn("Data", new wxDataViewChoiceByIndexRenderer(arrDataMode),
+            (unsigned int)CConditionalTreeModel::EColumn::DataMode, -1, wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE));
+
     // Associate the model
     m_dataViewCtrl->AssociateModel(m_pModel);
     m_pModel->DecRef();

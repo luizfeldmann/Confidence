@@ -20,6 +20,10 @@ protected:
     using parent_map_t = std::map<wxDataViewItem, wxDataViewItem>;
     mutable parent_map_t m_mapParents;
 
+public:
+    CConditionalTreeModel(CConditional& rEdit);
+    ~CConditionalTreeModel();
+
     //! @brief Defines the columns shown in the table
     enum class EColumn : unsigned int
     {
@@ -27,14 +31,10 @@ protected:
         LHS,        //!< Left expression
         Infix,      //!< The description of the operation
         RHS,        //!< Right expression
-
+        DataMode,   //!< To treat the expressions as string / number
         /* MUST BE LAST */
         Count
     };
-
-public:
-    CConditionalTreeModel(CConditional& rEdit);
-    ~CConditionalTreeModel();
 
     /* Public interface */
 

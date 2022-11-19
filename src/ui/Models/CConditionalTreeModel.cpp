@@ -124,6 +124,49 @@ public:
     }
 };
 
+class CDataModeColumnHandler : public IModelColumnHandler
+{
+public:
+    CDataModeColumnHandler() = default;
+
+    wxString GetType() const override
+    {
+        return "int";
+    }
+
+    void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
+    {
+        const CLogicalComparator* const pComparator = GetComparator(rItem);
+        assert(pComparator);
+
+        value = (long)pComparator->GetStringMode();
+    }
+
+    bool IsEnabled(const wxDataViewItem& rItem) const
+    {
+        const CLogicalComparator* const pComparator = GetComparator(rItem);
+        assert(pComparator);
+
+        return pComparator->AllowStringMode();
+    }
+
+    bool HasValue(const wxDataViewItem& rItem) const
+    {
+        const ICondition* const pCondition = CConditionalTreeModel::GetPointer(rItem);
+        assert(pCondition);
+
+        return (ICondition::ECategory::Comparator == pCondition->GetCategory());
+    }
+
+    bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
+    {
+        CLogicalComparator* const pComparator = GetComparator(rItem);
+        assert(pComparator);
+
+        return pComparator->SetStringMode((bool)value.GetLong());
+    }
+};
+
 /* CConditionalTreeModel */
 CConditionalTreeModel::CConditionalTreeModel(CConditional& rEdit)
     : m_rEdit(rEdit)
@@ -132,6 +175,7 @@ CConditionalTreeModel::CConditionalTreeModel(CConditional& rEdit)
     m_mapColumns[(unsigned int)EColumn::LHS] = std::make_unique<CExpressionColumnHandler>(false);
     m_mapColumns[(unsigned int)EColumn::Infix] = std::make_unique<CInfixColumnHandler>();
     m_mapColumns[(unsigned int)EColumn::RHS] = std::make_unique<CExpressionColumnHandler>(true);
+    m_mapColumns[(unsigned int)EColumn::DataMode] = std::make_unique<CDataModeColumnHandler>();
 }
 
 CConditionalTreeModel::~CConditionalTreeModel()
