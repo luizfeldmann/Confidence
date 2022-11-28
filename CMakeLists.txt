@@ -141,6 +141,8 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "include/core/items/file_operation/IFileOperationContext.h"
     "include/core/items/file_operation/CFileOperation.h"
     "src/core/items/file_operation/CFileOperation.cpp"
+    "include/core/items/file_operation/CRegexHandler.h"
+    "src/core/items/file_operation/CRegexHandler.cpp"
     "src/core/items/file_operation/CIniFileHandler.cpp"
     "include/core/items/file_operation/CXmlFileHandler.h"
     "src/core/items/file_operation/CXmlFileHandler.cpp"

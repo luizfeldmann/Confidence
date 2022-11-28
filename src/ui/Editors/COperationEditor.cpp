@@ -3,6 +3,7 @@
 #include "wxExport/IOperationEditor.h"
 #include "core/items/file_operation/CFileOperations.h"
 #include "core/items/file_operation/IFileOperationHandler.h"
+#include "core/items/file_operation/CRegexHandler.h"
 #include "core/items/file_operation/CIniFileHandler.h"
 #include "core/items/file_operation/CXmlFileHandler.h"
 
@@ -77,6 +78,7 @@ void COperationEditorUI::onHandlerChoice(wxCommandEvent& event)
 {
     using fnNewHandler_t = std::function<IFileOperationHandler::handler_ptr_t()>;
     static const std::unordered_map<EFileOperationHandlerType, fnNewHandler_t> c_mHandlerFactory {
+        {EFileOperationHandlerType::Regex,      CRegexHandler::Create },
         {EFileOperationHandlerType::IniFile,    CIniFileHandler::Create },
         {EFileOperationHandlerType::XmlFile,    CXmlFileHandler::Create },
         //{EFileOperationHandlerType::JsonFile,   nullptr },
