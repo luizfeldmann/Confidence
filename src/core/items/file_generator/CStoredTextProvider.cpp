@@ -21,9 +21,10 @@ ETextProviderType CStoredTextProvider::GetType() const
     return ETextProviderType::EStored;
 }
 
-std::string CStoredTextProvider::GetText() const
+bool CStoredTextProvider::GetText(std::string& strOutText) const
 {
-    return m_strText;
+    strOutText = m_strText;
+    return true;
 }
 
 bool CStoredTextProvider::SetText(const std::string& strText)
@@ -69,12 +70,15 @@ std::vector<std::string> CStoredTextProvider::GetDependencies() const
 
 bool CStoredTextProvider::Document(IDocExporter& rExporter) const
 {
-    bool bStatus = rExporter.Collapsible()
-        && rExporter.Summary()
-        && rExporter.Text("Contents:")
-        && rExporter.PopStack()
-        && rExporter.Code(GetText())
-        && rExporter.PopStack();
+    std::string strContents;
+
+    bool bStatus = GetText(strContents);
+    bStatus = bStatus && rExporter.Collapsible();
+    bStatus = bStatus && rExporter.Summary();
+    bStatus = bStatus && rExporter.Text("Contents:");
+    bStatus = bStatus && rExporter.PopStack();
+    bStatus = bStatus && rExporter.Code(strContents);
+    bStatus = bStatus && rExporter.PopStack();
 
     return bStatus;
 }

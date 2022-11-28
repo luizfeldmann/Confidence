@@ -79,14 +79,20 @@ CGeneratedTextFileEditorUI::~CGeneratedTextFileEditorUI()
 
 bool CGeneratedTextFileEditorUI::ReloadText()
 {
-    ITextProvider* pProvider = m_rEdit.GetProvider();
-    const bool bHasProvider = (nullptr != pProvider);
+    bool bStatus = false;
 
-    m_textEditor->Show(bHasProvider);
-    if (bHasProvider)
-        m_textEditor->ChangeValue(pProvider->GetText());
+    const ITextProvider* const pProvider = m_rEdit.GetProvider();
+    if (pProvider)
+    {
+        std::string strText;
+        bStatus = pProvider->GetText(strText);
 
-    return bHasProvider;
+        if (bStatus)
+            m_textEditor->ChangeValue(strText);
+    }
+
+    m_textEditor->Show(bStatus);
+    return bStatus;
 }
 
 void CGeneratedTextFileEditorUI::ReloadProviderType()
@@ -275,11 +281,13 @@ void CGeneratedTextFileEditorUI::onOpenEditor(wxCommandEvent& event)
     // Get the path to the file being editted
     // It may be a real file (if using template) or a temporary file if using in-memory
     ITextProvider* const pOrigProvider = m_rEdit.GetProvider();
-    if (nullptr != pOrigProvider)
+    if (nullptr == pOrigProvider)
+        CERROR("Cannot edit contents because no provider is defined");
+    else
     {
         if (ETextProviderType::EFile == pOrigProvider->GetType())
         {
-            CFileTextProvider* const pFileProvider = dynamic_cast<CFileTextProvider*>(pOrigProvider);
+            const CFileTextProvider* const pFileProvider = dynamic_cast<const CFileTextProvider*>(pOrigProvider);
             
             // Use the path to the template file
             if (pFileProvider)
@@ -287,18 +295,29 @@ void CGeneratedTextFileEditorUI::onOpenEditor(wxCommandEvent& event)
         }
         else
         {
-            // Create a temp file to edit
-            pTmpFile.reset(new CTempFile);
-            strEditFile = pTmpFile->path();
+            std::string strCurrentText;
+            if (pOrigProvider->GetText(strCurrentText))
+            {
+                // Create a temp file to edit
+                pTmpFile = std::make_unique<CTempFile>();
+                strEditFile = pTmpFile->path();
 
-            // Initial data - store current text inside temporary file
-            CFileTextProvider cIntermediateProvider(strEditFile);
-            cIntermediateProvider.SetText(pOrigProvider->GetText());
+                // Initial data - store current text inside temporary file
+                CFileTextProvider cIntermediateProvider(strEditFile);
+                if (!cIntermediateProvider.SetText(strCurrentText))
+                {
+                    CWARNING("Unable to update contents of temporary file '%s'", strEditFile.c_str());
+                    pTmpFile.reset();
+                    strEditFile.clear();
+                }
+            }
         }
     }
 
     // Open the file in editor if its valid
-    if (strEditFile.empty() || !std::filesystem::exists(strEditFile))
+    if (strEditFile.empty())
+        CERROR("Cannot edit '%s': unable to get a path to the file", GetName().c_str());
+    else if (!std::filesystem::exists(strEditFile))
         CERROR("Cannot edit '%s': file does not exist", strEditFile.c_str());
     else
     {
@@ -316,8 +335,13 @@ void CGeneratedTextFileEditorUI::onOpenEditor(wxCommandEvent& event)
                 // If temp file, bring the disk content back to memory
                 if (pTmpFile)
                 {
+                    std::string strModifiedText;
                     const CFileTextProvider cIntermediateProvider(pTmpFile->path());
-                    pOrigProvider->SetText( cIntermediateProvider.GetText() );
+
+                    if (!cIntermediateProvider.GetText(strModifiedText))
+                        CERROR("Unable to read contents of temporary '%s'", cIntermediateProvider.GetFilePathAbsolute().c_str());
+                    else if (!pOrigProvider->SetText(strModifiedText))
+                        CERROR("Unable to update file contents");
                 }
 
                 // Bring new content to GUI

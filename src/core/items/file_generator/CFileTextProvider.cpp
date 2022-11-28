@@ -28,15 +28,21 @@ ETextProviderType CFileTextProvider::GetType() const
     return ETextProviderType::EFile;
 }
 
-std::string CFileTextProvider::GetText() const
+bool CFileTextProvider::GetText(std::string& strOutText) const
 {
-    std::stringstream str;
+    bool bStatus = false;
 
     std::ifstream ifFile(m_strFilePath, std::ios_base::binary);
     if (ifFile.is_open())
+    {
+        std::stringstream str;
         str << ifFile.rdbuf();
 
-    return str.str();
+        strOutText = str.str();
+        bStatus = true;
+    }
+
+    return bStatus;
 }
 
 bool CFileTextProvider::SetText(const std::string& strText)

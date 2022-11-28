@@ -50,7 +50,10 @@ public:
     ETreeItemType GetType() const override;
 
     //! @brief Gets a pointer to the underlying text provider
-    ITextProvider* GetProvider() const;
+    ITextProvider* GetProvider();
+
+    //! @copydoc GetProvider
+    const ITextProvider* GetProvider() const;
 
     //! @brief Sets the underlying text provider
     void SetProvider(provider_ptr_t pNewProvider);

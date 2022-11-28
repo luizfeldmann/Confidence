@@ -24,7 +24,8 @@ public:
     virtual ETextProviderType GetType() const = 0;
 
     //! @brief Reads the text
-    virtual std::string GetText() const = 0;
+    //! @return True if success
+    virtual bool GetText(std::string&) const = 0;
 
     //! @brif Writes the text
     //! @return True if success

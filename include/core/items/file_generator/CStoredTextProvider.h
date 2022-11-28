@@ -26,7 +26,7 @@ public:
     ETextProviderType GetType() const;
 
     //! @copydoc ITextProvider::GetText
-    std::string GetText() const override;
+    bool GetText(std::string&) const override;
 
     //! @copydoc ITextProvider::SetText
     bool SetText(const std::string&) override;

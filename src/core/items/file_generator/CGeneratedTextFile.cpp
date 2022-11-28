@@ -36,7 +36,12 @@ ETreeItemType CGeneratedTextFile::GetType() const
     return ETextFile;
 }
 
-ITextProvider* CGeneratedTextFile::GetProvider() const
+ITextProvider* CGeneratedTextFile::GetProvider()
+{
+    return m_pProvider.get();
+}
+
+const ITextProvider* CGeneratedTextFile::GetProvider() const
 {
     return m_pProvider.get();
 }
@@ -130,24 +135,35 @@ bool CGeneratedTextFile::Execute(CExecutionContext& rContext) const
         CWARNING("Unespecified file generator for file '%s'", strName.c_str());
     else
     {
-        // Evaluate the contents and the destination
-        IFileGenerator::sptr_t pFile;
-        std::string strContents = m_pProvider->GetText();
-        std::string strDestination = GetOutputPath();
+        // Get the text contents of for the file
+        std::string strContents;
+        bStatus = m_pProvider->GetText(strContents);
 
-        bStatus = rContext.Evaluate(strContents)
-            && rContext.Evaluate(strDestination);
-
-        if (bStatus)
-            pFile = m_pGenerator->NewFile(strDestination);
-
-        if (pFile && pFile->IsValid())
+        if (!bStatus)
+            CWARNING("Failed to get contents for file '%s'", strName.c_str());
+        else
         {
-            std::ostream& os = pFile->GetStream();
-            os << strContents;
-            os.flush();
+            // Evaluate the expressions in the contents and the destination
+            std::string strDestination = GetOutputPath();
 
-            rContext.Store(pFile);
+            bStatus = rContext.Evaluate(strContents);
+            bStatus = bStatus && rContext.Evaluate(strDestination);
+
+            IFileGenerator::sptr_t pFile;
+            if (bStatus)
+            {
+                pFile = m_pGenerator->NewFile(strDestination);
+                bStatus = pFile && pFile->IsValid();
+            }
+
+            if (bStatus)
+            {
+                std::ostream& os = pFile->GetStream();
+                os << strContents;
+                os.flush();
+
+                rContext.Store(pFile);
+            }
         }
     }
     
