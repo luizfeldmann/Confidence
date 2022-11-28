@@ -80,6 +80,7 @@ protected:
 	void onBtnItemPaste(wxCommandEvent& event) override;
 	void onToolViewDesc(wxCommandEvent& event) override;
 	void onTreeItemActivate(wxDataViewEvent& event) override;
+	void onClickHtmlLink(wxHtmlLinkEvent& event) override;
 };
 
 #endif

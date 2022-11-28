@@ -37,7 +37,7 @@ The *Confidence* tool is implemented in accordance to the principles outlined ab
 
 - **Project File:** All the configuration resides within a single project file in the *JSON* format. This file should be as self-contained as possible, requiring few or none outside sources.
 
-- **Documentation Exporters:** The tool can generated *.HTML* and *.MD* documentation from the project file.
+- **Documentation Exporters:** The tool can generate *.HTML* and *.MD* documentation from the project file.
 
 - **Presets:** The resulting output is evaluated from the combination of the following constructs:
     - **Configuration:** A named preset that can be used as a key to define rules logic for other parameters. The user executes a single chosen *configuration* at a time.
@@ -49,7 +49,7 @@ The *Confidence* tool is implemented in accordance to the principles outlined ab
 
 - **Conditionals:** Performs logical comparison of expressions and logical association of conditions to determine the execution of certain blocks of the project, allowing for more complex rules for deciding the final configuration.
 
-- **Environment Imports:** Allows importing environmental variables for used in expressions inside the project, as a way to parameterize the generated configuration according to the local system's specificities.
+- **Environment Imports:** Allows importing environmental variables for use in expressions inside the project, as a way to parameterize the generated configuration according to the local system's specificities.
 
 - **File Operations:** Performs I/O on configuration files in formats *.XML* and *.INI* 
     - **Read:** Imports parameters from configuration files into the project dictionary for use in later expressions.

@@ -401,3 +401,8 @@ void CMainWindow::ReloadProject()
     // Update tree: delete and re-add the project
     m_pTreeModel->SetRoot(m_pProject);
 }
+
+void CMainWindow::onClickHtmlLink(wxHtmlLinkEvent& event)
+{
+    wxLaunchDefaultBrowser(event.GetLinkInfo().GetHref());
+}
