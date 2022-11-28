@@ -105,7 +105,13 @@ bool IProjTreeItem::DocumentChildren(IDocExporter& rExporter) const
 
 bool IProjTreeItem::Document(IDocExporter& rExporter) const
 {
-    bool bStatus = rExporter.Container();
+    char szHexHash[17];
+    {
+        const size_t uHash = std::hash<std::string>{}(GetName());
+        std::snprintf(szHexHash, sizeof(szHexHash), "%016zX", uHash);
+    }
+
+    bool bStatus = rExporter.Container("item", szHexHash);
     bStatus = bStatus && DocumentName(rExporter);
     bStatus = bStatus && DocumentDescription(rExporter);
     bStatus = bStatus && DocumentCustom(rExporter);

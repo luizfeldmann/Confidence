@@ -160,6 +160,11 @@ Agedge_s* CDiagram::Edge(const std::string& strName, Agnode_s* pNode1, Agnode_s*
     return agedge(m_pGraph.get(), pNode1, pNode2, (char*)strName.c_str(), true);
 }
 
+/*static*/ bool CDiagram::URL(Agnode_s* pNode, const char* szURL)
+{
+    return 0 == agsafeset(pNode, "URL", szURL, "");
+}
+
 bool CDiagram::ExportSVG(std::string& strData)
 {
     bool bStatus = false;

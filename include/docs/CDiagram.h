@@ -29,6 +29,9 @@ public:
     //! @brief Creates (or gets a pointer to) an edge between the given nodes
     Agedge_s* Edge(const std::string& strName, Agnode_s*, Agnode_s*);
 
+    //! @brief Assigns a URL to the node
+    static bool URL(Agnode_s*, const char* szURL);
+
     //! @brief Exports the graph in SVG format to the provided buffer
     //! @return True if success
     bool ExportSVG(std::string& strData);

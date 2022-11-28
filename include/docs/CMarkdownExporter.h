@@ -12,7 +12,7 @@ public:
     CMarkdownExporter();
 
     //! @copydoc IDocExporter::Container
-    bool Container() override;
+    bool Container(const std::string& strClass, const std::string& strId) override;
 
     //! @copydoc IDocExporter::Finish
     bool Finish() override;

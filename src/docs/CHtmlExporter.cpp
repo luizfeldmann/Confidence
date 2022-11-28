@@ -42,6 +42,20 @@ private:
     //! Stores the dependency diagram
     CDiagram m_diagDeps;
 
+    Agnode_s* Node(const std::string& strNode)
+    {
+        Agnode_s* pNode = m_diagDeps.Node(strNode);
+
+        char szHash[18];
+        {
+            const size_t uHash = std::hash<std::string>{}(strNode);
+            std::snprintf(szHash, sizeof(szHash), "#%016zX", uHash);
+        }
+        CDiagram::URL(pNode, szHash);
+
+        return pNode;
+    }
+
 public:
     CHtmlExporterPrivate()
         : m_diagDeps(c_depdiagTitle)
@@ -50,8 +64,8 @@ public:
 
     void Dependency(const std::string& strSrc, const std::string& strDst) override
     {
-        auto nodeSrc = m_diagDeps.Node(strSrc);
-        auto nodeDst = m_diagDeps.Node(strDst);
+        auto nodeSrc = Node(strSrc);
+        auto nodeDst = Node(strDst);
 
         std::size_t hEdge = std::hash<std::string>{}(strSrc) ^ (std::hash<std::string>{}(strDst) << 1);
         m_diagDeps.Edge(std::to_string(hEdge), nodeSrc, nodeDst);
@@ -59,7 +73,7 @@ public:
 
     bool GenerateDependencyDiagram(IDocExporter& rExporter)
     {
-        bool bStatus = rExporter.Container();
+        bool bStatus = rExporter.Container("item", "");
         bStatus = bStatus && rExporter.Heading();
         bStatus = bStatus && rExporter.Text(c_depdiagTitle);
         bStatus = bStatus && rExporter.PopStack();
@@ -213,13 +227,24 @@ void CHtmlExporter::DecrementHeading()
     CCommonMarkExporter::PopStack();
 }
 
-bool CHtmlExporter::Container()
+bool CHtmlExporter::Container(const std::string& strClass, const std::string& strId)
 {
-    bool bStatus = false;
+    // Build open tag
+    std::string strDiv = "<div";
 
-    CMarkCustomBlock cDiv("<div class=\"item\">", "</div>");
+    if (!strClass.empty())
+        strDiv += " class=\"" + strClass + "\"";
+
+    if (!strId.empty())
+        strDiv += " id=\"" + strId + "\"";
+
+    strDiv += ">";
+
+    // Append to AST
+    CMarkCustomBlock cDiv(strDiv.c_str(), "</div>");
     cmark_node* pParent = TopNode();
 
+    bool bStatus = false;
     if (pParent && cDiv && cmark_node_append_child(pParent, cDiv))
     {
         PushNode(cDiv);

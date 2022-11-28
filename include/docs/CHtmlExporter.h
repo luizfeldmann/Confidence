@@ -30,7 +30,7 @@ public:
     void DecrementHeading() override;
 
     //! @copydoc IDocExporter::Container
-    bool Container() override;
+    bool Container(const std::string& strClass, const std::string& strId) override;
 
     //! @copydoc IDocExporter::Start
     bool Start(std::ostream& rOutput) override;

@@ -34,7 +34,7 @@ public:
     virtual bool Heading() = 0;
 
     //! @brief Starts a container and pushes to the stack
-    virtual bool Container() = 0;
+    virtual bool Container(const std::string& strClass, const std::string& strId) = 0;
 
     //! @brief Pops the last node from the stack
     virtual bool PopStack() = 0;

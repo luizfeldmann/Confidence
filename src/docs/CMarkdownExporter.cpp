@@ -26,7 +26,7 @@ void CMarkdownExporter::Dependency(const std::string& strSrc, const std::string&
 
 }
 
-bool CMarkdownExporter::Container()
+bool CMarkdownExporter::Container(const std::string& strClass, const std::string& strId)
 {
     // In MD, just a fake block that does nothing
     cmark_node* pBlock = NewNode(CMARK_NODE_CUSTOM_BLOCK, true);
