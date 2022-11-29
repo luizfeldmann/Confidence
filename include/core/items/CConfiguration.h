@@ -41,7 +41,7 @@ public:
     ETreeItemType GetType() const override;
 
     //! @copydoc IExecutable::Execute
-    bool Execute(CExecutionContext&) const override;
+    bool Execute(CExecutionContext& rContext) const override;
 };
 
 DECLARE_SERIALIZATION_SCHEME(CConfiguration)

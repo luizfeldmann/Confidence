@@ -33,9 +33,19 @@ public:
     void OnAnyItemRenamed(const IProjTreeItem& pItem) override;
 
     /* OVERRIDES FROM IVariableEditor */
+    /** @name IVariableEditor overrides */
+    //!@{
+    
+    //! @brief Updates the stored configuration regarding the "per instance" mode of the variable
     void onToolPerInstance(wxCommandEvent& event) override;
+    
+    //! @brief Updates the stored configuration regarding the "export variable to environment" feature
     void onToolExportEnv(wxCommandEvent& event) override;
+    
+    //! @brief Deletes the rule associated to the selected cell in the table
     void onDeleteCell(wxCommandEvent& event) override;
+
+    //!@}
 };
 
 CVariableEditorUI::CVariableEditorUI(wxWindow* pParent, std::shared_ptr<const CProject> pProject, CVariable& rVar)

@@ -89,7 +89,7 @@ public:
     void Stop() const;
 
     //! @copydoc IExecutable::Execute
-    bool Execute(CExecutionContext&) const override;
+    bool Execute(CExecutionContext& rContext) const override;
 
     using ptr_exporter_t = std::unique_ptr<IDocExporter>;
     using vec_exporters_t = std::vector<ptr_exporter_t>;

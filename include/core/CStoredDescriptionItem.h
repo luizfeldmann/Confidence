@@ -10,6 +10,7 @@ class CStoredDescriptionItem : public virtual IDescribedItem
 protected:
     //! The display name of the item
     std::string m_strDescription;
+
     SERIALIZATION_FRIEND(CStoredDescriptionItem);
 
 public:

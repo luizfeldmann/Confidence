@@ -10,6 +10,7 @@ class CStoredOutputFileName : public virtual IOutputFileName
 protected:
     //! Stores the output file name
     std::string m_strOutputPath;
+
     SERIALIZATION_FRIEND(CStoredOutputFileName);
 
 public:

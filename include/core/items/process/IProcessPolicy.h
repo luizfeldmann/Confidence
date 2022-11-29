@@ -4,16 +4,9 @@
 #include <JInterface/JsonSerialization.h>
 #include <docs/IDocumentable.h>
 #include "core/items/process/SProcessStartInfo.h"
+#include "core/items/process/EProcessPolicy.h"
 
 class CExecutionContext;
-
-//! @brief Types of process policies
-enum class EProcessPolicy : int
-{
-    Undefined       = -1,   //!< The policy is unknown or not defined    
-    FireForget      = 0,    //!< The process is started and forked
-    WaitCompletion  = 1,    //!< Wait for the process to complete and (optionally) capture output
-};
 
 //! @brief Defines the behaviour when starting a process
 class IProcessPolicy : public IDocumentable

@@ -19,13 +19,27 @@ protected:
     //! Pointer to the model managing the data view of operations
     CFileOperationsModel* m_pModel;
 
-    /* OVERRIDES FROM IOperationEditor */
+    /** @name IOperationEditor overrides */
+    //!@{
+    
+    //! @brief Updates the saved path of the operated file
     void onFilePath(wxCommandEvent& event) override;
+    
+    //! @brief Creates and associates a new handler according to the format chosen by the user
     void onHandlerChoice(wxCommandEvent& event) override;
+    
+    //! @brief Creates a new operation
     void onToolNew(wxCommandEvent& event) override;
+    
+    //! @brief Deletes the selected operation
     void onToolDelete(wxCommandEvent& event) override;
+    
+    //! @brief Moves the selected operation up
     void onToolUp(wxCommandEvent& event) override;
+    
+    //! @brief Moves the selected operation down
     void onToolDown(wxCommandEvent& event) override;
+    //!@}
 
 public:
     COperationEditorUI(wxWindow* pParent, CFileOperations& rEdit);

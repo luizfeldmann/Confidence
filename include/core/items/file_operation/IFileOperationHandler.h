@@ -18,8 +18,13 @@ public:
     //! @brief Reflects the object type
     virtual EFileOperationHandlerType GetType() const = 0;
 
+    //! Type used as a pointer to a #IFileOperatorContext
     using context_ptr_t = std::shared_ptr<IFileOperatorContext>;
+
+    //! Type used as a pointer to a #IFileDataLocator
     using locator_ptr_t = std::unique_ptr<IFileDataLocator>;
+
+    //! Type used as a pointer to a #IFileOperationHandler
     using handler_ptr_t = std::unique_ptr<IFileOperationHandler>;
 
     //! @brief Creates a context to handle operations to a provided file path

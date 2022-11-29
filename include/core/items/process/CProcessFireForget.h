@@ -3,7 +3,7 @@
 
 #include "IProcessPolicy.h"
 
-//! @copydoc EProcessPolicy::EProcessFireForget
+//! @copydoc EProcessPolicy::FireForget
 class CProcessFireAndForget : public IProcessPolicy
 {
 public:

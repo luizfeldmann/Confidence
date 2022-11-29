@@ -41,7 +41,7 @@ const std::vector<ETreeItemType>& STreeItemTypeInfo::GetTypesList()
     return theList;
 }
 
-const wxString& STreeItemTypeInfo::STreeItemTypeInfo::GetName(ETreeItemType eType)
+const wxString& STreeItemTypeInfo::GetName(ETreeItemType eType)
 {
     const STreeItemTypeInfo& rInfo = GetInfo(eType);
     return rInfo.m_strTypeName;

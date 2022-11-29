@@ -17,8 +17,13 @@ protected:
     //! Pointer to the model managing the data view table for the configuration
     CConfigurationSummaryModel* m_pModel;
 
-    /* OVERRIDES FROM IConfigurationEditor */
+    /** @name IConfigurationEditor overrides */
+    //!@{
+    
+    //! @brief When the user activates an item (a configuration) it's dedicated editor opens in a tab
     void onItemActivated(wxDataViewEvent& event) override;
+
+    //!@}
 
 public:
     CConfigurationEditorUI(CMainWindow& rMainWindow, wxWindow* pParent, std::shared_ptr<const CProject> pProject, CConfiguration& rConfig);

@@ -4,12 +4,15 @@
 #include "IGroupFilter.h"
 #include <JInterface/JsonSerialization.h>
 
+//! @brief Base implementation of #IGroupFilter where the pointers to the filtered items are stored in a collection.
+//!        The pointers are (de)-serialized as a collection of names of the key items.
 class CGroupFilterBase : public IGroupFilter
 {
 public:
     CGroupFilterBase();
     virtual ~CGroupFilterBase();
 
+    //! @brief Type of collection holding the names of the filtered items
     using strvec_t = std::vector<std::string>;
 
     //! @copydoc IGroupFilter::push_back

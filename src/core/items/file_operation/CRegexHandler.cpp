@@ -9,9 +9,11 @@
 
 /* CRegexLocator */
 
+//! @brief Stores and validades a regular expression
 class CRegexLocator : public IFileDataLocator
 {
 public:
+    //! Stores the regular expression used by the #CRegexOperationContext to perform the R/W operations
     std::string m_strREGEX;
 
     CRegexLocator()
@@ -61,6 +63,7 @@ REGISTER_POLYMORPHIC_CLASS(CRegexLocator);
 
 /* CRegexOperationContext */
 
+//! @brief Performs a series of R/W operations on a provided file of arbitrary format using regular expressions
 class CRegexOperationContext : public IFileOperatorContext
 {
 protected:

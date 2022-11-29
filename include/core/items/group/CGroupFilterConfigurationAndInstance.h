@@ -4,10 +4,15 @@
 #include "CGroupFilterConfiguration.h"
 #include "CGroupFilterInstance.h"
 
+//! @brief The group only runs for the selected configurations AND the selected instances
+//! @details A combination of both #CGroupFilterConfiguration and #CGroupFilterInstance
 class CGroupFilterConfigurationAndInstance : public IGroupFilter
 {
 protected:
+    //! @brief Subfilter used to filter the configurations
     CGroupFilterConfiguration m_byConfig;
+
+    //! @brief Subfilter used to filter the instances
     CGroupFilterInstance m_byInstance;
 
     SERIALIZATION_FRIEND(CGroupFilterConfigurationAndInstance);
@@ -25,6 +30,7 @@ public:
     //! @brief Instantiates a new filter of this type
     static std::unique_ptr<IGroupFilter> Create();
 
+    //! @brief Reflects the type associated with this filter implementation
     static ETreeItemType GetOwnType();
 
     //! @copydoc IGroupFilter::GetType
@@ -42,7 +48,7 @@ public:
     //! @copydoc IGroupFilter::Filter
     bool Filter(sptr_t pItem) const override;
 
-    //! @copydoc IGroupFilter::Filter
+    //! @brief @copybrief IGroupFilter::Filter
     bool Filter(const CGroup& rGroup, const CExecutionContext& rContext) const override;
 
     //! @copydoc IDocumentable::Document

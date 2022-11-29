@@ -14,6 +14,7 @@ public:
     //! @brief Instantiates a new filter of this type
     static std::unique_ptr<IGroupFilter> Create();
 
+    //! @brief Reflects the type associated with this filter implementation
     static ETreeItemType GetOwnType();
 
     //! @copydoc IGroupFilter::GetType

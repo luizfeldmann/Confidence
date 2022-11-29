@@ -113,10 +113,19 @@ protected:
 
     void OnListToggle(wxCommandEvent& event, wxCheckListBox* pListBox);
 
-    /*OVERRIDES FROM IGroupEditor */
+    /** @name IGroupEditor overrides */
+    //!@{
+    
+    //! @brief Creates and associates a new class of filter according to the type selected by the user
     void onChangeFilter(wxCommandEvent& event) override;
+    
+    //! @brief When the user toggles the selection of an item in the list of configurations, it updates the underlying items of the filter
     void onConfigListToggle(wxCommandEvent& event) override;
+    
+    //! @brief  When the user toggles the selection of an item in the list of instances, it updates the underlying items of the filter
     void onInstanceListToggle(wxCommandEvent& event) override;
+
+    //!@}
 };
 
 CGroupEditorUI::CGroupEditorUI(wxWindow* pParent, CGroup& rEdit, std::shared_ptr<const CProject> pProject)

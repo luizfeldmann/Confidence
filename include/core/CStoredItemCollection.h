@@ -12,6 +12,7 @@ private:
     CStoredItemCollection& operator=(const CStoredItemCollection&) = delete;
 
 protected:
+    //! Type of collection used to store the items
     using vstore_t = vec_ptr_t;
 
     //! Stores the subitems of this tree item
@@ -22,6 +23,7 @@ protected:
 
     SERIALIZATION_FRIEND(CStoredItemCollection);
 
+    //! @brief Finds an item in this collection and returns it's iterator
     vstore_t::iterator find(const IProjTreeItem&);
 
 public:

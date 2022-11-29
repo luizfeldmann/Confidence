@@ -25,6 +25,7 @@ public:
         m_pStack.push(GetRootNode());
     }
 
+    //! @brief Gets the top level node of the AST (the document)
     cmark_node* GetRootNode()
     {
         return m_pNode;

@@ -126,6 +126,7 @@ SET(${CMAKE_PROJECT_NAME}_SOURCES
     "src/core/IExpression.cpp"
     "include/core/CStoredExpression.h"
     "src/core/CStoredExpression.cpp"
+    "include/core/items/process/EProcessPolicy.h"
     "include/core/items/process/CProcessArgument.h"
     "src/core/items/process/CProcessArgument.cpp"
     "include/core/items/process/CProcessFireForget.h"

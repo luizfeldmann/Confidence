@@ -45,14 +45,31 @@ protected:
     //! @brief Called by the text editor when the text is changed
     void OnTextChanged(wxStyledTextEvent& event);
 
-    /* OVERRIDES FROM ITextFileEditor */
+    /** @name ITextFileEditor overrides */
+    //!@{
+    
+    //! @brief Creates and associates a new provider of the type selected by the user
     void onChangeProvider(wxCommandEvent& event) override;
+    
+    //! @brief Updates the saved path to the template file and reloads the text
     void onInputFilePathChanged(wxCommandEvent& event) override;
+    
+    //! @brief Opens a dialog to select a new template file
     void onSelectFile(wxCommandEvent& event) override;
+    
+    //! @brief Saves the changes to the template file
     void onSaveFile(wxCommandEvent& event) override;
+    
+    //! @brief Creates and associates a new generator of the type selected by the user
     void onChangeGenerator(wxCommandEvent& event) override;
+    
+    //! @brief Updates the saved path to the output file
     void onOutputFilePathChanged(wxCommandEvent& event) override;
+    
+    //! @brief Opens a dialog to select and external editor for the current text
     void onOpenEditor(wxCommandEvent& event) override;
+
+    //!@}
 };
 
 CGeneratedTextFileEditorUI::CGeneratedTextFileEditorUI(wxWindow* pParent, CGeneratedTextFile& rEdit)

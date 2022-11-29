@@ -11,10 +11,14 @@
 
 static const std::string c_strIniDelimiter = "/";
 
+//! @brief Stores a pair of section & key names to locate data in INI files
 class CIniFileLocator : public IFileDataLocator
 {
 public:
+    //! Stores the relevat section name
     std::string m_strSection;
+
+    //! Stores the relevant key name 
     std::string m_strKey;
 
     CIniFileLocator()
@@ -65,6 +69,7 @@ REGISTER_POLYMORPHIC_CLASS(CIniFileLocator);
 
 /* CIniFileContext */
 
+//! @brief Performs R/W operations on a particular INI file
 class CIniFileContext : public IFileOperatorContext
 {
 protected:
@@ -74,7 +79,12 @@ protected:
     //! Stores the path to the INI file
     const std::filesystem::path m_path;
 
+    //! @brief Accessor to the file
+    //! @internal
     mINI::INIFile m_file;
+
+    //! Holds the parsed structure of the file
+    //! @internal
     mINI::INIStructure m_structure;
 
 public:

@@ -7,6 +7,7 @@
 
 /* CXmlFileLocator */
 
+//! @brief Validades and stores an XPath string
 class CXmlFileLocator : public IFileDataLocator
 {
 protected:
@@ -38,6 +39,7 @@ protected:
     }
 
 public:
+    //! @brief Stores the XPath string to be used by the #CXmlFileContext for a particular operation
     std::string m_XPath;
 
     CXmlFileLocator()
@@ -87,6 +89,7 @@ REGISTER_POLYMORPHIC_CLASS(CXmlFileLocator);
 
 /* CXmlFileContext */
 
+//! @brief Performs R/W operations a particular XML file
 class CXmlFileContext : public IFileOperatorContext
 {
 protected:
@@ -99,6 +102,10 @@ protected:
     //! Stores the parsed TREE of the XML
     pugi::xml_document m_document;
 
+    //! @brief Uses the provided locator to selected a node on the current document
+    //! @param[in] rLocator A #CXmlFileLocator whose xPath will be used to select the node
+    //! @param[out] xNode Receives the selected node
+    //! @return True if success
     bool select_node(const IFileDataLocator& rLocator, pugi::xpath_node& xNode)
     {
         const CXmlFileLocator& rXmlLocator = dynamic_cast<const CXmlFileLocator&>(rLocator);

@@ -1,3 +1,8 @@
+/**
+ * @file EDocExporter.h
+ * @brief Defines enum #EDocExporter
+ */
+
 #ifndef _EDOCEXPORTER_H_
 #define _EDOCEXPORTER_H_
 

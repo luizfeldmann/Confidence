@@ -12,16 +12,19 @@
     return wxDataViewItem((void*)pArg);
 }
 
+//! @brief Handles get/set of the type/format of the exporter on the #CDocExporterTableModel
 class CExporterTypeModelColumnHandler : public IModelColumnHandler
 {
 public:
     CExporterTypeModelColumnHandler() = default;
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "string";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const IDocExporter* const pItem = CDocExporterTableModel::GetPointer(rItem);
@@ -31,27 +34,32 @@ public:
         value = strDesc;
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem&) const
     {
         return true;
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         return false;
     }
 };
 
+//! @brief Handles get/set of the destination path of the exporter on the #CDocExporterTableModel
 class CExporterDestinationModelColumnHandler : public IModelColumnHandler
 {
 public:
     CExporterDestinationModelColumnHandler() = default;
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "string";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const IDocExporter* const pItem = CDocExporterTableModel::GetPointer(rItem);
@@ -61,11 +69,13 @@ public:
         value = strDesc;
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem&) const
     {
         return true;
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         IDocExporter* const pItem = CDocExporterTableModel::GetPointer(rItem);

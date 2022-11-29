@@ -4,7 +4,7 @@
 #include "IProcessPolicy.h"
 #include <optional>
 
-//! @copydoc EProcessPolicy::EProcessWaitCompletion
+//! @copydoc EProcessPolicy::WaitCompletion
 class CProcessWaitCompletion : public IProcessPolicy
 {
 public:

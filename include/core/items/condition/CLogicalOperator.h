@@ -21,9 +21,16 @@ private:
     CLogicalOperator& operator=(const CLogicalOperator&) = delete;
 
 public:
+    //! Type of pointer to the underlying conditions associated by this operator
     using condition_ptr_t = std::shared_ptr<ICondition>;
+
+    //! @copydoc CLogicalOperator::condition_ptr_t
     using const_condition_ptr_t = std::shared_ptr<const ICondition>;
+
+    //! Type used to hold/pass collections of pointers to the sub-conditions of this operator 
     using vec_cond_t = std::vector<condition_ptr_t>;
+
+    //! @copydoc vec_cond_t
     using vec_ccond_t = std::vector<const_condition_ptr_t>;
 
     //! @brief Reflects the operator type

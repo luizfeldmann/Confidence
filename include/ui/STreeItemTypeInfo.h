@@ -9,10 +9,10 @@
 //! @brief Information on how tree items should be presented according to their types
 struct STreeItemTypeInfo
 {
-    wxString m_strTypeName;                         //! Label to the item category
-    wxIcon m_icon;                                  //! Icon associated to the item type
-    std::function<ITreeItemCollection::ptr_t()>  m_fnFactory;   //! Factory function to create a new instance of that type
-    ITreeItemEditor::fnFactory_t m_fnNewEditor;     //! Factory function to create a new editor matching the item type
+    wxString m_strTypeName;                                         //!< Label to the item category
+    wxIcon m_icon;                                                  //!< Icon associated to the item type
+    std::function<ITreeItemCollection::ptr_t()>  m_fnFactory;       //!< Factory function to create a new instance of that type
+    ITreeItemEditor::fnFactory_t m_fnNewEditor;                     //!< Factory function to create a new editor matching the item type
 
     //! @brief Gets a list of all *valid* elements in enumeration ETreeItemType
     static const std::vector<ETreeItemType>& GetTypesList();

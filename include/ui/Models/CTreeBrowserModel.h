@@ -55,9 +55,16 @@ public:
     //! @return True if success - the parent object takes ownership of the pointer \p pInsertItem
     bool InsertItem(const wxDataViewItem& rParent, IProjTreeItem::ptr_t pInsertItem);
 
-    /* wxDataViewModel overrides */
+    /** @name wxDataViewModel overrides */
+    //!@{
+
+    //! @copydoc CBaseModel::GetColumnCount
     unsigned int GetColumnCount() const wxOVERRIDE;
+
+    //! @copydoc CBaseModel::IsContainer
     bool IsContainer(const wxDataViewItem& item) const wxOVERRIDE;
+
+    //!@}
 };
 
 #endif

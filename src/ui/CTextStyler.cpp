@@ -114,6 +114,8 @@ void CTextStyler::SetLexer(int iID)
     }
 }
 
+//! @brief Lexical states styles used by #wxSTC_LEX_CONTAINER
+//! @internal
 enum class EContainerStyle : int
 {
     ERegular = 0,       //!< Regular text / not variables

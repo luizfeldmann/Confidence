@@ -1,3 +1,8 @@
+/**
+ * @file EFileOperationHandlerType.h
+ * @brief Defines enum #EFileOperationHandlerType
+ */
+
 #ifndef _EFILEOPERATIONHANDLERTYPE_H_
 #define _EFILEOPERATIONHANDLERTYPE_H_
 

@@ -28,9 +28,16 @@ protected:
 public:
     CProjectEditorUI(wxWindow* pParent, CProject& rEdit);
 
-    /* OVERRIDES FROM IProjectEditor */
+    /** @name IProjectEditor overrides */
+    //!@{
+    
+    //! @brief Creates a new document exporter in the list of exporters
     void onToolNewDoc(wxCommandEvent& event) override;
+
+    //! @brief Deletes the selected exporter from the list
     void onToolDeleteDoc(wxCommandEvent& event) override;
+
+    //!@}
 };
 
 CProjectEditorUI::CProjectEditorUI(wxWindow* pParent, CProject& rEdit)

@@ -24,6 +24,7 @@ protected:
     //! Pointer to the configuration being executed
     std::weak_ptr<const CConfiguration> m_pConfiguration;
 
+    //! Type of collection used to store temporary objects for the duration of the execution
     using storage_list_t = std::list<std::shared_ptr<IContextStorage>>;
 
     //! Stores objects for the duration of the execution

@@ -27,7 +27,7 @@ public:
     //! @return True if success
     virtual bool GetText(std::string&) const = 0;
 
-    //! @brif Writes the text
+    //! @brief Writes the text
     //! @return True if success
     virtual bool SetText(const std::string&) = 0;
 };

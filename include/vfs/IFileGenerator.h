@@ -12,6 +12,7 @@ class IGeneratedFile : public IContextStorage
 public:
     virtual ~IGeneratedFile() = default;
 
+    //! Type used to represent a file path
     using path_t = std::filesystem::path;
 
     //! @brief Returns true if this file is valid and can be written to
@@ -38,7 +39,10 @@ class IFileGenerator
 public:
     virtual ~IFileGenerator() = default;
 
+    //! @copydoc IGeneratedFile::path_t
     using path_t = IGeneratedFile::path_t;
+
+    //! Type used as a pointer to the file interface produced by this generator
     using sptr_t = std::shared_ptr<IGeneratedFile>;
 
     //! @brief Creates a new file in the provided location

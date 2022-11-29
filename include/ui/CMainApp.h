@@ -9,6 +9,8 @@
 
 class CMainWindow;
 
+//! @brief Represents the current GUI application
+//! @internal
 class CMainApp : public wxApp
 {
 protected:

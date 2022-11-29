@@ -1,3 +1,8 @@
+/**
+ * @file EBuiltInVariables.h
+ * @brief Defines the built-in variables and related utility methods
+ */
+
 #ifndef _EBUILTINVARIABLES_H_
 #define _EBUILTINVARIABLES_H_
 

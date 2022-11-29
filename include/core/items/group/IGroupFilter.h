@@ -17,8 +17,13 @@ class IGroupFilter : public IDocumentable, public ISerializationNotify
 public:
     virtual ~IGroupFilter() = default;
 
+    //! @brief Type of the pointer to the class used as "keys" for the filter
     using sptr_t = std::shared_ptr<const IProjTreeItem>;
+
+    //! @copydoc IGroupFilter::sptr_t
     using wptr_t = sptr_t::weak_type;
+
+    //! @brief Type of the collection holding pointers to the filtered items
     using ptrvec_t = std::vector<wptr_t>;
 
     //! @brief Inserts an item in the filter

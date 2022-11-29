@@ -5,6 +5,7 @@
 class CLog 
 {
 public:
+    //! When true, warnings and error produce a GUI message box; otherwise, just it's just printed to the console.
     static bool m_bShowMessageBox;
 
     //! @brief Print a message to stdout with white coloring on the console.

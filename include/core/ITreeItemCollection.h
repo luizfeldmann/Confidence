@@ -15,9 +15,18 @@ public:
     ITreeItemCollection() = default;
     virtual ~ITreeItemCollection() = default;
 
+    //! Type of the pointer to tree items
     using ptr_t = std::shared_ptr<IProjTreeItem>;
+
+    //! @copydoc ITreeItemCollection::ptr_t
+    //! @details Constant version of the #ITreeItemCollection::ptr_t
     using cptr_t = std::shared_ptr<const IProjTreeItem>;
+
+    //! Type of used to hold/pass collections of pointers to tree items
     using vec_ptr_t = std::vector<ptr_t>;
+
+    //! @copydoc ITreeItemCollection::vec_ptr_t
+    //! @details Constant versions of the #ITreeItemCollection::vec_ptr_t
     using vec_cptr_t = std::vector<cptr_t>;
 
     //! @brief Gets a vector of references to the subitems

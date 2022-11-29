@@ -11,16 +11,19 @@
     return wxDataViewItem((void*)pArg);
 }
 
+//! @brief Handles get/set of the "Description" column of the #CProcessArgsModel
 class CArgumentDescriptionModelColumnHandler : public IModelColumnHandler
 {
 public:
     CArgumentDescriptionModelColumnHandler() = default;
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "string";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const CProcessArgument* const pItem = CProcessArgsModel::GetPointer(rItem);
@@ -30,11 +33,13 @@ public:
         value = strDesc;
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem&) const
     {
         return true;
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         CProcessArgument* const pItem = CProcessArgsModel::GetPointer(rItem);
@@ -46,16 +51,19 @@ public:
     }
 };
 
+//! @brief Handles get/set of the "Argument" column of the #CProcessArgsModel
 class CArgumentExpressionModelColumnHandler : public IModelColumnHandler
 {
 public:
     CArgumentExpressionModelColumnHandler() = default;
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "string";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const CProcessArgument* const pItem = CProcessArgsModel::GetPointer(rItem);
@@ -65,11 +73,13 @@ public:
         value = strExpr;
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem&) const
     {
         return true;
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         CProcessArgument* const pItem = CProcessArgsModel::GetPointer(rItem);

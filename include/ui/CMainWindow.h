@@ -10,6 +10,7 @@
 class CProject;
 class CTreeBrowserModel;
 
+//! @brief The top level window of the application: the project editor.
 class CMainWindow : public IMainWindow
 {
 public:

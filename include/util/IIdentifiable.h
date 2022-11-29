@@ -8,6 +8,7 @@
 class IIdentifiable
 {
 public:
+    //! The type used as an ID
     using id_type = CGuid;
 
 private:
@@ -17,6 +18,7 @@ private:
 protected:
     //! @brief The ID representing this instance
     id_type m_ID;
+
     SERIALIZATION_FRIEND(IIdentifiable);
 
 public:

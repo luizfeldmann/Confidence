@@ -10,8 +10,10 @@ class IProjTreeItem;
 class CParentalMap
 {
 protected:
-    //! Maps each item (key) to it's parent (value)
+    //! Type used to hold the association pairs between tree items and theirs parents
     using parent_map_t = std::unordered_map<const IProjTreeItem*, std::weak_ptr<const IProjTreeItem>>;
+    
+    //! Maps each item (key) to it's parent (value)
     parent_map_t m_mParents;
 
     //! @brief Recursively fills the paternity map for the provided item

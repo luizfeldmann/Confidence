@@ -24,13 +24,25 @@ protected:
     //! Manages keyboard shortcuts
     wxAcceleratorTable m_cAccTbl;
 
+    //! @brief Creates a new condition of the type selected by the user on the popup menu
     void onBtnNewSelected(wxCommandEvent& event);
 
-    /* OVERRIDES FROM IConditionalEditor */
+    /** @name IConditionalEditor overrides */
+    //!@{
+    
+    //! @brief Opens a popup menu for the user to chose a type of condition to create
     void onBtnNew(wxCommandEvent& event) override;
+    
+    //! @brief Deletes the selected item
     void onBtnDelete(wxCommandEvent& event) override;
+
+    //! @brief Moves the selected item up
     void onBtnUp(wxCommandEvent& event) override;
+
+    //! @brief Moves the selected item down
     void onBtnDown(wxCommandEvent& event) override;
+
+    //!@}
 
 public:
     CConditionalEditorUI(wxWindow* pParent, CConditional& rEdit);
@@ -68,14 +80,23 @@ CConditionalEditorUI::CConditionalEditorUI(wxWindow* pParent, CConditional& rEdi
     m_dataViewCtrl->SetAcceleratorTable(m_cAccTbl);
 }
 
+//! @brief Stores display and factory information about the available types of #ICondition
+//! @internal
 struct SConditionalCreationInfo
 {
+    //! Type of factory function to create a new #ICondition
     using fnFactory_t = std::function<std::shared_ptr<ICondition>()>;
 
+    //! The display name of a particular condition type
     wxString m_strName;
+
+    //! The display icon of a particular condition type
     wxIcon m_cIcon;
+
+    //! The factory function to instantiate a particular condition type
     fnFactory_t m_fnFactory;
 
+    //! Gets a collection of #SConditionalCreationInfo corresponding to all the available implementations of #ICondition
     static const std::vector<SConditionalCreationInfo>& Get()
     {
         static const std::vector<SConditionalCreationInfo> c_vInfo {

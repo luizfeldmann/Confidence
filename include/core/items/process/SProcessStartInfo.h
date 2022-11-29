@@ -20,9 +20,10 @@ struct SProcessStartInfo
     //! The window mode to start the process
     EProcessStartWindowMode m_eStartMode;
 
+    //! Type used as a collection of arguments to be passed to the starting process
     using vec_args_t = std::vector<std::string>;
     
-    //! The collection of arguments
+    //! The collection of arguments used to start the process
     vec_args_t m_vArguments;
 };
 

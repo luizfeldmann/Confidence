@@ -46,16 +46,37 @@ public:
     //! @copydoc INotifyItemOperation::OnAnyItemRenamed
     void OnAnyItemRenamed(const IProjTreeItem& rItem) override;
 
-    /* wxDataViewModel overrides */
+    /** @name wxDataViewModel overrides */
+    //!@{
+    
+    //! @copydoc CBaseModel::GetColumnCount
     unsigned int GetColumnCount() const wxOVERRIDE;
+
+    //! @copydoc CBaseModel::HasValue
     bool HasValue(const wxDataViewItem& item, unsigned col) const wxOVERRIDE;
+
+    //! @copydoc CBaseModel::GetColumnType
     wxString GetColumnType(unsigned int col) const wxOVERRIDE;
+
+    //! @copydoc CBaseModel::GetValue
     void GetValue(wxVariant& variant, const wxDataViewItem& item, unsigned int col) const wxOVERRIDE;
+
+    //! @copydoc CBaseModel::SetValue
     bool SetValue(const wxVariant& variant, const wxDataViewItem& item, unsigned int col) wxOVERRIDE;
+
+    //! @copydoc CBaseModel::IsEnabled
     bool IsEnabled(const wxDataViewItem& item, unsigned int col) const wxOVERRIDE;
+
+    //! @copydoc CBaseModel::IsContainer
     bool IsContainer(const wxDataViewItem& item) const wxOVERRIDE;
+
+    //! @copydoc CBaseModel::GetParent
     wxDataViewItem GetParent(const wxDataViewItem& item) const wxOVERRIDE;
+
+    //! @copydoc CBaseModel::GetChildren
     unsigned int GetChildren(const wxDataViewItem& parent, wxDataViewItemArray& array) const wxOVERRIDE;
+
+    //!@}
 };
 
 #endif

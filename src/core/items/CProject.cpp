@@ -25,7 +25,8 @@ REGISTER_POLYMORPHIC_CLASS(CProject);
 
 /* CProjectExecutionContext */
 
-/* Stores the state of the current project execution*/
+//! @brief Stores the state of the current project execution
+//! @internal
 class CProjectExecutionContext
 {
 private:

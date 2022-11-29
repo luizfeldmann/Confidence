@@ -18,7 +18,7 @@ protected:
     //! @brief Defines the columns shown in the table
     enum class EColumn : unsigned int
     {
-        Type        = 0, //!< Display the type of exporter
+        Type = 0, //!< Display the type of exporter
         Destination,     //!< The path to export the document
 
         /* MUST BE LAST */
@@ -45,11 +45,22 @@ public:
     //! @returns True if success
     bool DeleteItem(const wxDataViewItem&);
 
-    /* wxDataViewModel overrides */
+    /** @name wxDataViewModel overrides */
+    //!@{
+    
+    //! @copydoc CBaseModel::GetColumnCount
     unsigned int GetColumnCount() const wxOVERRIDE;
+
+    //! @copydoc CBaseModel::GetParent
     wxDataViewItem GetParent(const wxDataViewItem& item) const wxOVERRIDE;
+    
+    //! @copydoc CBaseModel::IsContainer
     bool IsContainer(const wxDataViewItem& item) const wxOVERRIDE;
+
+    //! @copydoc CBaseModel::GetChildren
     unsigned int GetChildren(const wxDataViewItem& parent, wxDataViewItemArray& array) const wxOVERRIDE;
+
+    //!@}
 };
 
 #endif

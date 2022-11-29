@@ -43,16 +43,37 @@ protected:
     //! Loads the "wait completion" exclusive UI elements
     void LoadWaitCompletion();
 
-    /* OVERRIDES FROM IRunProcessEditor */
+    /** @name IRunProcessEditor overrides */
+    //!@{
+    
+    //! @brief Creates a new argument in the list
     void onToolNewArg(wxCommandEvent& event) override;
+    
+    //! @brief Deletes the selected argument
     void onToolDelArg(wxCommandEvent& event) override;
+    
+    //! @brief Moves up the selected argument
     void onToolMoveUp(wxCommandEvent& event) override;
+    
+    //! @brief Moves down the selected argument
     void onToolMoveDown(wxCommandEvent& event) override;
+    
+    //! @brief Creates and associates a new policy class according to the user selection
     void onPolicyChanged(wxCommandEvent& event) override;
+    
+    //! @brief Updates the stored configuration of startup state of the process window
     void onWindowChanged(wxCommandEvent& event) override;
+    
+    //! @brief Updates the stored configuration on admin privileges
     void onAdminChanged(wxCommandEvent& event) override;
+    
+    //! @brief Updates the stored configuration on the validation of return code
     void onReturnCodeCombo(wxCommandEvent& event) override;
+    
+    //! @copybrief onReturnCodeCombo
     void onReturnCodeText(wxCommandEvent& event) override;
+
+    //!@}
 
 public:
     CRunProcessEditorUI(wxWindow* pParent, CRunProcess& cEdit);

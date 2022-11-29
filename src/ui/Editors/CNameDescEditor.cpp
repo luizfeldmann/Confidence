@@ -14,9 +14,15 @@ protected:
     //! Reference to the item being edited
     CNameDescEditor& m_rEditor;
 
-    /* Overrides from INameDescEditor */
+    /** @name INameDescEditor overrides */
+    //!@{
+    
+    //! @brief Updates the name saved in the item, updates the label in the editor tab and notifies all the observers
     void onChangedName(wxCommandEvent& event) override;
+    
+    //! @brief Updates the description in the item, notifies all the observers
     void onChangedDesc(wxCommandEvent& event) override;
+    //!@}
 
 public:
     CNameDescEditorUI(wxWindow* pParent, CNameDescEditor& rEditor);

@@ -4,6 +4,7 @@
 
 /* CBaseOperator */
 
+//! @brief Base implementation of the #CLogicalOperator which uses a vector to store multiple sub-conditions
 class CBaseOperator : public CLogicalOperator
 {
 protected:
@@ -16,22 +17,26 @@ public:
     CBaseOperator() = default;
     virtual ~CBaseOperator() = default;
 
+    //! @copydoc CLogicalOperator::SubItems
     vec_cond_t SubItems() override
     {
         return m_vInputs;
     }
 
+    //! @copydoc CLogicalOperator::SubItems
     vec_ccond_t SubItems() const override
     {
         return vec_ccond_t(m_vInputs.cbegin(), m_vInputs.cend());
     }
 
+    //! @copydoc CLogicalOperator::AddItem
     bool AddItem(condition_ptr_t pNewItem) override
     {
         m_vInputs.push_back( std::move(pNewItem) );
         return true;
     }
 
+    //! @copydoc CLogicalOperator::EraseItem
     bool EraseItem(const_condition_ptr_t pItem) override
     {
         bool bStatus = false;
@@ -47,6 +52,7 @@ public:
         return bStatus;
     }
 
+    //! @copydoc CLogicalOperator::SwapItems
     bool SwapItems(const_condition_ptr_t pA, const_condition_ptr_t pB)
     {
         bool bStatus = false;
@@ -72,6 +78,8 @@ DEFINE_SERIALIZATION_SCHEME(CBaseOperator,
 );
 
 /* CNot */
+
+//! @brief Inverts the output of the underlying condition
 class CNot : public CLogicalOperator
 {
 protected:
@@ -84,6 +92,7 @@ public:
     CNot() = default;
     virtual ~CNot() = default;
 
+    //! @copydoc CLogicalOperator::SubItems
     vec_cond_t SubItems() override
     {
         vec_cond_t vSub;
@@ -94,6 +103,7 @@ public:
         return vSub;
     }
 
+    //! @copydoc CLogicalOperator::SubItems
     vec_ccond_t SubItems() const override
     {
         vec_ccond_t vSub;
@@ -104,6 +114,7 @@ public:
         return vSub;
     }
 
+    //! @copydoc CLogicalOperator::AddItem
     bool AddItem(condition_ptr_t pNewItem) override
     {
         bool bStatus = false;
@@ -117,6 +128,7 @@ public:
         return bStatus;
     }
 
+    //! @copydoc CLogicalOperator::EraseItem
     bool EraseItem(const_condition_ptr_t pItem) override
     {
         bool bStatus = false;
@@ -130,21 +142,25 @@ public:
         return bStatus;
     }
 
+    //! @copydoc CLogicalOperator::SwapItems
     bool SwapItems(const_condition_ptr_t pA, const_condition_ptr_t pB)
     {
         return false;
     }
 
+    //! @copydoc CLogicalOperator::GetType
     ELogicalOperator GetType() const override
     {
         return ELogicalOperator::Not;
     }
 
+    //! @copydoc ICondition::GetInfix
     std::string GetInfix() const override
     {
         return "NOT";
     }
 
+    //! @copydoc IDocumentable::Document
     bool Document(IDocExporter& rExporter) const override
     {
         bool bStatus = rExporter.FormField(GetInfix(), "The following condition must evaluate to FALSE");
@@ -153,6 +169,7 @@ public:
         return bStatus;
     }
 
+    //! @copydoc ICondition::Evaluate
     bool Evaluate(CEvaluationContext& rContext, bool& bResult) const override
     {
         bool bStatus = false;
@@ -178,22 +195,27 @@ DEFINE_SERIALIZATION_SCHEME(CNot,
 REGISTER_POLYMORPHIC_CLASS(CNot);
 
 /* CAnd */
+
+//! @brief Requires all input conditions to evaluate to true
 class CAnd : public CBaseOperator
 {
 public:
     CAnd() = default;
     virtual ~CAnd() = default;
 
+    //! @copydoc CLogicalOperator::GetType
     ELogicalOperator GetType() const override
     {
         return ELogicalOperator::And;
     }
 
+    //! @copydoc ICondition::GetInfix
     std::string GetInfix() const override
     {
         return "AND";
     }
 
+    //! @copydoc IDocumentable::Document
     bool Document(IDocExporter& rExporter) const override
     {
         bool bStatus = rExporter.FormField(GetInfix(), "ALL of the below conditions must be true simultaneously");
@@ -202,6 +224,7 @@ public:
         return bStatus;
     }
 
+    //! @copydoc ICondition::Evaluate
     bool Evaluate(CEvaluationContext& rContext, bool& bResult) const override
     {
         bool bStatus = true;
@@ -226,22 +249,27 @@ DEFINE_SERIALIZATION_SCHEME(CAnd,
 REGISTER_POLYMORPHIC_CLASS(CAnd);
 
 /* COr */
+
+//! @brief Requires that at least one of the underlying conditions evaluate to true
 class COr : public CBaseOperator
 {
 public:
     COr() = default;
     virtual ~COr() = default;
 
+    //! @copydoc CLogicalOperator::GetType
     ELogicalOperator GetType() const override
     {
         return ELogicalOperator::Or;
     }
 
+    //! @copydoc ICondition::GetInfix
     std::string GetInfix() const override
     {
         return "OR";
     }
 
+    //! @copydoc IDocumentable::Document
     bool Document(IDocExporter& rExporter) const override
     {
         bool bStatus = rExporter.FormField(GetInfix(), "ANY of the below conditions must be true");
@@ -250,6 +278,7 @@ public:
         return bStatus;
     }
 
+    //! @copydoc ICondition::Evaluate
     bool Evaluate(CEvaluationContext& rContext, bool& bResult) const override
     {
         bool bStatus = true;

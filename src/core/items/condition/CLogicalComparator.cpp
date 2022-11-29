@@ -96,6 +96,7 @@ bool CLogicalComparator::Document(IDocExporter& rExporter) const
 class CNumericCapableComparator : public CLogicalComparator
 {
 protected:
+    //! Type used to represent the number converted from the expression
     using numeric_t = double;
 
     //! @brief Evaluates the comparison in numeric mode
@@ -155,7 +156,7 @@ public:
         return true;
     }
 
-    //! @copydoc CLogicalComparator::Evaluate
+    //! @copydoc CLogicalComparator::Evaluate(const std::string&,const std::string&, bool&)
     bool Evaluate(const std::string& lhs, const std::string& rhs, bool& bResult) const override final
     {
         bool bStatus;
@@ -216,15 +217,19 @@ public:
     REGISTER_POLYMORPHIC_CLASS(CLASSNAME);
 
 /* CEqual */
+
+//! @brief Checks if the left- and right-hand sides are equal
 class CEqual : public CStringCapableComparator
 {
 protected:
+    //! @copydoc CStringCapableComparator::EvaluateString
     bool EvaluateString(const std::string& lhs, const std::string& rhs, bool& bResult) const override
     {
         bResult = (lhs == rhs);
         return true;
     }
 
+    //! @copydoc CNumericCapableComparator::EvaluateNumeric
     bool EvaluateNumeric(numeric_t lhs, numeric_t rhs, bool& bResult) const override
     {
         bResult = (lhs == rhs);
@@ -232,11 +237,13 @@ protected:
     }
 
 public:
+    //! @copydoc CLogicalComparator::GetType
     ELogicalComparator GetType() const
     {
         return ELogicalComparator::Equal;
     }
 
+    //! @copydoc ICondition::GetInfix
     std::string GetInfix() const override
     {
         return "is EQUAL to";
@@ -246,15 +253,19 @@ public:
 DEFINE_STRING_CAPABLE(CEqual);
 
 /* CNotEqual */
+
+//! @brief Checks if the left- and right-hand sides are different
 class CNotEqual : public CStringCapableComparator
 {
 protected:
+    //! @copydoc CStringCapableComparator::EvaluateString
     bool EvaluateString(const std::string& lhs, const std::string& rhs, bool& bResult) const override
     {
         bResult = (lhs != rhs);
         return true;
     }
 
+    //! @copydoc CNumericCapableComparator::EvaluateNumeric
     bool EvaluateNumeric(numeric_t lhs, numeric_t rhs, bool& bResult) const override
     {
         bResult = (lhs != rhs);
@@ -262,11 +273,13 @@ protected:
     }
 
 public:
+    //! @copydoc CLogicalComparator::GetType
     ELogicalComparator GetType() const
     {
         return ELogicalComparator::NotEqual;
     }
 
+    //! @copydoc ICondition::GetInfix
     std::string GetInfix() const override
     {
         return "is NOT EQUAL to";
@@ -276,9 +289,11 @@ public:
 DEFINE_STRING_CAPABLE(CNotEqual);
 
 /* Less */
+//! @brief Comparator evaluates to true when LHS < RHS
 class CLess : public CNumericOnlyComparator
 {
 protected:
+    //! @copydoc CNumericCapableComparator::EvaluateNumeric
     bool EvaluateNumeric(numeric_t lhs, numeric_t rhs, bool& bResult) const override
     {
         bResult = (lhs < rhs);
@@ -286,11 +301,13 @@ protected:
     }
 
 public:
+    //! @copydoc CLogicalComparator::GetType
     ELogicalComparator GetType() const
     {
         return ELogicalComparator::Less;
     }
 
+    //! @copydoc ICondition::GetInfix
     std::string GetInfix() const override
     {
         return "is LESS than";
@@ -300,9 +317,11 @@ public:
 DEFINE_NUMERIC_ONLY(CLess);
 
 /* LessOrEqual */
+//! @brief Comparator evaluates to true when LHS <= RHS
 class CLessOrEqual : public CNumericOnlyComparator
 {
 protected:
+    //! @copydoc CNumericCapableComparator::EvaluateNumeric
     bool EvaluateNumeric(numeric_t lhs, numeric_t rhs, bool& bResult) const override
     {
         bResult = (lhs <= rhs);
@@ -310,11 +329,13 @@ protected:
     }
 
 public:
+    //! @copydoc CLogicalComparator::GetType
     ELogicalComparator GetType() const
     {
         return ELogicalComparator::LessOrEqual;
     }
 
+    //! @copydoc ICondition::GetInfix
     std::string GetInfix() const override
     {
         return "is LESS than or EQUAL to";
@@ -324,9 +345,11 @@ public:
 DEFINE_NUMERIC_ONLY(CLessOrEqual);
 
 /* Greater */
+//! @brief Comparator evaluates to true when LHS > RHS
 class CGreater : public CNumericOnlyComparator
 {
 protected:
+    //! @copydoc CNumericCapableComparator::EvaluateNumeric
     bool EvaluateNumeric(numeric_t lhs, numeric_t rhs, bool& bResult) const override
     {
         bResult = (lhs > rhs);
@@ -334,11 +357,13 @@ protected:
     }
 
 public:
+    //! @copydoc CLogicalComparator::GetType
     ELogicalComparator GetType() const
     {
         return ELogicalComparator::Greater;
     }
 
+    //! @copydoc ICondition::GetInfix
     std::string GetInfix() const override
     {
         return "is GREATER than";
@@ -348,9 +373,11 @@ public:
 DEFINE_NUMERIC_ONLY(CGreater);
 
 /* GreaterOrEqual */
+//! @brief Comparator evaluates to true when LHS >= RHS
 class CGreaterOrEqual : public CNumericOnlyComparator
 {
 protected:
+    //! @copydoc CNumericCapableComparator::EvaluateNumeric
     bool EvaluateNumeric(numeric_t lhs, numeric_t rhs, bool& bResult) const override
     {
         bResult = (lhs >= rhs);
@@ -358,11 +385,13 @@ protected:
     }
 
 public:
+    //! @copydoc CLogicalComparator::GetType
     ELogicalComparator GetType() const
     {
         return ELogicalComparator::GreaterOrEqual;
     }
-
+    
+    //! @copydoc ICondition::GetInfix
     std::string GetInfix() const override
     {
         return "is GREATER than or EQUAL to";

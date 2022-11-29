@@ -5,6 +5,7 @@
 #include "core/items/CProject.h"
 
 //! @brief Represents the set of options passed to the application when launched
+//! @internal
 class CCommandLineArguments
 {
 public:
@@ -14,6 +15,7 @@ public:
     //! The name of the configuration to run when using the Run mode
     std::string m_strRunConfigurationName;
 
+    //! The mode/command requested for this run
     enum class EMode {
         Invalid,//!< The application was called incorrectly
         Help,   //!< User requested a help message
@@ -21,11 +23,17 @@ public:
         Edit,   //!< Opens the project editor as a GUI
         Run,    //!< Runs the project in a console
         ExpDocs //!< Exports the documentation and then closes
-    } m_eMode = EMode::Invalid;
+    };
+    
+    //! The action/command the user requested
+    EMode m_eMode = EMode::Invalid;
 
     //! Zero if the command line was parsed and is valid
     int m_iExitCode = 0;
 
+    //! @brief Constructs this structure of parsed arguments from the raw arguments passaed to main()
+    //! @param[in] argc Arguments count
+    //! @param[in] argv Arguments values array
     CCommandLineArguments(int argc, const char* const* argv)
     {
         CLI::App app{ "Confidence - A configuration management tool you can trust" };

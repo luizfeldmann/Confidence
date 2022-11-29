@@ -10,6 +10,7 @@ class CFileTextProvider : public ITextProvider
 protected:
     //! Path to file where the text is accessed
     std::string m_strFilePath;
+
     SERIALIZATION_FRIEND(CFileTextProvider);
 
 public:

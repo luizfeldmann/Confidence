@@ -15,16 +15,19 @@
     return wxDataViewItem((void*)pOper);
 }
 
+//! @brief Handles get/set of the direction (R/W) of the operation on the #CFileOperationsModel
 class COperationDirectionColumnHandler : public IModelColumnHandler
 {
 public:
     COperationDirectionColumnHandler() = default;
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "int";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const CFileOperation* const pItem = CFileOperationsModel::GetPointer(rItem);
@@ -35,11 +38,13 @@ public:
         value = nIndex;
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem&) const
     {
         return true;
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         CFileOperation* const pItem = CFileOperationsModel::GetPointer(rItem);
@@ -51,16 +56,19 @@ public:
     }
 };
 
+//! @brief Handles get/set of the locator (#IFileDataLocator) of the operation on the #CFileOperationsModel
 class COperationLocatorColumnHandler : public IModelColumnHandler
 {
 public:
     COperationLocatorColumnHandler() = default;
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "string";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const CFileOperation* const pItem = CFileOperationsModel::GetPointer(rItem);
@@ -72,11 +80,13 @@ public:
         value = pLocator->to_string();
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem&) const
     {
         return true;
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         CFileOperation* const pItem = CFileOperationsModel::GetPointer(rItem);
@@ -91,16 +101,21 @@ public:
     }
 };
 
+//! @brief Handles get/set of expression of the operation on the #CFileOperationsModel
+//! @details For read operations, the expression is the name of the variable where the read data is stored.
+//!          For write operations, the expression is the new value to be written.
 class COperationExpressionColumnHandler : public IModelColumnHandler
 {
 public:
     COperationExpressionColumnHandler() = default;
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "string";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const CFileOperation* const pItem = CFileOperationsModel::GetPointer(rItem);
@@ -109,11 +124,13 @@ public:
         value = pItem->GetExpression();
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem&) const
     {
         return true;
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         CFileOperation* const pItem = CFileOperationsModel::GetPointer(rItem);
@@ -125,16 +142,19 @@ public:
     }
 };
 
+//! @brief Handles get/set of the description text of the operation on the #CFileOperationsModel
 class COperationDescriptionColumnHandler : public IModelColumnHandler
 {
 public:
     COperationDescriptionColumnHandler() = default;
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "string";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const CFileOperation* const pItem = CFileOperationsModel::GetPointer(rItem);
@@ -143,11 +163,13 @@ public:
         value = pItem->GetDescription();
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem&) const
     {
         return true;
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         CFileOperation* const pItem = CFileOperationsModel::GetPointer(rItem);

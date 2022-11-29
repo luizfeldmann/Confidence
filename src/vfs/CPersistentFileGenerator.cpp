@@ -5,6 +5,7 @@ DEFINE_SERIALIZATION_SCHEME(CPersistentFileGenerator);
 
 REGISTER_POLYMORPHIC_CLASS(CPersistentFileGenerator);
 
+//! @brief Creates and writes to a file stored on disk
 class CPersistentFile : public IGeneratedFile
 {
 private:
@@ -12,7 +13,10 @@ private:
     CPersistentFile& operator=(const CPersistentFile&) = delete;
 
 protected:
+    //! Stores the path of this files
     const path_t m_path;
+
+    //! Stores the file stream used to write to this file
     std::ofstream m_stream;
 
 public:
@@ -28,16 +32,19 @@ public:
 
     }
 
+    //! @copydoc IGeneratedFile::IsValid
     bool IsValid() const override
     {
         return m_stream.is_open();
     }
 
+    //! @copydoc IGeneratedFile::GetPath
     path_t GetPath() const override
     {
         return m_path;
     }
 
+    //! @copydoc IGeneratedFile::GetStream
     std::ostream& GetStream() override
     {
         return m_stream;

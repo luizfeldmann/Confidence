@@ -9,8 +9,10 @@
 class CBaseTreeItemModel : virtual public wxDataViewModel
 {
 protected:
-    //! Maps child (key) to parent (value)
+    //! Type used to hold associations between the parent and child items in the tree model
     using parent_map_t = std::map<wxDataViewItem, wxDataViewItem>;
+    
+    //! Maps child (key) to parent (value)
     mutable parent_map_t m_mapParents;
 
     //! @brief Gets the root item of the tree view
@@ -23,9 +25,16 @@ public:
     //! @brief Casts the project tree item into a data view item
     static wxDataViewItem GetViewItem(const IProjTreeItem* pItem);
 
-    /* wxDataViewModel overrides */
+    /** @name wxDataViewModel overrides */
+    //!@{
+    
+    //! @copydoc CBaseModel::GetParent
     wxDataViewItem GetParent(const wxDataViewItem& item) const wxOVERRIDE;
+
+    //! @copydoc CBaseModel::GetChildren
     unsigned int GetChildren(const wxDataViewItem& parent, wxDataViewItemArray& array) const wxOVERRIDE;
+
+    //!@}
 };
 
 #endif // _CBASETREEITEMMODEL_H_

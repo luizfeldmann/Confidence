@@ -18,9 +18,11 @@ bool IsEnabled(const wxDataViewItem&)
 /// Handlers
 /// =======================================================
 
+//! @brief Handler to get/set the name of the item on the tree view of #CTreeBrowserModel
 class CNameModelColumnHandler : public IModelColumnHandler
 {
 protected:
+    //! @internal
     wxEvtHandler& m_rEvtHandler;
 
 public:
@@ -30,11 +32,13 @@ public:
 
     }
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "wxDataViewIconText";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const IProjTreeItem* pItem = CBaseTreeItemModel::GetPointer(rItem);
@@ -48,11 +52,13 @@ public:
         value = wxVariant(iconAndText);
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem&) const
     {
         return true;
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         IProjTreeItem* pItem = CBaseTreeItemModel::GetPointer(rItem);
@@ -74,9 +80,11 @@ public:
     }
 };
 
+//! @brief Handler to get/set the description of the item on the tree view of #CTreeBrowserModel
 class CDescriptionModelColumnHandler : public IModelColumnHandler
 {
 protected:
+    //! @internal
     wxEvtHandler& m_rEvtHandler;
 
 public:
@@ -86,11 +94,13 @@ public:
 
     }
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "string";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const IProjTreeItem* const pItem = CBaseTreeItemModel::GetPointer(rItem);
@@ -100,11 +110,13 @@ public:
         value = strDesc;
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem&) const
     {
         return true;
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         return false;

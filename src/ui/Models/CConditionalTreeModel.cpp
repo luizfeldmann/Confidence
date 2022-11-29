@@ -5,27 +5,33 @@
 #include "util/Log.h"
 
 /* Column handlers */
+
+//! @brief Handles get/set of the "Icon" column of the #CConditionalTreeModel
 class CIconColumnHandler : public IModelColumnHandler
 {
 public:
     CIconColumnHandler() = default;
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "icon";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const ICondition* const pCond = CConditionalTreeModel::GetPointer(rItem);
         value << CConditionalTreeModel::GetIcon(pCond);
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem&) const
     {
         return true;
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         return false;
@@ -37,9 +43,11 @@ static CLogicalComparator* GetComparator(const wxDataViewItem& rItem)
     return dynamic_cast<CLogicalComparator*>(CConditionalTreeModel::GetPointer(rItem));
 }
 
+//! @brief Handles get/set of the expression (LHR or RHS) columns of the #CConditionalTreeModel
 class CExpressionColumnHandler : public IModelColumnHandler
 {
 protected:
+    //! False for LHS; True for the RHS
     const bool m_bIsRight;
 
 public:
@@ -49,11 +57,13 @@ public:
 
     }
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "text";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant & value, const wxDataViewItem & rItem) const override
     {
         const CLogicalComparator* const pComparator = GetComparator(rItem);
@@ -71,11 +81,13 @@ public:
         }
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem& rItem) const
     {
         return (nullptr != GetComparator(rItem));
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem & rItem)
     {
         bool bStatus = false;
@@ -95,16 +107,19 @@ public:
     }
 };
 
+//! @brief Handles get/set of the "Infix" column of the #CConditionalTreeModel
 class CInfixColumnHandler : public IModelColumnHandler
 {
 public:
     CInfixColumnHandler() = default;
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "text";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const ICondition* const pCondition = CConditionalTreeModel::GetPointer(rItem);
@@ -113,27 +128,32 @@ public:
             value = wxString(pCondition->GetInfix());
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem&) const
     {
         return false;
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         return false;
     }
 };
 
+//! @brief Handles get/set of the "Data Mode" column of the #CConditionalTreeModel
 class CDataModeColumnHandler : public IModelColumnHandler
 {
 public:
     CDataModeColumnHandler() = default;
 
+    //! @copydoc IModelColumnHandler::GetType
     wxString GetType() const override
     {
         return "int";
     }
 
+    //! @copydoc IModelColumnHandler::GetValue
     void GetValue(wxVariant& value, const wxDataViewItem& rItem) const override
     {
         const CLogicalComparator* const pComparator = GetComparator(rItem);
@@ -142,6 +162,7 @@ public:
         value = (long)pComparator->GetStringMode();
     }
 
+    //! @copydoc IModelColumnHandler::IsEnabled
     bool IsEnabled(const wxDataViewItem& rItem) const
     {
         const CLogicalComparator* const pComparator = GetComparator(rItem);
@@ -150,6 +171,7 @@ public:
         return pComparator->AllowStringMode();
     }
 
+    //! @copydoc IModelColumnHandler::HasValue
     bool HasValue(const wxDataViewItem& rItem) const
     {
         const ICondition* const pCondition = CConditionalTreeModel::GetPointer(rItem);
@@ -158,6 +180,7 @@ public:
         return (ICondition::ECategory::Comparator == pCondition->GetCategory());
     }
 
+    //! @copydoc IModelColumnHandler::SetValue
     bool SetValue(const wxVariant& value, const wxDataViewItem& rItem)
     {
         CLogicalComparator* const pComparator = GetComparator(rItem);

@@ -5,12 +5,12 @@
 class Version
 {
 public:
-    static const unsigned uMajor;
-    static const unsigned uMinor;
-    static const unsigned uPatch;
-    static const unsigned uTweak;
-    static const char* const szVersion;
-    static const char* const szTimestamp;
+    static const unsigned uMajor;           //!< Major version number
+    static const unsigned uMinor;           //!< Minor version number
+    static const unsigned uPatch;           //!< Patch version number
+    static const unsigned uTweak;           //!< Tweak version number
+    static const char* const szVersion;     //!< String representation of the version in format "major.minor.patch.tweak"
+    static const char* const szTimestamp;   //!< Holds the date and time of the build
 };
 
 #endif

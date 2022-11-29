@@ -34,6 +34,8 @@ static const char* g_szCssStyles =
 
 /* CHtmlExporterPrivate */
 
+//! @brief Holds internal information required by the #CHtmlExporter for the duration of an exporting session
+//! @internal
 class CHtmlExporterPrivate : public IDocumentationContext
 {
 private:
@@ -42,6 +44,7 @@ private:
     //! Stores the dependency diagram
     CDiagram m_diagDeps;
 
+    //! @brief Creates a node with the provided name on the dependency diagram (or gets a pointer if it already exists)
     Agnode_s* Node(const std::string& strNode)
     {
         Agnode_s* pNode = m_diagDeps.Node(strNode);
@@ -62,6 +65,7 @@ public:
     {
     }
 
+    //! @copydoc IDocumentationContext::Dependency
     void Dependency(const std::string& strSrc, const std::string& strDst) override
     {
         auto nodeSrc = Node(strSrc);
@@ -71,6 +75,8 @@ public:
         m_diagDeps.Edge(std::to_string(hEdge), nodeSrc, nodeDst);
     }
 
+    //! @brief Appends a section containing the dependency diagram to the project documentation
+    //! @return True if success
     bool GenerateDependencyDiagram(IDocExporter& rExporter)
     {
         bool bStatus = rExporter.Container("item", "");

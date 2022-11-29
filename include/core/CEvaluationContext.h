@@ -10,6 +10,7 @@
 class CEvaluationContext
 {
 protected:
+    //! Type used to store associations of variable names to variable values
     using variable_map_t = std::map<std::string, std::string>;
 
     //! Collection of variables names and values

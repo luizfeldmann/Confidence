@@ -7,6 +7,7 @@ DEFINE_SERIALIZATION_SCHEME(CTempSymlinkGenerator);
 
 REGISTER_POLYMORPHIC_CLASS(CTempSymlinkGenerator);
 
+//! @brief Creates and writes to a temporary file symlinked to a relevant location
 class CTempSymlinkFile : public IGeneratedFile
 {
 private:
@@ -14,9 +15,16 @@ private:
     CTempSymlinkFile& operator=(const CTempSymlinkFile&) = delete;
 
 protected:
+    //! @internal
     std::error_code m_eStatus;
+
+    //! Stores the path to the relevant location where the symlink is created
     path_t const m_dstPath;
+
+    //! Stores the path to the temporary file
     path_t const m_tmpPath;
+
+    //! Stream used to write data to the file
     std::ofstream m_stream;
 
 public:
@@ -84,16 +92,19 @@ public:
         }
     }
 
+    //! @copydoc IGeneratedFile::IsValid
     bool IsValid() const override
     {
         return !m_eStatus;
     }
 
+    //! @copydoc IGeneratedFile::GetPath
     path_t GetPath() const override
     {
         return m_dstPath;
     }
 
+    //! @copydoc IGeneratedFile::GetStream
     std::ostream& GetStream() override
     {
         return m_stream;

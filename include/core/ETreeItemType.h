@@ -1,3 +1,8 @@
+/**
+ * @file ETreeItemType.h
+ * @brief Defines enum #ETreeItemType
+ */
+
 #ifndef _ETREEITEMTYPE_H_
 #define _ETREEITEMTYPE_H_
 

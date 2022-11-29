@@ -54,7 +54,7 @@ public:
     //! @brief Gets the collection of arguments used when starting the process
     vec_args_t& GetArguments();
 
-    //! @bcopydoc GetArguments
+    //! @copydoc GetArguments
     const vec_args_t& GetArguments() const;
 
     //! @copydoc IExecutable::Execute
