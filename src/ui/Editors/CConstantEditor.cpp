@@ -8,12 +8,24 @@
 class CConstantEditorUI : public IConstantEditor
 {
 protected:
+    //! The underlying item to edit
     CConstant& m_rEdit;
 
+    /** @name IConstantEditor overrides */
+    //!@{
+    
+    //! @brief When the constant expression is changed, updates the saved value
     void onExpressionChanged(wxCommandEvent& event) override;
+
+    //! @brief When the "export to environment" checkbox is changed, updates the saved configuration
     void onChkboxExport(wxCommandEvent& event) override;
 
+    //!@}
+
 public:
+    //! @brief Constructs a new editor UI associated with the specified #CConstant
+    //! @param[in] pParent Pointer to the window where this editor will be created
+    //! @param[in] rEdit @copybrief m_rEdit
     CConstantEditorUI(wxWindow* pParent, CConstant& rEdit);
 
 };

@@ -16,6 +16,7 @@ public:
     //! Stores the regular expression used by the #CRegexOperationContext to perform the R/W operations
     std::string m_strREGEX;
 
+    //! @brief Constructs an empty locator for regular expressions
     CRegexLocator()
     {
 
@@ -77,6 +78,8 @@ protected:
     std::string m_content;
 
 public:
+    //! @brief Constructs a context to operate on the requested file
+    //! @param[in] filePath @copybrief m_path
     CRegexOperationContext(const std::filesystem::path& filePath)
         : m_path(filePath)
     {

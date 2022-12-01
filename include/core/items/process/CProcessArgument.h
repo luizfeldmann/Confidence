@@ -13,10 +13,15 @@ private:
     CProcessArgument& operator=(const CProcessArgument&) = delete;
 
 public:
+    //! @brief Constructs an empty argument
     CProcessArgument();
+
     ~CProcessArgument();
 
+    //! @brief Default move-constructor
     CProcessArgument(CProcessArgument&&) = default;
+
+    //! @brief Default move-assignment operator
     CProcessArgument& operator=(CProcessArgument&&) = default;
 
     //! @copydoc IDocumentable::Document

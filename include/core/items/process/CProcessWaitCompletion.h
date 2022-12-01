@@ -13,6 +13,7 @@ public:
     //! @copydoc IProcessPolicy::GetType
     EProcessPolicy GetType() const override;
 
+    //! Type used to pass/store the configuration about return code enforcement
     using opt_returncode_t = std::optional<int>;
 
     //! @brief Sets the (optional) checked return code

@@ -9,19 +9,24 @@ class ICondition;
 enum class ELogicalComparator;
 enum class ELogicalOperator;
 
-//! @brief Model to connect the GUI to the backend project structure
+//! @brief Represents a tree of logically associated conditional operators and comparators
 class CConditionalTreeModel : public CBaseModelMapped
 {
 protected:
     //! @brief The underlying conditional item being editted
     CConditional& m_rEdit;
 
-    //! Maps child (key) to parent (value)
+    //! Type used to hold associations between the parent and child items in the tree model
     using parent_map_t = std::map<wxDataViewItem, wxDataViewItem>;
+
+    //! Maps child (key) to parent (value)
     mutable parent_map_t m_mapParents;
 
 public:
+    //! @brief Constructs a table model to view/edit a tree of conditionals
+    //! @param[in] rEdit @copybrief m_rEdit
     CConditionalTreeModel(CConditional& rEdit);
+
     ~CConditionalTreeModel();
 
     //! @brief Defines the columns shown in the table

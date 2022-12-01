@@ -1,3 +1,8 @@
+/**
+ * @file ITextProvider.h
+ * @brief Defines interface #ITextProvider
+ */
+
 #ifndef _ITEXTPROVIDER_H_
 #define _ITEXTPROVIDER_H_
 

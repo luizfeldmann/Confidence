@@ -1,3 +1,8 @@
+/**
+ * @file IGroupFilter.h
+ * @brief Defines interface #IGroupFilter
+ */
+
 #ifndef _IGROUPFILTER_H_
 #define _IGROUPFILTER_H_
 
@@ -37,7 +42,7 @@ public:
 
     //! @brief Reads the filter status of an item
     //! @param[in] pItem The item whose status is to be read
-    virtual bool Filter(sptr_t pItem) const = 0;
+    virtual bool FilterItem(sptr_t pItem) const = 0;
 
     //! @brief Gets the accepted type of filtered item
     virtual ETreeItemType GetType() const = 0;

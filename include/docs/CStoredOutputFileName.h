@@ -14,8 +14,11 @@ protected:
     SERIALIZATION_FRIEND(CStoredOutputFileName);
 
 public:
+    //! @brief Initializes an empty file name
     CStoredOutputFileName() = default;
 
+    //! @brief Constructs with an initial file path
+    //! @param[in] strInitial @copybrief m_strOutputPath
     CStoredOutputFileName(const std::string& strInitial);
 
     //! @copydoc IOutputFileName::GetOutputFileName

@@ -76,6 +76,9 @@ protected:
     //!@}
 
 public:
+    //! @brief Constructs a new editor UI associated with the specified #CRunProcess
+    //! @param[in] pParent Pointer to the window where this editor will be created
+    //! @param[in] cEdit @copybrief m_cEdit
     CRunProcessEditorUI(wxWindow* pParent, CRunProcess& cEdit);
 };
 

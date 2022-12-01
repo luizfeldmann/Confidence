@@ -49,6 +49,7 @@ public:
     //! @param[in] pNewPolicy New policy to assign
     void SetPolicy(IProcessPolicy* pNewPolicy);
 
+    //! @brief Type used to store/pass a collection of arguments used to run a process
     using vec_args_t = std::list<CProcessArgument>;
 
     //! @brief Gets the collection of arguments used when starting the process

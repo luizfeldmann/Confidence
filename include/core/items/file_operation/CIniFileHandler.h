@@ -8,6 +8,7 @@
 class CIniFileHandler : public IFileOperationHandler
 {
 public:
+    //! @brief Constructs a handler for INI files
     CIniFileHandler();
     ~CIniFileHandler();
 

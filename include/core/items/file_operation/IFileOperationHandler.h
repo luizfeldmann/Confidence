@@ -1,3 +1,8 @@
+/**
+ * @file IFileOperationHandler.h
+ * @brief Defines interface #IFileOperationHandler
+ */
+
 #ifndef _IFILEOPERATIONHANDLER_H_
 #define _IFILEOPERATIONHANDLER_H_
 

@@ -1,3 +1,8 @@
+/**
+ * @file ITreeItemCollection.h
+ * @brief Defines interface #ITreeItemCollection
+ */
+
 #ifndef _ICHILDRENCOLLECTION_H_
 #define _ICHILDRENCOLLECTION_H_
 
@@ -12,7 +17,9 @@ class IProjTreeItem;
 class ITreeItemCollection
 {
 public:
+    //! @brief Constructs an empty collection
     ITreeItemCollection() = default;
+
     virtual ~ITreeItemCollection() = default;
 
     //! Type of the pointer to tree items

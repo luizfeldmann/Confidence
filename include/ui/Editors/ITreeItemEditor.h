@@ -1,3 +1,8 @@
+/**
+ * @file ITreeItemEditor.h
+ * @brief Defines interface #ITreeItemEditor
+ */
+
 #ifndef _ITREEITEMEDITOR_H_
 #define _ITREEITEMEDITOR_H_
 
@@ -30,10 +35,17 @@ protected:
     wxSizer* const m_pSizer;
 
 public:
+    //! Constructs an editor tab for the specified project item
+    //! @param[in] rMainWindow @copybrief m_rMainWindow
+    //! @param[in] rItem @copybrief m_rItem
     ITreeItemEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
+
     virtual ~ITreeItemEditor();
 
+    //! @brief Default move-constructor
     ITreeItemEditor(ITreeItemEditor&&) = default;
+
+    //! @brief Default move-assignment operator
     ITreeItemEditor& operator=(ITreeItemEditor&&) = default;
 
     //! Prototype callback used to create a new editor for the provided item

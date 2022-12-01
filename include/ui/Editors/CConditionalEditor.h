@@ -9,9 +9,13 @@ class CConditionalEditorUI;
 class CConditionalEditor : public CNameDescEditor
 {
 protected:
+    //! Pointer to the private implementation of the editor UI
     CConditionalEditorUI* const m_pUi;
 
 public:
+    //! @brief Constructs a new #CConditionalEditor
+    //! @param[in] rMainWindow Reference to the main application window
+    //! @param[in] rItem Reference to #CConditional
     CConditionalEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @brief Returns a new instance of this class

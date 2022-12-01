@@ -18,7 +18,7 @@ protected:
     //! Stores the subitems of this tree item
     vstore_t m_vItems;
 
-    //! The types of children that may be added to this object
+    //! The types of children that may be added as children to this object
     ETreeItemType m_eSupportedItemTypes;
 
     SERIALIZATION_FRIEND(CStoredItemCollection);
@@ -28,9 +28,13 @@ protected:
 
 public:
     //! @brief Initializes a new instance with support for the given types of subitems
+    //! @param[in] eSupportedSubitems @copybrief m_eSupportedItemTypes
     CStoredItemCollection(ETreeItemType eSupportedSubitems);
 
+    //! @brief Default move-constructor
     CStoredItemCollection(CStoredItemCollection&&) = default;
+
+    //! @brief Default move-assignment operator
     CStoredItemCollection& operator=(CStoredItemCollection&&) = default;
 
     //! @copydoc ITreeItemCollection::SubItems

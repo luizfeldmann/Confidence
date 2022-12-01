@@ -1,3 +1,8 @@
+/**
+ * @file ICondition.h
+ * @brief Defines interface #ICondition
+ */
+
 #ifndef _ICONDITION_H_
 #define _ICONDITION_H_
 

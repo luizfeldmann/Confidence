@@ -1,3 +1,8 @@
+/**
+ * @file IProjTreeItem.h
+ * @brief Defines interface #IProjTreeItem
+ */
+
 #ifndef _IPROJTREEITEM_H_
 #define _IPROJTREEITEM_H_
 

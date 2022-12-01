@@ -1,3 +1,8 @@
+/**
+ * @file ISerializationNotify.h
+ * @brief Defines interface #ISerializationNotify
+ */
+
 #ifndef _ISERIALIZATIONNOTIFY_H_
 #define _ISERIALIZATIONNOTIFY_H_
 

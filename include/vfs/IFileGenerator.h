@@ -1,3 +1,8 @@
+/**
+ * @file IFileGenerator.h
+ * @brief Defines interfaces #IFileGenerator and #IGeneratedFile
+ */
+
 #ifndef _IFILEGENERATOR_H_
 #define _IFILEGENERATOR_H_
 

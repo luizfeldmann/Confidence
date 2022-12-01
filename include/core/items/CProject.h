@@ -91,7 +91,10 @@ public:
     //! @copydoc IExecutable::Execute
     bool Execute(CExecutionContext& rContext) const override;
 
+    //! Pointer type used to pass/store the configured instances of documentation exports
     using ptr_exporter_t = std::unique_ptr<IDocExporter>;
+
+    //! Type used to pass/store the collection of document exports used by the project
     using vec_exporters_t = std::vector<ptr_exporter_t>;
 
     //! @brief Gets a reference to the collection of documentation exporters

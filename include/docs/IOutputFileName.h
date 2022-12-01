@@ -1,3 +1,8 @@
+/**
+ * @file IOutputFileName.h
+ * @brief Defines interface #IOutputFileName
+ */
+
 #ifndef _IOUTPUTFILENAME_H_
 #define _IOUTPUTFILENAME_H_
 

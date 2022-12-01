@@ -1,3 +1,8 @@
+/**
+ * @file IFileDataLocator.h
+ * @brief Defines interface #IFileDataLocator
+ */
+
 #ifndef _IFILEDATALOCATOR_H_
 #define _IFILEDATALOCATOR_H_
 

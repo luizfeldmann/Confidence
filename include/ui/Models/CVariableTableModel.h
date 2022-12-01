@@ -7,15 +7,15 @@
 class CVariable;
 class CProject;
 
-//! @brief Table with configurations as rows and instances as columns
+//! @brief Table with #CConfiguration as rows and #CInstance as columns
 class CVariableTableModel : public CBaseTreeItemModel, public INotifyItemOperation
 {
 protected:
     //! The variable being edited
     CVariable& m_rVar;
 
-    //! Pointer to the project
-    //! This is required to query for all instances and configurations
+    //! @brief Pointer to the project
+    //! @details This is required to query for all instances and configurations
     std::weak_ptr<const CProject> m_pProj;
 
     //! The data view control using this model
@@ -25,7 +25,12 @@ protected:
     const IProjTreeItem& GetRootItem() const override;
 
 public:
+    //! @brief Constructs a table model to view/edit the rules defining a particular #CVariable
+    //! @param[in] rVar @copybrief m_rVar
+    //! @param[in] pProj @copybrief m_pProj
+    //! @param[in] pCtrl @copybrief m_pCtrl
     CVariableTableModel(CVariable& rVar, std::shared_ptr<const CProject> pProj, wxDataViewCtrl* pCtrl);
+
     ~CVariableTableModel();
 
     //! Clears the columns and recreates based on the project's instances

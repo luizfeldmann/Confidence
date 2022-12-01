@@ -64,6 +64,12 @@ public:
     //! @copydoc CBaseModel::IsContainer
     bool IsContainer(const wxDataViewItem& item) const wxOVERRIDE;
 
+    //! @copydoc CBaseTreeItemModel::GetParent
+    wxDataViewItem GetParent(const wxDataViewItem& item) const wxOVERRIDE;
+
+    //! @copydoc CBaseTreeItemModel::GetChildren
+    unsigned int GetChildren(const wxDataViewItem& parent, wxDataViewItemArray& array) const wxOVERRIDE;
+
     //!@}
 };
 

@@ -67,7 +67,7 @@ protected:
     SERIALIZATION_FRIEND(CLogicalComparator);
 
     //! Performs the boolean evaluation of the string-evaluated expressions
-    virtual bool Evaluate(const std::string& lhs, const std::string& rhs, bool& bResult) const = 0;
+    virtual bool DoEvaluate(const std::string& lhs, const std::string& rhs, bool& bResult) const = 0;
 
     //! Constructs an empty comparator
     CLogicalComparator();

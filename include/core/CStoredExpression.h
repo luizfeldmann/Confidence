@@ -14,6 +14,7 @@ protected:
     SERIALIZATION_FRIEND(CStoredExpression);
 
 public:
+    //! Constructs an empty expression
     CStoredExpression() = default;
 
     //! @copydoc IExpression::GetExpression

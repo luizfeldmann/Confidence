@@ -16,6 +16,9 @@ struct SColor
     SColor();
 
     //! @brief Initializes the color from the given components
+    //! @param[in] uR @copybrief r
+    //! @param[in] uG @copybrief g
+    //! @param[in] uB @copybrief b
     SColor(uint8_t uR, uint8_t uG, uint8_t uB);
 
     //! @brief Constructs from a given wxColour
@@ -36,7 +39,9 @@ struct STextStyle
     //! @brief Initializes an empty style
     STextStyle();
 
-    // !@brief Initializes a style from the given parameters
+    //! @brief Initializes a style from the given parameters
+    //! @param[in] iID @copybrief m_iID
+    //! @param[in] sForeground @copybrief m_cForeground
     STextStyle(int iID, const SColor& sForeground);
 };
 
@@ -49,8 +54,13 @@ struct STextStylesheet
     std::string m_strExt;               //!< Default file extension for this style
     std::vector<STextStyle> m_vLex;     //!< Collection of lexical states
 
+    //! @brief Constructs an empty stylesheet
     STextStylesheet();
 
+    //! @brief Constructs a stylesheet with the provided parameters
+    //! @param[in] iID @copybrief m_iID
+    //! @param[in] strExt @copybrief m_strExt
+    //! @param[in] ilStyles @copybrief m_vLex
     STextStylesheet(int iID, const std::string& strExt, std::initializer_list<STextStyle> ilStyles);
 };
 
@@ -76,6 +86,8 @@ protected:
     static const vec_styles_t& GetStyles();
 
 public:
+    //! @brief Constructs a new styler object
+    //! param[in] rSTC @copybrief m_rSTC
     CTextStyler(wxStyledTextCtrl& rSTC);
     ~CTextStyler();
 

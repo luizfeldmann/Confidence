@@ -25,6 +25,7 @@ protected:
     //!@}
 
 public:
+    //! @brief Constructs a new editor UI associated with the specified #IProjTreeItem
     CNameDescEditorUI(wxWindow* pParent, CNameDescEditor& rEditor);
 
     //! @copydoc INotifyItemOperation::OnAnyItemRenamed

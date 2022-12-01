@@ -9,9 +9,13 @@ class CGeneratedTextFileEditorUI;
 class CGeneratedTextFileEditor : public CNameDescEditor
 {
 protected:
+    //! Pointer to the private implementation of the editor UI
     CGeneratedTextFileEditorUI* const m_pUiTextFile;
 
 public:
+    //! @brief Constructs a new #CGeneratedTextFileEditor
+    //! @param[in] rMainWindow Reference to the main application window
+    //! @param[in] rItem Reference to #CGeneratedTextFile
     CGeneratedTextFileEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @brief Returns a new instance of this class

@@ -15,8 +15,6 @@ protected:
     //! Holds the graph description
     std::unique_ptr<Agraph_s, int(*)(Agraph_s*)> m_pGraph;
 
-    int Attribute(void* pItem, char* szName, const char* szValue, const char* szDefault);
-
 public:
     //! @brief Creates a diagram with the provided name
     CDiagram(const std::string& strName);

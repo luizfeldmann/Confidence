@@ -7,6 +7,9 @@
 class CMarkCustomBlock : public CMarkNodeWrapper
 {
 public:
+    //! @brief Constructs a custom with with provided open/close tags
+    //! @param[in] szStart Text for "on_enter" event
+    //! @param[in] szEnd Text for "on_exit" event
     CMarkCustomBlock(const char* szStart, const char* szEnd);
 };
 

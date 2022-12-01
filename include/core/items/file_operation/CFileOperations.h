@@ -16,6 +16,7 @@ class CFileOperations : public IProjTreeItem
     , public CNoChildren
 {
 public:
+    //! @brief Type of collection used to pass/store the operations performed on a file by the #CFileOperations
     using vec_oper_t = std::list<CFileOperation>;
 
 protected:

@@ -65,23 +65,57 @@ protected:
 	//! @param[in] bRun True if the project is currently running
 	void SetRunMode(bool bRun);
 
-	/* Auto generated GUI event handlers */
+	//! @name Overrides from IMainWindow
+	//!@{
+	
+	//! @brief Starts a new blank project
 	void onBtnNewProject(wxCommandEvent& event) override;
+	
+	//! @brief Shows a dialog to select and open a project file 
 	void onBtnOpenProject(wxCommandEvent& event) override;
+	
+	//! @brief Saves the project to the current path
 	void onBtnSaveProject(wxCommandEvent& event) override;
+	
+	//! @brief Shows a dialog to select and save a project file
 	void onBtnSaveAsProject(wxCommandEvent& event) override;
+	
+	//! @brief Exports the documentation of the project
 	void onBtnDocumentation(wxCommandEvent& event) override;
+	
+	//! @brief Executes the project
 	void onBtnRunProject(wxCommandEvent& event) override;
+	
+	//! @brief Stops the current project execution
 	void onBtnStopProject(wxCommandEvent& event) override;
+	
+	//! @brief Shows a pop-up menu with options of new items to create
 	void onBtnNewItem(wxCommandEvent& event) override;
+	
+	//! @brief Deletes the selected tree item
 	void onBtnDeleteItem(wxCommandEvent& event) override;
+	
+	//! @brief Move up the selected tree item
 	void onBtnItemUp(wxCommandEvent& event) override;
+	
+	//! @brief Move down the selected tree item
 	void onBtnItemDown(wxCommandEvent& event) override;
+	
+	//! @brief Cuts the selected tree item
 	void onBtnItemCut(wxCommandEvent& event) override;
+	
+	//! @brief Pastes the selected tree item
 	void onBtnItemPaste(wxCommandEvent& event) override;
+	
+	//! @brief Toggles show/hide description in the tree view
 	void onToolViewDesc(wxCommandEvent& event) override;
+	
+	//! @brief Opens a tab to edit a project item
 	void onTreeItemActivate(wxDataViewEvent& event) override;
+	
+	//! @brief Opens an HTML link in the default browser
 	void onClickHtmlLink(wxHtmlLinkEvent& event) override;
+	//!@}
 };
 
 #endif

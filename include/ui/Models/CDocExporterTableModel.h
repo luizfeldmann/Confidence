@@ -26,7 +26,10 @@ protected:
     };
 
 public:
+    //! @brief Constructs a table model to view/edit the documentation exporters attached to the specified project
+    //! @param[in] rEdit @copybrief m_rEdit
     CDocExporterTableModel(CProject& rEdit);
+
     ~CDocExporterTableModel();
 
     /* Public interface */

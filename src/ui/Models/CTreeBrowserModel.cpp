@@ -19,13 +19,16 @@ bool IsEnabled(const wxDataViewItem&)
 /// =======================================================
 
 //! @brief Handler to get/set the name of the item on the tree view of #CTreeBrowserModel
+//! @details When the name is edited, an event handler is notified to consistently update the UI
 class CNameModelColumnHandler : public IModelColumnHandler
 {
 protected:
-    //! @internal
+    //! The event handler which will receive notifications when the item name is changed
     wxEvtHandler& m_rEvtHandler;
 
 public:
+    //! Constructs a new handler associated to the provided observer
+    //! @param[in] rEvtHandler @copybrief m_rEvtHandler
     CNameModelColumnHandler(wxEvtHandler& rEvtHandler)
         : m_rEvtHandler(rEvtHandler)
     {
@@ -81,13 +84,16 @@ public:
 };
 
 //! @brief Handler to get/set the description of the item on the tree view of #CTreeBrowserModel
+//! @details When the description is edited, an event handler is notified to consistently update the UI
 class CDescriptionModelColumnHandler : public IModelColumnHandler
 {
 protected:
-    //! @internal
+    //! The event handler which will receive notifications when the item description is changed
     wxEvtHandler& m_rEvtHandler;
 
 public:
+    //! Constructs a new handler associated to the provided observer
+    //! @param[in] rEvtHandler @copybrief m_rEvtHandler
     CDescriptionModelColumnHandler(wxEvtHandler& rEvtHandler)
         : m_rEvtHandler(rEvtHandler)
     {
@@ -177,6 +183,16 @@ bool CTreeBrowserModel::IsContainer(const wxDataViewItem& item) const
     }
 
     return bIsContainer;
+}
+
+wxDataViewItem CTreeBrowserModel::GetParent(const wxDataViewItem& item) const
+{
+    return CBaseTreeItemModel::GetParent(item);
+}
+
+unsigned int CTreeBrowserModel::GetChildren(const wxDataViewItem& parent, wxDataViewItemArray& array) const
+{
+    return CBaseTreeItemModel::GetChildren(parent, array);
 }
 
 /// =======================================================

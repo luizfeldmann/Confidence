@@ -42,6 +42,7 @@ public:
     //! @brief Stores the XPath string to be used by the #CXmlFileContext for a particular operation
     std::string m_XPath;
 
+    //! @brief Constructs a blank locator for use with the #CXmlFileContext
     CXmlFileLocator()
     {
 
@@ -126,6 +127,8 @@ protected:
     }
 
 public:
+    //! @brief Constructs a context to operate on a particular XML file
+    //! @param[in] filePath @copybrief m_strPath
     CXmlFileContext(const std::filesystem::path& filePath)
         : m_strPath(filePath.string())
     {

@@ -16,6 +16,7 @@ protected:
 
 public:
     //! @brief Instantiates a new node of the give type
+    //! @param[in] eType The type of node to create and wrap
     CMarkNodeWrapper(cmark_node_type eType);
 
     //! @brief Frees the wrapped node *if* it's still owned

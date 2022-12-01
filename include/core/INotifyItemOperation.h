@@ -1,3 +1,8 @@
+/**
+ * @file INotifyItemOperation.h
+ * @brief Defines interface #INotifyItemOperation
+ */
+
 #ifndef _INOTIFYITEMOPERATION_H_
 #define _INOTIFYITEMOPERATION_H_
 

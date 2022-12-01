@@ -32,7 +32,10 @@ public:
     CFileOperation();
     ~CFileOperation();
 
+    //! @brief Default move-constructor
     CFileOperation(CFileOperation&&) noexcept;
+
+    //! @brief Default move-assignment operator
     CFileOperation& operator=(CFileOperation&&) noexcept;
 
     //! Gets the direction of data operation

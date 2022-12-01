@@ -16,6 +16,7 @@ class CVariable : public IProjTreeItem
                 , public CAssignable
 {
 protected:
+    //! Collection type used to pass/store the rules defining the variable
     using vec_rules_t = std::vector<CVariableExpressionKey>;
 
     //! When true, rules dependes on configurations & instances; otherwise only on configurations

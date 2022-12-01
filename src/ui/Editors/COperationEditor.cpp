@@ -42,6 +42,9 @@ protected:
     //!@}
 
 public:
+    //! @brief Constructs a new editor UI associated with the specified #CFileOperations
+    //! @param[in] pParent Pointer to the window where this editor will be created
+    //! @param[in] rEdit @copybrief m_rEdit
     COperationEditorUI(wxWindow* pParent, CFileOperations& rEdit);
 };
 

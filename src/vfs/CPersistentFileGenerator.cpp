@@ -13,13 +13,15 @@ private:
     CPersistentFile& operator=(const CPersistentFile&) = delete;
 
 protected:
-    //! Stores the path of this files
+    //! Stores the path of this file
     const path_t m_path;
 
     //! Stores the file stream used to write to this file
     std::ofstream m_stream;
 
 public:
+    //! Opens or creates a new file on disk in the specified path
+    //! @param[in] path @copybrief m_path
     CPersistentFile(const path_t& path)
         : m_path(path)
         , m_stream(path, std::ios::binary)

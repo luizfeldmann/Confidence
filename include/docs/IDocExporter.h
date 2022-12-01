@@ -1,3 +1,8 @@
+/**
+ * @file IDocExporter.h
+ * @brief Defines interface #IDocExporter
+ */
+
 #ifndef _IDOCEXPORTER_H_
 #define _IDOCEXPORTER_H_
 

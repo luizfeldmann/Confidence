@@ -7,7 +7,7 @@
 class CRunProcess;
 class CProcessArgument;
 
-//! @brief Model to connect the GUI to the backend project structure
+//! @brief Manages the table of arguments of a process starter
 class CProcessArgsModel : public CBaseModelMapped
 {
 protected:
@@ -25,6 +25,8 @@ protected:
     };
 
 public:
+    //! @brief Constructs a table model to view/edit the arguments of a #CRunProcess
+    //! @param[in] rEdit @copybrief m_rEdit
     CProcessArgsModel(CRunProcess& rEdit);
     ~CProcessArgsModel();
 

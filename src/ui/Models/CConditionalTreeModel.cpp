@@ -51,6 +51,8 @@ protected:
     const bool m_bIsRight;
 
 public:
+    //! @brief Constructs a handler to manage the expression of the comparator
+    //! @param[in] bRightSide Choice to manage the LHS or RHS
     CExpressionColumnHandler(bool bRightSide)
         : m_bIsRight(bRightSide)
     {

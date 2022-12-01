@@ -17,15 +17,19 @@ class CNameDescEditorUI;
 class CNameDescEditor : public ITreeItemEditor
 {
 protected:
+    //! Pointer to the private implementation of the editor UI
     CNameDescEditorUI* const m_pUiNameDesc;
 
 public:
+    //! @brief Constructs a new #CNameDescEditor
+    //! @param[in] rMainWindow Reference to the main application window
+    //! @param[in] rItem Reference to any #IProjTreeItem
     CNameDescEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @brief Returns a new instance of this class
     static std::unique_ptr<ITreeItemEditor> Create(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
-    //! @copydoc INotifyItemOperation::ItemChanged
+    //! @copydoc INotifyItemOperation::OnAnyItemRenamed
     void OnAnyItemRenamed(const IProjTreeItem& rChanged) override;
 };
 

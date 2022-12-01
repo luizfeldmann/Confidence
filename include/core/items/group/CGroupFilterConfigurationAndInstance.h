@@ -45,8 +45,8 @@ public:
     //! @copydoc IGroupFilter::GetItems
     ptrvec_t GetItems() const override;
 
-    //! @copydoc IGroupFilter::Filter
-    bool Filter(sptr_t pItem) const override;
+    //! @copydoc IGroupFilter::FilterItem
+    bool FilterItem(sptr_t pItem) const override;
 
     //! @brief @copybrief IGroupFilter::Filter
     bool Filter(const CGroup& rGroup, const CExecutionContext& rContext) const override;

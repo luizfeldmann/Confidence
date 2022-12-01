@@ -1,3 +1,8 @@
+/**
+ * @file IDependsOnVariables.h
+ * @brief Defines interface #IDependsOnVariables
+ */
+
 #ifndef _IDEPENDSONVARIABLES_H_
 #define _IDEPENDSONVARIABLES_H_
 

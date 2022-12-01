@@ -15,7 +15,7 @@ private:
     CTempSymlinkFile& operator=(const CTempSymlinkFile&) = delete;
 
 protected:
-    //! @internal
+    //! The status code of the class logic
     std::error_code m_eStatus;
 
     //! Stores the path to the relevant location where the symlink is created
@@ -28,6 +28,8 @@ protected:
     std::ofstream m_stream;
 
 public:
+    //! @brief Constructs a #CTempSymlinkFile managing a symlink from \p path to a temporary location
+    //! @param[in] path @copybrief m_dstPath
     CTempSymlinkFile(const path_t& path)
         : m_eStatus()
         , m_dstPath(path)

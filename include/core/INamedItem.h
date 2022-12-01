@@ -1,3 +1,8 @@
+/**
+ * @file INamedItem.h
+ * @brief Defines interface #INamedItem
+ */
+
 #ifndef _INAMEDITEM_H_
 #define _INAMEDITEM_H_
 

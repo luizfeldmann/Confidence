@@ -1,3 +1,8 @@
+/**
+ * @file IDocumentationContext.h
+ * @brief Defines interface #IDocumentationContext
+ */
+
 #ifndef _IDOCUMENTATION_CONTEXT_H_
 #define _IDOCUMENTATION_CONTEXT_H_
 

@@ -7,7 +7,10 @@
 class CTreeItemEditorManager : public wxEvtHandler, public INotifyItemOperation
 {
 public:
+    //! @brief Constructs a manager of editors
+    //! @param[in] rMainWindow @copybrief m_rMainWindow
     CTreeItemEditorManager(CMainWindow& rMainWindow);
+
     ~CTreeItemEditorManager();
 
     //! @brief Creates a tab for the item, or focuses it if already exists
@@ -30,7 +33,10 @@ protected:
     //! The main GUI window
     CMainWindow& m_rMainWindow;
 
+    //! Type of pointer used to pass/store the managed editors
     using PtrEditor = std::unique_ptr<ITreeItemEditor>;
+
+    //! Collection used to hold the open editors
     using VecPtrEditor = std::vector<PtrEditor>;
 
     //! Collection of all the editors/tabs currently open

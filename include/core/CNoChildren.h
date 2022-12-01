@@ -7,7 +7,8 @@
 class CNoChildren : public virtual ITreeItemCollection
 {
 public:
-    using ITreeItemCollection::ITreeItemCollection;
+    //! @brief Constructs a new #CNoChildren
+    CNoChildren();
 
     //! @copydoc ITreeItemCollection::SubItems
     vec_ptr_t SubItems() override;

@@ -1,3 +1,8 @@
+/**
+ * @file IExecutable.h
+ * @brief Defines interface #IExecutable
+ */
+
 #ifndef _IEXECUTABLE_H_
 #define _IEXECUTABLE_H_
 

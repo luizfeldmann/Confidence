@@ -14,9 +14,11 @@ protected:
     SERIALIZATION_FRIEND(CStoredNameItem);
 
 public:
+    //! @brief Constructs an item without a name
     CStoredNameItem() = default;
 
     //! @brief Initializes the item with the provided name
+    //! @param[in] strName @copybrief m_strName
     CStoredNameItem(const std::string& strName);
 
     virtual ~CStoredNameItem() = default;

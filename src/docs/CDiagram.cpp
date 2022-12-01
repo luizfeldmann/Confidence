@@ -80,6 +80,9 @@ protected:
 
 public:
     //! @brief Starts the layout of the graph using the requested engine
+    //! @param[in] pGVC @copybrief m_pGVC
+    //! @param[in] pGraph @copybrief m_pGraph
+    //! @param[in] szEngine The name of the layout engine to use
     CGvLayout(GVC_t* pGVC, graph_t* pGraph, const char* szEngine)
         : m_pGVC(pGVC)
         , m_pGraph(pGraph)

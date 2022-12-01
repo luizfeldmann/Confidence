@@ -21,6 +21,7 @@ public:
     //! Stores the relevant key name 
     std::string m_strKey;
 
+    //! @brief Constructs a locator for INI files, to be used by the #CIniFileContext
     CIniFileLocator()
         : m_strSection("Section")
         , m_strKey("Key")
@@ -88,6 +89,8 @@ protected:
     mINI::INIStructure m_structure;
 
 public:
+    //! @brief Constructs a context to operate on a particular INI file
+    //! @param[in] filePath @copybrief m_path
     CIniFileContext(const std::filesystem::path& filePath)
         : m_path(filePath)
         , m_file(filePath.string())

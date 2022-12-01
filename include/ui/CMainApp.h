@@ -19,6 +19,8 @@ protected:
 
 public:
     CMainApp();
+
+    //! @brief Loads the project pointed by m_strOpenProjectFileName, creates and shows the m_pMainWindow
     virtual bool OnInit();
 
     //! The path to the project to be opened when the editor launches

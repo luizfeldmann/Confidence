@@ -45,6 +45,7 @@ protected:
     //!@}
 
 public:
+    //! @brief Constructs a new editor UI associated with the specified #CConditional
     CConditionalEditorUI(wxWindow* pParent, CConditional& rEdit);
 
 };

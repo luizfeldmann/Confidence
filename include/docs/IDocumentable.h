@@ -1,3 +1,8 @@
+/**
+ * @file IDocumentable.h
+ * @brief Defines interface #IDocumentable
+ */
+
 #ifndef _IDOCUMENTABLE_H_
 #define _IDOCUMENTABLE_H_
 

@@ -26,6 +26,9 @@ protected:
     void onBtnNewItemMenu(wxCommandEvent& evt);
 
 public:
+    //! @brief Constructs a new editor UI associated with the specified #CProject
+    //! @param[in] pParent Pointer to the window where this editor will be created
+    //! @param[in] rEdit @copybrief m_rEdit
     CProjectEditorUI(wxWindow* pParent, CProject& rEdit);
 
     /** @name IProjectEditor overrides */

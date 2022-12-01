@@ -59,13 +59,13 @@ public:
     virtual unsigned int GetColumnCount() const wxOVERRIDE = 0;
 
     //! @brief Gets the parent item of the requested child item
-    //virtual wxDataViewItem GetParent(const wxDataViewItem& item) const wxOVERRIDE = 0;
+    virtual wxDataViewItem GetParent(const wxDataViewItem& item) const wxOVERRIDE = 0;
 
     //! @brief Checks if an item can have children
     virtual bool IsContainer(const wxDataViewItem& item) const wxOVERRIDE = 0;
 
     //! @brief Fills the array with the child items of the requested parent
-    //virtual unsigned int GetChildren(const wxDataViewItem& parent, wxDataViewItemArray& array) const wxOVERRIDE = 0;
+    virtual unsigned int GetChildren(const wxDataViewItem& parent, wxDataViewItemArray& array) const wxOVERRIDE = 0;
 
     //!@}
 };

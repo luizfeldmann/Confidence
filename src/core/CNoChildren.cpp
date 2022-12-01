@@ -1,6 +1,11 @@
 #include "core/CNoChildren.h"
 #include "core/IProjTreeItem.h"
 
+CNoChildren::CNoChildren()
+{
+
+}
+
 CNoChildren::vec_ptr_t CNoChildren::SubItems()
 {
     vec_ptr_t vEmpty;

@@ -60,13 +60,13 @@ CGroupFilterConfigurationAndInstance::ptrvec_t CGroupFilterConfigurationAndInsta
     return vItems2;
 }
 
-bool CGroupFilterConfigurationAndInstance::Filter(sptr_t pItem) const
+bool CGroupFilterConfigurationAndInstance::FilterItem(sptr_t pItem) const
 {
     bool bFilter = false;
 
     const IGroupFilter* pFilter = GetSubFilter(pItem);
     if (pFilter)
-        bFilter = pFilter->Filter(pItem);
+        bFilter = pFilter->FilterItem(pItem);
 
     return bFilter;
 }

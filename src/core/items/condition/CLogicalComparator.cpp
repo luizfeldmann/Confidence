@@ -60,7 +60,7 @@ bool CLogicalComparator::Evaluate(CEvaluationContext& rContext, bool& bResult) c
     
     bool bStatus = rContext.Evaluate(lhs);
     bStatus = bStatus && rContext.Evaluate(rhs);
-    bStatus = bStatus && Evaluate(lhs, rhs, bResult);
+    bStatus = bStatus && DoEvaluate(lhs, rhs, bResult);
 
     return bStatus;
 }
@@ -156,8 +156,8 @@ public:
         return true;
     }
 
-    //! @copydoc CLogicalComparator::Evaluate(const std::string&,const std::string&, bool&)
-    bool Evaluate(const std::string& lhs, const std::string& rhs, bool& bResult) const override final
+    //! @copydoc CLogicalComparator::DoEvaluate
+    bool DoEvaluate(const std::string& lhs, const std::string& rhs, bool& bResult) const override final
     {
         bool bStatus;
 
@@ -204,8 +204,8 @@ public:
         return false;
     }
 
-    //! @copydoc CLogicalComparator::Evaluate
-    bool Evaluate(const std::string& lhs, const std::string& rhs, bool& bResult) const override final
+    //! @copydoc CLogicalComparator::DoEvaluate
+    bool DoEvaluate(const std::string& lhs, const std::string& rhs, bool& bResult) const override final
     {
         return EvaluateNumeric(lhs, rhs, bResult);
     }

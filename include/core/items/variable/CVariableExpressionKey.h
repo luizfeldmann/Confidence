@@ -29,12 +29,12 @@ protected:
 
     SERIALIZATION_FRIEND(CVariableExpressionKey);
 
-    //! The pointer to the associated configuration
-    //! This value is updated on #PostDeserialize
+    //! @brief The pointer to the associated configuration
+    //! @details This value is updated on #PostDeserialize
     std::weak_ptr<const CConfiguration> m_pConfiguration;
     
-    //! The pointer the associated instance
-    //! This value is updated on #PostDeserialize
+    //! @brief The pointer the associated instance
+    //! @details This value is updated on #PostDeserialize
     std::weak_ptr<const CInstance> m_pInstance;
 
     //! @brief Gets a pointer to the associated configuration
@@ -44,9 +44,16 @@ protected:
     std::shared_ptr<const CInstance> GetInstance() const;
 
 public:
+    // @brief Constructs a blank key
     CVariableExpressionKey();
 
+    //! @brief Constructs a key associating an expression to a particular #CConfiguration
+    //! @param[in] pConfig @copybrief m_pConfiguration
     CVariableExpressionKey(const std::weak_ptr<const CConfiguration>& pConfig);
+
+    //! @brief Constructs a key associating an expression to a particular pair of #CConfiguration and #CInstance
+    //! @param[in] pConfig @copybrief m_pConfiguration
+    //! @param[in] pInst @copybrief m_pInstance
     CVariableExpressionKey(const std::weak_ptr<const CConfiguration>& pConfig, const std::weak_ptr<const CInstance>& pInst);
 
     //! @brief Checks if the provided pair of instance and configuration match this key's

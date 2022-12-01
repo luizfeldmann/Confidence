@@ -1,3 +1,8 @@
+/**
+ * @file IIdentifiable.h
+ * @brief Defines interface #IIdentifiable
+ */
+
 #ifndef _IIDENTIFIABLE_H_
 #define _IIDENTIFIABLE_H_
 
@@ -24,7 +29,11 @@ protected:
 public:
     //! @brief Initializes a default-constructed ID
     IIdentifiable() = default;
+
+    //! @brief Constructs by taking the ID of another object; the other object's ID is null-ed
     IIdentifiable(IIdentifiable&& rOther) noexcept;
+
+    //! @brief Assigns the ID by taking it from another object; the other object's ID is null-ed
     IIdentifiable& operator=(IIdentifiable&& rOther) noexcept;
 
     //! @brief Returns the unique ID associated with this object

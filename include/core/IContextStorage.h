@@ -1,3 +1,8 @@
+/**
+ * @file IContextStorage.h
+ * @brief Defines interface #IContextStorage
+ */
+
 #ifndef _ICONTEXTSTORAGE_H_
 #define _ICONTEXTSTORAGE_H_
 

@@ -8,6 +8,7 @@
 class CRegexHandler : public IFileOperationHandler
 {
 public:
+    //! @brief Constructs a handler for regular expressions
     CRegexHandler();
     ~CRegexHandler();
 

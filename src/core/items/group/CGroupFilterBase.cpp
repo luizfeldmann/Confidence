@@ -37,7 +37,7 @@ void CGroupFilterBase::erase(sptr_t pInstance)
         ));
 }
 
-bool CGroupFilterBase::Filter(sptr_t pItem) const
+bool CGroupFilterBase::FilterItem(sptr_t pItem) const
 {
     return std::any_of(m_vItemPtrs.cbegin(), m_vItemPtrs.cend(),
         std::bind(compare, pItem, std::placeholders::_1));

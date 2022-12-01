@@ -11,25 +11,35 @@
 class CFilterFactory
 {
 public:
+    //! Pointer type to #IGroupFilter
     using ptrFilter_t = std::shared_ptr<IGroupFilter>;
+
+    //! Type of factory function to produce new #IGroupFilter objects
     using fnFactory_t = std::function<ptrFilter_t()>;
+
+    //! Association between filter types and the factory functions that creates such types
     using pair_t = std::pair<ETreeItemType, fnFactory_t>;
+
+    //! Type of collection used to store the associations between filter types and factory functions
     using collection_t = std::vector<pair_t>;
 
     //! @brief Creates a new filter of the requested type
+    //! @param[in] eType The type of the filter that must be created
     static ptrFilter_t Create(ETreeItemType eType)
     {
         return Find(GetCollection(), eType)->second();
     }
 
-    //! @brief Converts the filter type to an index
+    //! @brief Converts the filter type to an index in the internal collection of factories
+    //! @param[in] eType The type of the filter to be found 
     static unsigned int GetIndex(ETreeItemType eType)
     {
         const collection_t& rCol = GetCollection();
         return std::distance(rCol.cbegin(), Find(rCol, eType));
     }
 
-    //! @brief Converts an index to the filter type
+    //! @brief Converts an index of the internal factory collection to the filter type
+    //! @param[in] uIndex Index of the filter type in the collection
     static ETreeItemType FromIndex(unsigned int uIndex)
     {
         const collection_t& rCol = GetCollection();
@@ -58,12 +68,16 @@ protected:
     }
 
     //! @brief Checks if an associated pair matches the filter type
+    //! @param[in] pair Reference to the pair to be compared to \p eType
+    //! @param[in] eType Filter type to be compared to \p pair
     static bool Compare(const pair_t& pair, ETreeItemType eType)
     {
         return pair.first == eType;
     }
 
     //! @brief Finds the associative collection iterator for the entry of the provided filter type
+    //! @param[in] rCol Reference to a collection of filter factories
+    //! @param[in] eType The type of filter whose iterator in the \p rCol is to be found
     static collection_t::const_iterator Find(const collection_t& rCol, ETreeItemType eType)
     {
         return std::find_if(rCol.cbegin(), rCol.cend(), std::bind(&Compare, std::placeholders::_1, eType));
@@ -75,6 +89,10 @@ protected:
 class CGroupEditorUI : public IGroupEditor, public INotifyItemOperation
 {
 public:
+    //! @brief Constructs a new editor UI associated with the specified #CGroup
+    //! @param[in] pParent Pointer to the window where this editor will be created
+    //! @param[in] rEdit @copybrief m_rEdit
+    //! @param[in] pProject @copybrief m_pProject
     CGroupEditorUI(wxWindow* pParent, CGroup& rEdit, std::shared_ptr<const CProject> pProject);
 
     //! @copydoc INotifyItemOperation::OnItemCreated
@@ -111,6 +129,9 @@ protected:
     //! @brief Appends an item to the provided filter list, and (un)-checks it according to the filter
     void AppendFilterListItem(std::shared_ptr<const IGroupFilter> pFilter, IProjTreeItem::cptr_t pItem, wxCheckListBox* pListBox);
 
+    //! @brief Updates the #m_rEdit when items are (un-)checked
+    //! @param[in] event The UI event
+    //! @param[in] pListBox The listbox where the item was toggled
     void OnListToggle(wxCommandEvent& event, wxCheckListBox* pListBox);
 
     /** @name IGroupEditor overrides */
@@ -267,7 +288,7 @@ void CGroupEditorUI::AppendFilterListItem(std::shared_ptr<const IGroupFilter> pF
     assert(pListBox);
     const int nIndex = pListBox->Append(pItem->GetName(), (void*)pItem.get());
 
-    const bool bCheck = pFilter ? pFilter->Filter(pItem) : false;
+    const bool bCheck = pFilter ? pFilter->FilterItem(pItem) : false;
     pListBox->Check(nIndex, bCheck);
 }
 

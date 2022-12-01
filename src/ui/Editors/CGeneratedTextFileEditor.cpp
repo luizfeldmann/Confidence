@@ -21,13 +21,17 @@
 class CGeneratedTextFileEditorUI : public ITextFileEditor
 {
 public:
+    //! @brief Constructs a new editor UI associated with the specified #CGeneratedTextFile
+    //! @param[in] pParent Pointer to the window where this editor will be created
+    //! @param[in] rEdit @copybrief m_rEdit
     CGeneratedTextFileEditorUI(wxWindow* pParent, CGeneratedTextFile& rEdit);
     ~CGeneratedTextFileEditorUI();
 
 protected:
+    //! Manages the syntax highlighting in the textbox
     CTextStyler m_cStyler;
 
-    //! Underlying project item being edited
+    //! Underlying file generator item being edited
     CGeneratedTextFile& m_rEdit;
 
     //! @brief Reloads the text from the underlying object

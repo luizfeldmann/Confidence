@@ -1,3 +1,8 @@
+/**
+ * @file IExpression.h
+ * @brief Defines interface #IExpression
+ */
+
 #ifndef _IEXPRESSION_H_
 #define _IEXPRESSION_H_
 

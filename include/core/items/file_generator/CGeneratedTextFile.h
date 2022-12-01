@@ -15,7 +15,10 @@ class CGeneratedTextFile : public IProjTreeItem
     , public CNoChildren
 {
 public:
+    //! Pointer type used to store/pass the #ITextProvider used as input for the #CGeneratedTextFile
     using provider_ptr_t = std::unique_ptr<ITextProvider>;
+
+    //! Pointer type used to store/pass the #IFileGenerator used as output for the #CGeneratedTextFile
     using generator_ptr_t = std::unique_ptr<IFileGenerator>;
 
 protected:

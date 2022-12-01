@@ -10,22 +10,27 @@ class CConfiguration;
 class CProject;
 class CVariable;
 
-//! @brief Table with configurations as rows and instances as columns
+//! @brief Table with #CConfiguration as rows, #CInstance as columns, #CVariable or #CConstant as cells
 class CConfigurationSummaryModel : public wxDataViewModel, public CParentalMap, public INotifyItemOperation
 {
 protected:
     //! The configuration being edited
     CConfiguration& m_rEdit;
 
-    //! Pointer to the project
-    //! This is required to query for all instances and variables
+    //! @brief Pointer to the project
+    //! @details This is required to query for all instances and variables
     std::weak_ptr<const CProject> m_pProj;
 
     //! The data view control using this model
     wxDataViewCtrl* const m_pCtrl;
 
 public:
+    //! @brief Constructs a table model associated to the specified configuration and data view control
+    //! @param[in] rConfig @copybrief m_rEdit
+    //! @param[in] pProj @copybrief m_pProj
+    //! @param[in] pCtrl @copybrief m_pCtrl
     CConfigurationSummaryModel(CConfiguration& rConfig, std::shared_ptr<const CProject> pProj, wxDataViewCtrl* pCtrl);
+
     ~CConfigurationSummaryModel();
 
     //! @brief Obtains a pointer to a variable from the provided data view item

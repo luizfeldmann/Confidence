@@ -1,3 +1,8 @@
+/**
+ * @file IProcessPolicy.h
+ * @brief Defines interface #IProcessPolicy
+ */
+
 #ifndef _IPROCESSPOLICY_H_
 #define _IPROCESSPOLICY_H_
 

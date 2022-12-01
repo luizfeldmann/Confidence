@@ -9,9 +9,13 @@ class CVariableEditorUI;
 class CVariableEditor : public CNameDescEditor
 {
 protected:
+    //! Pointer to the private implementation of the editor UI
     CVariableEditorUI* const m_pUiVar;
 
 public:
+    //! @brief Constructs a new #CVariableEditor
+    //! @param[in] rMainWindow Reference to the main application window
+    //! @param[in] rItem Reference to #CVariable
     CVariableEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @copydoc INotifyItemOperation::OnItemCreated

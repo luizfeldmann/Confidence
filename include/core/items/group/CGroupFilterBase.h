@@ -24,8 +24,8 @@ public:
     //! @copydoc IGroupFilter::GetItems
     ptrvec_t GetItems() const override;
 
-    //! @copydoc IGroupFilter::Filter
-    bool Filter(sptr_t pItem) const override;
+    //! @copydoc IGroupFilter::FilterItem
+    bool FilterItem(sptr_t pItem) const override;
 
     //! @copydoc IDocumentable::Document
     virtual bool Document(IDocExporter& rExporter) const override;

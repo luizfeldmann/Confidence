@@ -39,7 +39,7 @@ ETreeItemType CGroupFilterConfiguration::GetType() const
 
 bool CGroupFilterConfiguration::Filter(const CGroup& rGroup, const CExecutionContext& rContext) const
 {
-    return CGroupFilterBase::Filter(rContext.GetConfiguration());
+    return CGroupFilterBase::FilterItem(rContext.GetConfiguration());
 }
 
 bool CGroupFilterConfiguration::Document(IDocExporter& rExporter) const

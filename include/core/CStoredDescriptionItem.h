@@ -8,14 +8,19 @@
 class CStoredDescriptionItem : public virtual IDescribedItem
 {
 protected:
-    //! The display name of the item
+    //! The displayed description of the item
     std::string m_strDescription;
 
     SERIALIZATION_FRIEND(CStoredDescriptionItem);
 
 public:
+    //! @brief Constructs an item without a description
     CStoredDescriptionItem() = default;
+
+    //! @brief Constructs an item with the provided initial description
+    //! @param[in] strDesc @copybrief m_strDescription
     CStoredDescriptionItem(const std::string& strDesc);
+
     virtual ~CStoredDescriptionItem() = default;
 
     //! @copydoc IDescribedItem::GetDescription

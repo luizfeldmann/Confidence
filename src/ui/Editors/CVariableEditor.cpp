@@ -21,6 +21,10 @@ protected:
     wxAcceleratorTable m_cAccTbl;
 
 public:
+    //! @brief Constructs a new editor UI associated with the specified #CVariable
+    //! @param[in] pParent Pointer to the window where this editor will be created
+    //! @param[in] pProject Pointer to the current project which owns \p rVar
+    //! @param[in] rVar @copybrief m_rVar
     CVariableEditorUI(wxWindow* pParent, std::shared_ptr<const CProject> pProject, CVariable& rVar);
 
     //! @copydoc INotifyItemOperation::OnItemCreated
@@ -29,7 +33,7 @@ public:
     //! @copydoc INotifyItemOperation::OnAnyItemErased
     void OnAnyItemErased(const IProjTreeItem& rItem) override;
 
-    //! @copydoc INotifyItemOperation::OnAnyItemChanged
+    //! @copydoc INotifyItemOperation::OnAnyItemRenamed
     void OnAnyItemRenamed(const IProjTreeItem& pItem) override;
 
     /* OVERRIDES FROM IVariableEditor */

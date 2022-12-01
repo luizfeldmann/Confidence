@@ -1,3 +1,8 @@
+/**
+ * @file IFileOperationContext.h
+ * @brief Defines interface #IFileOperatorContext
+ */
+
 #ifndef _IFILEOPERATIONCONTEXT_H_
 #define _IFILEOPERATIONCONTEXT_H_
 

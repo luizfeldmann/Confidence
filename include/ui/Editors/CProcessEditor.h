@@ -9,9 +9,13 @@ class CRunProcessEditorUI;
 class CRunProcessEditor : public CNameDescEditor
 {
 protected:
+    //! Pointer to the private implementation of the editor UI
     CRunProcessEditorUI* const m_pUiProc;
 
 public:
+    //! @brief Constructs a new #CRunProcessEditor
+    //! @param[in] rMainWindow Reference to the main application window
+    //! @param[in] rItem Reference to #CRunProcess
     CRunProcessEditor(CMainWindow& rMainWindow, IProjTreeItem& rItem);
 
     //! @brief Returns a new instance of this class

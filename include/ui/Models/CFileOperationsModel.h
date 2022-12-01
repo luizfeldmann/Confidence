@@ -27,7 +27,10 @@ protected:
     };
 
 public:
+    //! @brief Constructs a table model to view/edit the list of operations of a particular #CFileOperations
+    //! @param[in] rEdit @copybrief m_rEdit
     CFileOperationsModel(CFileOperations& rEdit);
+
     ~CFileOperationsModel();
 
     /* Public interface */

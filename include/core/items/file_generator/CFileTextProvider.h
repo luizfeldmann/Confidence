@@ -49,7 +49,7 @@ public:
     //! @copydoc IDependsOnVariables::GetDependencies
     std::vector<std::string> GetDependencies() const override;
 
-    //! @copydoc IDocumentable:Document
+    //! @copydoc IDocumentable::Document
     bool Document(IDocExporter& rExporter) const override;
 };
 

@@ -1,3 +1,8 @@
+/**
+ * @file IDescribedItem.h
+ * @brief Defines interface #IDescribedItem
+ */
+
 #ifndef _IDESCRIBEDITEM_H_
 #define _IDESCRIBEDITEM_H_
 

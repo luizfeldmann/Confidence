@@ -8,6 +8,7 @@
 class CXmlFileHandler : public IFileOperationHandler
 {
 public:
+    //! @brief Constructs a new handler for the XML format
     CXmlFileHandler();
     ~CXmlFileHandler();
 

@@ -5,7 +5,7 @@
 
 /* CMarkdownExporterSession */
 
-//! @brief Exporter session state
+//! @brief Exporter session state used by the #CCommonMarkExporter
 class CCommonMarkExporterSession : public CMarkNodeWrapper
 {
 public:
@@ -18,6 +18,8 @@ public:
     //! Level of heading (title, subtitle, section, subsection, etc...)
     int m_nHeading = 1;
 
+    //! @brief Constructs a new session for the #CCommonMarkExporter
+    //! @param[in] rOutput @copybrief m_rOutput
     CCommonMarkExporterSession(std::ostream& rOutput)
         : CMarkNodeWrapper(CMARK_NODE_DOCUMENT)
         , m_rOutput(rOutput)
