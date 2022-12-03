@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #include "util/version.h"
 
 /* static */ const unsigned     Version::uMajor = (${PROJECT_VERSION_MAJOR});

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #include "ui/Editors/CProjectEditor.h"
 #include "ui/Models/CDocExporterTableModel.h"
 #include "core/items/CProject.h"

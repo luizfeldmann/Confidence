@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #include "core/items/condition/CLogicalOperator.h"
 #include "docs/IDocExporter.h"
 #include <JInterface/JsonSerialization.h>

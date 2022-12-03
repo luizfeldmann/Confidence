@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #include "ui/CAcceleratorEntry.h"
 
 CAcceleratorEntry::CAcceleratorEntry(int nFlags, int nKeyCode, wxToolBarToolBase* pTool)

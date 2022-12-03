@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #include "core/items/CEnvironmentImport.h"
 #include "core/items/variable/CEnvironmentVariable.h"
 #include "core/CExecutionContext.h"

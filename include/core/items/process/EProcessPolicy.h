@@ -1,4 +1,9 @@
 /**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
+/**
  * @file EProcessPolicy.h
  * @brief Defines enum #EProcessPolicy
  */

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #include "ui/Models/CConditionalTreeModel.h"
 #include "core/items/condition/CLogicalComparator.h"
 #include "core/items/condition/CLogicalOperator.h"

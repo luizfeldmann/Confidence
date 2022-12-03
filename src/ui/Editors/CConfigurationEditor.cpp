@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #include "ui/Editors/CConfigurationEditor.h"
 #include "core/items/CConfiguration.h"
 #include "ui/Models/CConfigurationSummaryModel.h"

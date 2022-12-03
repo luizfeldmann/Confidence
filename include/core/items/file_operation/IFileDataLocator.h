@@ -1,4 +1,9 @@
 /**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
+/**
  * @file IFileDataLocator.h
  * @brief Defines interface #IFileDataLocator
  */

@@ -1,3 +1,8 @@
+#
+# Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+# Licensed under the MIT license: https://opensource.org/licenses/MIT
+#
+
 # The VCPKG port of Graphviz currently does not support find_package
 
 SET(GV_IMPORT_PREFIX "${Z_VCPKG_ROOT_DIR}/packages/graphviz_${VCPKG_TARGET_TRIPLET}")

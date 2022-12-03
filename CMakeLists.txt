@@ -1,3 +1,8 @@
+#
+# Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+# Licensed under the MIT license: https://opensource.org/licenses/MIT
+#
+
 CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
 PROJECT(Confidence LANGUAGES CXX VERSION 1.0.0.0 HOMEPAGE_URL https://github.com/luizfeldmann/Confidence)
 

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #ifndef _CMARK_NODE_WRAPPER_H_
 #define _CMARK_NODE_WRAPPER_H_
 

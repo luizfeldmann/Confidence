@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #include "core/items/group/CGroupFilterConfiguration.h"
 #include "core/items/CConfiguration.h"
 #include "core/items/CProject.h"

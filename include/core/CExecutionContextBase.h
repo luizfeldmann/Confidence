@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #ifndef _CEXECUTIONCONTEXTBASE_H_
 #define _CEXECUTIONCONTEXTBASE_H_
 

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #ifndef _CHTMLEXPORTER_H_
 #define _CHTMLEXPORTER_H_
 

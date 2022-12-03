@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #include "core/items/file_operation/CRegexHandler.h"
 #include "core/items/file_operation/IFileDataLocator.h"
 #include "core/items/file_operation/IFileOperationContext.h"

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #ifndef _CPROCESSARGSMODEL_H_
 #define _CPROCESSARGSMODEL_H_
 

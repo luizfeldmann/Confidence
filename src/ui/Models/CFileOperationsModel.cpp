@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #include "ui/Models/CFileOperationsModel.h"
 #include "core/items/file_operation/CFileOperations.h"
 #include "core/items/file_operation/CFileOperation.h"

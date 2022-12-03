@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #include "ui/Editors/COperationEditor.h"
 #include "ui/Models/CFileOperationsModel.h"
 #include "wxExport/IOperationEditor.h"

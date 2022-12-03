@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+ * Licensed under the MIT license: https://opensource.org/licenses/MIT
+ */
+
 #include "core/items/condition/CConditional.h"
 #include "core/items/condition/ICondition.h"
 #include "core/CExecutionContext.h"

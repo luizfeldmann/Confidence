@@ -1,3 +1,8 @@
+#
+# Copyright (c) 2022 Luiz Gustavo Pfitscher e Feldmann
+# Licensed under the MIT license: https://opensource.org/licenses/MIT
+#
+
 # Convert the README.md into a webpage that can be displayed by wxWidgets
 
 set(README_MD "${PROJECT_SOURCE_DIR}/README.md")
