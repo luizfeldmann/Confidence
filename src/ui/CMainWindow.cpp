@@ -7,7 +7,9 @@
 #include "ui/Models/CTreeBrowserModel.h"
 #include "ui/STreeItemTypeInfo.h"
 #include "util/Log.h"
+#include "util/version.h"
 #include <wx/filedlg.h>
+#include <wx/msgdlg.h>
 #include <wx/menu.h>
 #include "core/items/CProject.h"
 #include "core/items/CConfiguration.h"
@@ -29,6 +31,10 @@ CMainWindow::CMainWindow(std::shared_ptr<CProject> pProject)
 
     // Configure the main window's icon
     SetIcon(wxIcon("RES_ID_ICON_APPLICATION"));
+
+    // Set version information
+    m_staticTextVersion->SetLabel(Version::szVersion);
+    m_staticTextTimeStamp->SetLabel(Version::szTimestamp);
 
     // Configure the project tree view
     m_pTreeModel->Bind(EVT_TREE_ITEM_RENAME, &CMainWindow::onTreeItemRenamed, this);
@@ -89,8 +95,23 @@ std::shared_ptr<const CProject> CMainWindow::GetProject() const
 
 void CMainWindow::onBtnNewProject(wxCommandEvent& event)
 {
-    m_pProject = CProject::Create();
-    ReloadProject();
+    wxMessageDialog cMsgBox(this, 
+        "Do you want to save the changes before starting a new project ?", 
+        "New project - Save changes ?",
+        wxYES_NO | wxCANCEL | wxCANCEL_DEFAULT | wxICON_WARNING);
+
+    cMsgBox.SetYesNoLabels("Save", "Discard");
+
+    const int nResult = cMsgBox.ShowModal();
+
+    if (wxID_YES == nResult)
+        onBtnSaveProject(event);
+
+    if (wxID_CANCEL != nResult)
+    {
+        m_pProject = CProject::Create();
+        ReloadProject();
+    }
 }
 
 void CMainWindow::onBtnOpenProject(wxCommandEvent& event)
