@@ -159,6 +159,9 @@ bool CGeneratedTextFile::Execute(CExecutionContext& rContext) const
             {
                 pFile = m_pGenerator->NewFile(strDestination);
                 bStatus = pFile && pFile->IsValid();
+
+                if (!bStatus)
+                    CWARNING("Failed to generate destination file '%s'", strDestination.c_str());
             }
 
             if (bStatus)
