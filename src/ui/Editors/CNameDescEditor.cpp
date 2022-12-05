@@ -59,6 +59,9 @@ void CNameDescEditorUI::onChangedName(wxCommandEvent& event)
 {
     const wxString newName = m_textCtrlName->GetValue();
 
+    long savedSelectionFrom = 0, savedSelectionTo = 0;
+    m_textCtrlName->GetSelection(&savedSelectionFrom, &savedSelectionTo);
+
     IProjTreeItem& rItem = m_rEditor.GetItem();
     bool bSuccess = rItem.SetName(newName.ToStdString());
 
@@ -76,6 +79,7 @@ void CNameDescEditorUI::onChangedName(wxCommandEvent& event)
     {
         // Reset to the previous, valid name
         m_textCtrlName->ChangeValue(rItem.GetName());
+        m_textCtrlName->SetSelection(savedSelectionFrom, savedSelectionTo);
     }
 }
 

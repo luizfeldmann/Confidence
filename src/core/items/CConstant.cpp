@@ -18,7 +18,7 @@ DEFINE_SERIALIZATION_SCHEME(CConstant,
 REGISTER_POLYMORPHIC_CLASS(CConstant);
 
 CConstant::CConstant()
-    : CStoredNameItem("<new constant>")
+    : CStoredNameItem("Constant")
     , CStoredDescriptionItem("<no constant description>")
 {
 
@@ -32,6 +32,14 @@ IProjTreeItem::ptr_t CConstant::Create()
 CConstant::~CConstant()
 {
 
+}
+
+bool CConstant::SetName(const std::string& strNewName)
+{
+    bool bStatus = CEvaluationContext::ValidateVariableName(strNewName);
+    bStatus = bStatus && CStoredNameItem::SetName(strNewName);
+
+    return bStatus;
 }
 
 ETreeItemType CConstant::GetType() const

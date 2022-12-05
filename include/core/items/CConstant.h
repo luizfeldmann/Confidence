@@ -39,6 +39,9 @@ public:
     //! @brief Returns a new instance of this class
     static IProjTreeItem::ptr_t Create();
 
+    //! @copydoc INamedItem::SetName
+    bool SetName(const std::string& strNewName) override;
+
     //! @copydoc IProjTreeItem::GetType
     ETreeItemType GetType() const override;
 

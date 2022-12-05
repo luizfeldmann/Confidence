@@ -23,7 +23,7 @@ REGISTER_POLYMORPHIC_CLASS(CVariable);
 
 /* CVariable */
 CVariable::CVariable()
-    : CStoredNameItem("<new variable>")
+    : CStoredNameItem("Variable")
     , CStoredDescriptionItem("<no variable description>")
     , m_bPerInstance(true)
 {
@@ -43,6 +43,14 @@ CVariable::~CVariable()
 ETreeItemType CVariable::GetType() const
 {
     return EVariable;
+}
+
+bool CVariable::SetName(const std::string& strNewName)
+{
+    bool bStatus = CEvaluationContext::ValidateVariableName(strNewName);
+    bStatus = bStatus && CStoredNameItem::SetName(strNewName);
+
+    return bStatus;
 }
 
 bool CVariable::PostDeserialize(CProject& rProject)

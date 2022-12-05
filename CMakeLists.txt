@@ -4,7 +4,7 @@
 #
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
-PROJECT(Confidence LANGUAGES CXX VERSION 1.0.0.0 HOMEPAGE_URL https://github.com/luizfeldmann/Confidence)
+PROJECT(Confidence LANGUAGES CXX VERSION 1.0.0.1 HOMEPAGE_URL https://github.com/luizfeldmann/Confidence)
 
 # Configure project metadata
 SET(PROJ_DESCRIPTION "Confidence is a tool to centralize and manage configuration files")

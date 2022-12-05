@@ -47,6 +47,11 @@ public:
 
     //! @brief Returns a collection of names of variables contained in the expression
     static std::vector<std::string> ListVariables(const std::string& strExpression);
+
+    //! @brief Checks if the provided variable name can match the regular expressions used by the this evaluator
+    //! @param[in] strName The variable name *without the enclosing $()* to validate
+    //! @return True if valid
+    static bool ValidateVariableName(const std::string& strName);
 };
 
 #endif

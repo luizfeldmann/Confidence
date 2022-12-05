@@ -78,7 +78,7 @@ bool CEvaluationContext::Evaluate(std::string& strExpression) const
     return bStatus;
 }
 
-std::vector<std::string> CEvaluationContext::ListVariables(const std::string& strExpression)
+/* static */ std::vector<std::string> CEvaluationContext::ListVariables(const std::string& strExpression)
 {
     std::vector<std::string> vNames;
 
@@ -90,4 +90,11 @@ std::vector<std::string> CEvaluationContext::ListVariables(const std::string& st
     }
 
     return vNames;
+}
+
+/* static */ bool CEvaluationContext::ValidateVariableName(const std::string& strName)
+{
+    const std::string strExpression = MakeExpression(strName);
+
+    return std::regex_match(strExpression, GetVariableRegex());
 }
