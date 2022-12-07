@@ -35,6 +35,26 @@ public:
     //! @param[in] pItem Reference to the item whose parent must be found
     //! @return The parent of the item or nullptr if not found (the project root has no parent)
     std::shared_ptr<const IProjTreeItem> GetParent(const IProjTreeItem* pItem) const;
+
+    //! @brief Fills a collection with the sequence of parents of a child item
+    //! @param[in] pChild Pointer to the child whose parents must be found
+    //! @param[out] it Iterator used the output the parent items to the collection
+    template<typename OutputIterator>
+    void GetParentBranch(const IProjTreeItem* pChild, OutputIterator& it)
+    {
+        for (const IProjTreeItem* pCurrent = pChild; nullptr != pCurrent; pCurrent = GetParent(pCurrent).get())
+            ++it = pCurrent;
+    }
+
+    //! @copydoc GetParentBranch
+    //! @param[in] pParent The parent item whose subitems will be mapped
+    template<typename OutputIterator>
+    static void GetParentBranch(const std::shared_ptr<const IProjTreeItem>& pParent, const IProjTreeItem* pChild, OutputIterator& it)
+    {
+        CParentalMap cMap;
+        cMap.Remap(pParent);
+        cMap.GetParentBranch(pChild, it);
+    }
 };
 
 #endif

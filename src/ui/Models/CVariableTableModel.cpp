@@ -10,6 +10,7 @@
 #include "core/items/CInstanceGroup.h"
 #include "core/items/CConfiguration.h"
 #include "core/items/variable/CVariable.h"
+#include "core/CParentalMap.h"
 #include "ui/Models/CBaseTreeItemModel.h"
 #include "ui/Models/CInstanceColumn.h"
 #include "ui/Models/CVariableCell.h"
@@ -86,7 +87,19 @@ void CVariableTableModel::OnAnyItemRenamed(const IProjTreeItem& rItem)
     // Rename the row if a configuration was renamed
     const CConfiguration* const pConfig = dynamic_cast<const CConfiguration*>(&rItem);
     if (pConfig)
-        ItemChanged(CBaseTreeItemModel::GetViewItem(pConfig));
+    {
+        // Calling ItemChanged() on an item that was never expanded may cause an 'invalid item' error
+        // The chain of parents until the relevant item is reached
+        std::list<const IProjTreeItem*> parentBranch;
+        CParentalMap::GetParentBranch(m_pProj.lock(), pConfig, std::front_inserter(parentBranch));
+
+        for (const IProjTreeItem* pItem : parentBranch)
+            m_pCtrl->Expand(CBaseTreeItemModel::GetViewItem(pItem));
+
+        const auto aItem = CBaseTreeItemModel::GetViewItem(pConfig);
+        ItemChanged(aItem);
+        m_pCtrl->Select(aItem);
+    }
 }
 
 void CVariableTableModel::ReloadColumns()
