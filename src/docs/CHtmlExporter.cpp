@@ -207,7 +207,12 @@ bool CHtmlExporter::Finish()
         else
         {
             GetStream() << pBuffer;
-            free(pBuffer);
+
+            #ifdef free
+            #undef free
+            #endif
+
+            cmark_get_default_mem_allocator()->free(pBuffer);
 
             bStatus = true;
         }
